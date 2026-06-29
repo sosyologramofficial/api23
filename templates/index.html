@@ -1,0 +1,3436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreativeLabs API Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           ROOT TOKENS — DEEP CINEMA PALETTE
+        ═══════════════════════════════════════════ */
+        :root {
+            --void:        #03020a;
+            --depth:       #07050f;
+            --surface:     #0e0b1a;
+            --elevated:    #161223;
+            --panel:       #1c1830;
+            --input-bg:    #120f1e;
+            --border:      rgba(139,92,246,0.15);
+            --border-bright: rgba(139,92,246,0.4);
+
+            --violet:      #8b5cf6;
+            --violet-glow: rgba(139,92,246,0.25);
+            --violet-dim:  rgba(139,92,246,0.1);
+            --amber:       #f59e0b;
+            --amber-glow:  rgba(245,158,11,0.2);
+            --amber-dim:   rgba(245,158,11,0.08);
+            --cyan:        #22d3ee;
+            --cyan-dim:    rgba(34,211,238,0.1);
+            --rose:        #f43f5e;
+            --rose-dim:    rgba(244,63,94,0.12);
+            --emerald:     #10b981;
+            --emerald-dim: rgba(16,185,129,0.12);
+
+            --text:        #ede9ff;
+            --text-dim:    #9b93b8;
+            --text-muted:  #5a5270;
+
+            --sidebar-w:   270px;
+            --topbar-h:    60px;
+            --radius:      14px;
+            --radius-sm:   8px;
+            --shadow:      0 20px 60px rgba(0,0,0,0.8);
+            --transition:  0.25s cubic-bezier(0.4,0,0.2,1);
+
+            --success: var(--emerald);
+            --error:   var(--rose);
+            --warning: var(--amber);
+            --info:    var(--cyan);
+            --primary: var(--violet);
+            --primary-dark: #6d28d9;
+            --secondary: #4f46e5;
+            --accent: var(--cyan);
+            --bg-main: var(--void);
+            --bg-card: var(--elevated);
+            --bg-input: var(--input-bg);
+        }
+
+        /* ═══════════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        /* Film grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size: 200px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.6;
+        }
+
+        /* Ambient background glow */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 10%, rgba(139,92,246,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(245,158,11,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 60% 30%, rgba(34,211,238,0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           SCROLLBAR
+        ═══════════════════════════════════════════ */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--void); }
+        ::-webkit-scrollbar-thumb { background: var(--violet-dim); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--violet); }
+
+        /* ═══════════════════════════════════════════
+           SIDEBAR
+        ═══════════════════════════════════════════ */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--depth);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 200;
+            transition: transform var(--transition);
+            overflow: hidden;
+        }
+
+        /* Sidebar inner glow */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 300px;
+            background: radial-gradient(ellipse at top left, rgba(139,92,246,0.12), transparent 70%);
+            pointer-events: none;
+        }
+
+        .sidebar-brand {
+            padding: 22px 20px 18px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .brand-logo {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 0.06em;
+            background: linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 34px; height: 34px;
+            background: linear-gradient(135deg, var(--violet), var(--cyan));
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px var(--violet-glow);
+            -webkit-text-fill-color: initial;
+            color: white;
+        }
+
+        .brand-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-muted);
+            padding: 10px 10px 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            border: 1px solid transparent;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 1.05rem;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-item .nav-label { flex: 1; }
+
+        .nav-item .nav-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            background: var(--violet-dim);
+            color: var(--violet);
+            border: 1px solid var(--border-bright);
+            border-radius: 99px;
+            padding: 1px 7px;
+        }
+
+        .nav-item:hover {
+            background: var(--violet-dim);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(34,211,238,0.06));
+            color: var(--violet);
+            border-color: var(--border-bright);
+            box-shadow: 0 0 20px rgba(139,92,246,0.1);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: -1px; top: 20%; bottom: 20%;
+            width: 3px;
+            background: var(--violet);
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 10px var(--violet);
+        }
+
+        .sidebar-footer {
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-footer-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 0.08em;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--emerald);
+            box-shadow: 0 0 6px var(--emerald);
+            animation: statusPulse 2s ease-in-out infinite;
+            margin-right: 5px;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ═══════════════════════════════════════════
+           MAIN LAYOUT
+        ═══════════════════════════════════════════ */
+        .main-wrapper {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            min-width: 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           TOPBAR
+        ═══════════════════════════════════════════ */
+        .topbar {
+            height: var(--topbar-h);
+            background: rgba(7,5,15,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-shrink: 0;
+            overflow: visible;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            width: 36px; height: 36px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1.1rem;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            padding: 0;
+            box-shadow: none;
+            transform: none;
+        }
+        .hamburger::after { display: none; }
+        .hamburger:hover { background: var(--violet-dim); color: var(--violet); transform: none; box-shadow: none; }
+
+        .topbar-page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-spacer { flex: 1; }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input { display: none; }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--panel);
+            border: 1px solid var(--border-bright);
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            left: 3px; top: 50%;
+            transform: translateY(-50%);
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all var(--transition);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--violet-dim);
+            border-color: var(--violet);
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            left: calc(100% - 19px);
+            background: var(--violet);
+            box-shadow: 0 0 8px var(--violet-glow);
+        }
+
+        /* Segmented button group */
+        .seg-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        .seg-group--wrap { flex-wrap: wrap; }
+        .seg-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px 12px;
+            background: var(--panel);
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-sm);
+            color: var(--text-dim);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+            box-shadow: none !important;
+            transform: none !important;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .seg-btn::after { display: none !important; }
+        .seg-btn:hover {
+            background: var(--elevated);
+            border-color: var(--border-bright) !important;
+            color: var(--text);
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .seg-btn.active {
+            background: var(--violet-dim);
+            border-color: var(--violet) !important;
+            color: var(--violet);
+            font-weight: 600;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        /* TTS Range Sliders — thumb tam uca yapışır */
+        .tts-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 99px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            outline: none;
+            cursor: pointer;
+            /* padding sıfır — thumb kenar hizalaması için */
+            padding: 0;
+            margin: 6px 0;
+            box-sizing: border-box;
+        }
+        .tts-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--violet);
+            border: 2px solid rgba(139,92,246,0.5);
+            box-shadow: 0 0 8px var(--violet-glow);
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .tts-range::-webkit-slider-thumb:hover {
+            background: #a78bfa;
+            box-shadow: 0 0 14px var(--violet-glow);
+        }
+        .tts-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--violet);
+            border: 2px solid rgba(139,92,246,0.5);
+            box-shadow: 0 0 8px var(--violet-glow);
+            cursor: pointer;
+        }
+        /* Emotion tag chips */
+        .tts-emotion-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 14px;
+            border-radius: 99px;
+            border: 1px solid var(--border-bright);
+            background: var(--input-bg);
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s, border-color 0.18s;
+            user-select: none;
+        }
+        .tts-emotion-chip.active {
+            background: var(--violet-dim);
+            border-color: var(--violet);
+            color: var(--violet);
+        }
+        .topbar-settings-btn {
+            background: var(--violet-dim);
+            border: 1px solid var(--border-bright);
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            box-shadow: none;
+            transform: none;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .topbar-settings-btn::after { display: none; }
+        .topbar-settings-btn:hover { background: var(--violet); color: #fff; transform: none; box-shadow: none; }
+
+        .topbar-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--cyan);
+            background: var(--cyan-dim);
+            border: 1px solid rgba(34,211,238,0.2);
+            border-radius: 99px;
+            padding: 4px 12px;
+            letter-spacing: 0.06em;
+        }
+
+        /* ═══════════════════════════════════════════
+           PAGE CONTENT
+        ═══════════════════════════════════════════ */
+        .content {
+            flex: 1;
+            padding: clamp(1rem, 3vw, 2rem);
+            min-width: 0;
+        }
+
+        .page { display: none; max-width: 100%; }
+        .page.active { display: block; }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--violet);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .page-eyebrow::before {
+            content: '';
+            width: 20px; height: 1px;
+            background: var(--violet);
+        }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 900;
+            letter-spacing: -0.01em;
+            color: var(--text);
+        }
+
+        .page-title span { color: var(--violet); }
+
+        .page-desc {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            margin-top: 6px;
+        }
+
+        /* ═══════════════════════════════════════════
+           CARDS / PANELS
+        ═══════════════════════════════════════════ */
+        .card {
+            background: var(--elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: clamp(1.25rem, 3vw, 1.75rem);
+            margin-bottom: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            max-width: 100%;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+        }
+
+        .card:hover {
+            border-color: rgba(139,92,246,0.3);
+            box-shadow: 0 8px 40px rgba(139,92,246,0.08);
+        }
+
+        .card-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--violet);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ═══════════════════════════════════════════
+           QUOTA STATS
+        ═══════════════════════════════════════════ */
+        .quota-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 0;
+        }
+
+        .quota-stat {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .quota-stat-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--violet);
+        }
+
+        .quota-stat-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        /* ═══════════════════════════════════════════
+           FORM ELEMENTS
+        ═══════════════════════════════════════════ */
+        .form-group { margin-bottom: 1.25rem; }
+
+        /* form-row grid içindeki form-group'larda margin-bottom'ı sıfırla,
+           gap değeri zaten boşluğu sağlar */
+        .form-row .form-group { margin-bottom: 0; }
+
+        label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all var(--transition);
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--violet);
+            box-shadow: 0 0 0 3px var(--violet-glow), 0 0 20px rgba(139,92,246,0.1);
+        }
+
+        input[type="text"]:hover:not(:focus),
+        textarea:hover:not(:focus),
+        select:hover:not(:focus) {
+            border-color: rgba(139,92,246,0.3);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 2.5rem;
+        }
+
+        select option {
+            background: var(--surface);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            resize: none;
+            min-height: 110px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            padding-bottom: 2rem;
+            padding-right: 1rem;
+        }
+
+        input[type="file"] { display: none; }
+
+        input[type="checkbox"] {
+            width: 18px; height: 18px;
+            cursor: pointer;
+            accent-color: var(--violet);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--input-bg);
+            border: 2px dashed rgba(139,92,246,0.25);
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: center;
+            overflow: hidden;
+            white-space: normal;
+            word-break: break-all;
+            box-sizing: border-box;
+            max-width: 100%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+        .file-input-label::before {
+            content: '📁';
+            font-size: 1.3rem;
+        }
+
+        .file-input-label:hover {
+            border-color: var(--violet);
+            background: var(--violet-dim);
+            color: var(--violet);
+        }
+
+        .file-selected {
+            border-color: var(--violet);
+            border-style: solid;
+            background: rgba(139,92,246,0.08);
+            color: var(--violet);
+        }
+
+        .file-selected::before { content: '✓'; }
+
+        /* ═══════════════════════════════════════════
+           BUTTONS
+        ═══════════════════════════════════════════ */
+        button {
+            background: linear-gradient(135deg, var(--violet) 0%, #6d28d9 100%);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(139,92,246,0.25);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        button:hover::after { opacity: 1; }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139,92,246,0.4);
+        }
+        button:active { transform: translateY(0); }
+
+        button:disabled {
+            background: var(--panel);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            border: 1px solid var(--border);
+        }
+        button:disabled::after { display: none; }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            box-shadow: 0 4px 20px rgba(79,70,229,0.25);
+        }
+        .btn-secondary:hover { box-shadow: 0 8px 30px rgba(79,70,229,0.4); }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--rose) 0%, #be123c 100%);
+            box-shadow: 0 4px 20px rgba(244,63,94,0.2);
+        }
+        .btn-danger:hover { box-shadow: 0 8px 30px rgba(244,63,94,0.4); }
+
+        .btn-amber {
+            background: linear-gradient(135deg, var(--amber) 0%, #d97706 100%);
+            box-shadow: 0 4px 20px rgba(245,158,11,0.2);
+            color: #000;
+        }
+        .btn-amber:hover { box-shadow: 0 8px 30px rgba(245,158,11,0.4); }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .task-btn-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 0;
+        }
+        .task-btn-group button {
+            font-size: 0.62rem;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #quotaReadable:not([style*="display:none"]):not([style*="display: none"]) {
+            margin-top: 1.25rem;
+        }
+        /* Oluşturma tab'larındaki ana aksiyon butonu - tutarlı üst boşluk */
+        .tab-panel > button:not([class]) {
+            margin-top: 0;
+            display: block;
+        }
+        #tasksContainer:empty,
+        #paginationContainer:empty,
+        #statusResponse[style*="display:none"],
+        #statusResponse[style*="display: none"],
+        #quotaResponse[style*="display:none"],
+        #quotaResponse[style*="display: none"],
+        #quotaReadable[style*="display:none"],
+        #quotaReadable[style*="display: none"] {
+            display: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        /* tasksContainer boşluğu: statusResponse hidden iken task-btn-group altında normalize */
+        .card:has(#tasksContainer) .task-btn-group {
+            margin-bottom: 0;
+        }
+        @media (max-width: 640px) {
+            .task-btn-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           FORM ROWS / GRIDS
+        ═══════════════════════════════════════════ */
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+        .form-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .form-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; }
+
+        /* ═══════════════════════════════════════════
+           RESPONSE BOX
+        ═══════════════════════════════════════════ */
+        .response-box {
+            background: var(--void);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            margin-top: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            max-height: 380px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            line-height: 1.7;
+            border-left: 3px solid var(--violet);
+        }
+
+        .response-box::-webkit-scrollbar { width: 4px; }
+        .response-box::-webkit-scrollbar-thumb { background: var(--violet-dim); border-radius: 2px; }
+
+        /* ═══════════════════════════════════════════
+           STATUS COLORS
+        ═══════════════════════════════════════════ */
+        .success { color: var(--emerald); font-weight: 600; }
+        .error    { color: var(--rose);    font-weight: 600; }
+        .warning  { color: var(--amber);   font-weight: 600; }
+        .info     { color: var(--cyan);    font-weight: 600; }
+
+        /* ═══════════════════════════════════════════
+           ALERTS
+        ═══════════════════════════════════════════ */
+        .alert {
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            border: 1px solid;
+        }
+        .alert-info    { background: var(--cyan-dim);    color: var(--cyan);    border-color: rgba(34,211,238,0.3); }
+        .alert-warning { background: var(--amber-dim);   color: var(--amber);   border-color: rgba(245,158,11,0.3); }
+
+        /* ═══════════════════════════════════════════
+           TABS (Main)
+        ═══════════════════════════════════════════ */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.75rem;
+            background: var(--void);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all var(--transition);
+            box-shadow: none;
+            transform: none;
+            flex: 1;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .tab-btn::after  { display: none; }
+        .tab-btn:hover   { color: var(--text); background: var(--violet-dim); transform: none; box-shadow: none; }
+        .tab-btn.active  { background: var(--violet); color: #fff; box-shadow: 0 2px 12px rgba(139,92,246,0.4); }
+
+        .tab-panel { display: block; overflow: hidden; min-width: 0; max-width: 100%; }
+
+        /* ═══════════════════════════════════════════
+           SUB-TABS (VEO inner tabs)
+        ═══════════════════════════════════════════ */
+        .sub-tab-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.25rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            background: transparent;
+            border: none;
+            border-radius: 5px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 7px 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            transition: all var(--transition);
+            box-shadow: none;
+            transform: none;
+            flex: 1;
+        }
+        .sub-tab-btn::after { display: none; }
+        .sub-tab-btn:hover  { color: var(--cyan); background: var(--cyan-dim); transform: none; box-shadow: none; }
+        .sub-tab-btn.active { background: linear-gradient(135deg, rgba(34,211,238,0.2), rgba(139,92,246,0.15)); color: var(--cyan); }
+
+        .sub-tab-panel { display: block; }
+
+        /* ═══════════════════════════════════════════
+           TASK CARDS
+        ═══════════════════════════════════════════ */
+        #tasksContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+            gap: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            width: 100%;
+            min-width: 0;
+        }
+        #tasksContainer:not(:empty) {
+            margin-top: 1.25rem;
+        }
+
+        .single-task-view #tasksContainer { display: block; margin-top: 1rem; margin-bottom: 0; }
+        .single-task-view .task-card { max-width: 100%; }
+
+        .task-card {
+            background: var(--elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all var(--transition);
+            break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            min-width: 0;
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .task-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--violet), transparent);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .task-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 30px rgba(139,92,246,0.1);
+        }
+        .task-card:hover::after { opacity: 1; }
+
+        .task-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .task-card h3 {
+                white-space: normal;
+                word-break: break-all;
+            }
+        }
+
+        .task-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 0.625rem;
+            margin-top: 1rem;
+        }
+
+        .task-info-item {
+            background: var(--panel);
+            padding: 0.625rem 0.875rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            border: 1px solid transparent;
+        }
+
+        .task-info-item strong {
+            color: var(--violet);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .task-info-item a {
+            color: var(--cyan);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+        .task-info-item a:hover { color: var(--violet); text-decoration: underline; }
+
+        .task-meta-row {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 1fr;
+            gap: 0.625rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .task-meta-row {
+                grid-auto-flow: row;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .task-meta-item {
+            min-width: 0;
+        }
+
+        .task-meta-item span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-pending  { background: var(--amber-dim);   color: var(--amber);   border: 1px solid rgba(245,158,11,0.3); }
+        .status-running  { background: var(--cyan-dim);    color: var(--cyan);    border: 1px solid rgba(34,211,238,0.3); animation: pulseStatus 1.5s ease-in-out infinite; }
+        .status-completed{ background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16,185,129,0.3); }
+        .status-failed, .status-error, .status-timeout { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(244,63,94,0.3); }
+
+        @keyframes pulseStatus {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34,211,238,0.3); }
+            50%       { box-shadow: 0 0 0 4px rgba(34,211,238,0); }
+        }
+
+        /* Media results */
+        .result-image {
+            max-width: 100%;
+            max-height: 500px;
+            width: auto;
+            height: auto;
+            border-radius: var(--radius-sm);
+            margin: 1rem auto;
+            box-shadow: var(--shadow);
+            display: block;
+            border: 1px solid var(--border);
+        }
+
+        .result-video {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: var(--radius-sm);
+            margin: 1rem auto;
+            display: block;
+            border: 1px solid var(--border);
+        }
+
+        /* Logs */
+        .logs {
+            background: var(--void);
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            max-height: 130px;
+            overflow-y: auto;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--amber);
+            line-height: 1.7;
+        }
+        .logs::-webkit-scrollbar { width: 3px; }
+        .logs::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 2px; }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid rgba(139,92,246,0.2);
+            border-top: 2px solid var(--violet);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ═══════════════════════════════════════════
+           PAGINATION
+        ═══════════════════════════════════════════ */
+        #paginationContainer {
+            width: 100%;
+            display: block;
+            margin-top: 0;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 1.25rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 7px 12px;
+            font-size: 0.65rem;
+            min-width: 36px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            box-shadow: none;
+            transform: none;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--violet-dim);
+            color: var(--violet);
+            border-color: var(--border-bright);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .pagination button::after { display: none; }
+
+        .pagination .page-btn.active {
+            background: var(--violet);
+            color: #fff;
+            border-color: var(--violet);
+            box-shadow: 0 0 12px var(--violet-glow);
+        }
+
+        .pagination-info {
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            flex-basis: 100%;
+        }
+
+        .pagination-goto {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.5rem 0 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination-goto label {
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            margin: 0;
+        }
+
+        .pagination-goto input[type="number"] {
+            width: 64px;
+            padding: 6px 10px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-align: center;
+            appearance: textfield;
+        }
+        .pagination-goto input[type="number"]::-webkit-inner-spin-button,
+        .pagination-goto input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+        .pagination-goto input[type="number"]:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 2px var(--violet-dim); }
+        .pagination-goto button { padding: 6px 14px; font-size: 0.65rem; }
+
+        /* ═══════════════════════════════════════════
+           SIDEBAR OVERLAY (mobile)
+        ═══════════════════════════════════════════ */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 199;
+        }
+
+        /* ═══════════════════════════════════════════
+           PROMPT COUNTER
+        ═══════════════════════════════════════════ */
+        .prompt-wrap { position: relative; }
+        .prompt-counter {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            pointer-events: none;
+        }
+
+        /* ═══════════════════════════════════════════
+           SETTINGS SAVE BUTTON ROW
+        ═══════════════════════════════════════════ */
+        .btn-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION compat shim (kept for JS)
+        ═══════════════════════════════════════════ */
+        .section { display: none; }
+        .section.collapsed { display: none; }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow: 30px 0 80px rgba(0,0,0,0.6);
+            }
+            .sidebar-overlay.open {
+                display: block;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-row.cols-2,
+            .form-row.cols-3,
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn-group button {
+                width: 100%;
+            }
+            .task-info {
+                grid-template-columns: 1fr;
+            }
+            #tasksContainer {
+                grid-template-columns: 1fr;
+            }
+            /* 2×2 grid for mode tabs, icons stacked above text */
+            .tab-nav {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3px;
+                padding: 3px;
+            }
+            .tab-btn {
+                flex-direction: column;
+                gap: 4px;
+                font-size: 0.58rem;
+                padding: 9px 4px;
+                white-space: normal;
+                text-align: center;
+                letter-spacing: 0.04em;
+            }
+            .tab-icon {
+                font-size: 1.1rem;
+                line-height: 1;
+            }
+            .content {
+                padding: 1rem;
+            }
+            /* Music mode buttons 2x2 grid on mobile */
+            #musicModeGroup.seg-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            #musicModeGroup .seg-btn {
+                min-width: 0;
+                font-size: 0.72rem;
+                padding: 8px 6px;
+            }
+            #musicInstrumentalGroup.seg-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            #tasksContainer {
+                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ══════════════ SIDEBAR ══════════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">
+                <div class="brand-icon">🎬</div>
+                <div>
+                    <div>CreativeLabs</div>
+                    <div class="brand-subtitle">AI Studio Interface</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Studio</div>
+
+            <a class="nav-item active" id="nav-settings" onclick="showPage('page-settings', this)">
+                <span class="nav-icon">🔑</span>
+                <span class="nav-label">API Ayarları</span>
+            </a>
+
+            <a class="nav-item" id="nav-quota" onclick="showPage('page-quota', this)">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Quota Kontrolü</span>
+            </a>
+
+            <div class="nav-section-label">Üretim</div>
+
+            <a class="nav-item" id="nav-generate" onclick="showPage('page-generate', this)">
+                <span class="nav-icon">🎨</span>
+                <span class="nav-label">Oluşturma</span>
+                
+            </a>
+
+            <a class="nav-item" id="nav-tasks" onclick="showPage('page-tasks', this)">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Task Durumu</span>
+            </a>
+
+            <div class="nav-section-label">Döküman</div>
+
+            <a class="nav-item" href="/api-doc" target="_blank">
+                <span class="nav-icon">📖</span>
+                <span class="nav-label">API Dokümantasyonu</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-info">
+                <span class="status-dot"></span>API CONNECTED
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- ══════════════ MAIN ══════════════ -->
+    <div class="main-wrapper">
+
+        <!-- Top bar -->
+        <header class="topbar">
+            <button class="hamburger" onclick="toggleSidebar()" aria-label="Menü">☰</button>
+            <div class="topbar-page-title" id="topbarPageTitle">API Ayarları</div>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-settings-btn" onclick="toggleDisplaySettings()" title="Görüntü Ayarları">⚙️ Ayarlar</button>
+        </header>
+
+        <!-- Settings Dropdown -->
+        <div id="displaySettingsPanel" style="display:none; position:fixed; top:60px; right:16px; z-index:300; background:var(--panel); border:1px solid var(--border-bright); border-radius:var(--radius); padding:1rem 1.25rem; min-width:220px; box-shadow:0 8px 40px rgba(0,0,0,0.7);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--violet); margin-bottom:0.875rem;">🎛️ Görüntü Ayarları</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+                <span style="font-size:0.82rem; color:var(--text-dim);">JSON Yanıtları Göster</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settingShowJson" onchange="applyDisplaySettings()">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- ══ CONTENT ══ -->
+        <main class="content">
+
+            <!-- ─── PAGE: API SETTINGS ─── -->
+            <div class="page active" id="page-settings">
+                <div class="page-header">
+                    <div class="page-eyebrow">Yapılandırma</div>
+                    <div class="page-title">API <span>Ayarları</span></div>
+                    <div class="page-desc">API anahtarınızı ve bağlantı adresinizi kaydedin</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🔑 Kimlik Bilgileri</div>
+                    <div class="form-row cols-2">
+                        <div class="form-group">
+                            <label for="apiKey">api key</label>
+                            <input type="text" id="apiKey" value="" placeholder="API anahtarınızı girin">
+                        </div>
+                        <div class="form-group">
+                            <label for="apiUrl">api base url</label>
+                            <input type="text" id="apiUrl" value="" placeholder="https://api.example.com">
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button type="button" onclick="saveApiSettings()">💾 Kaydet</button>
+                        <button type="button" class="btn-danger" onclick="clearApiSettings()">🗑️ Temizle</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── PAGE: QUOTA ─── -->
+            <div class="page" id="page-quota">
+                <div class="page-header">
+                    <div class="page-eyebrow">Sistem</div>
+                    <div class="page-title">Quota <span>Kontrolü</span></div>
+                    <div class="page-desc">Mevcut kapasitenizi ve çalışan task sayısını görün</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📊 Kullanım Durumu</div>
+                    <button onclick="checkQuota()">Quota'yı Kontrol Et</button>
+                    <div id="quotaResponse" class="response-box" style="display:none;"></div>
+                    <div id="quotaReadable" style="display:none;">
+                        <div class="quota-grid" id="quotaGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── PAGE: GENERATE ─── -->
+            <div class="page" id="page-generate">
+                <div class="page-header">
+                    <div class="page-eyebrow">Üretim Merkezi</div>
+                    <div class="page-title">İçerik <span>Oluşturma</span></div>
+                    <div class="page-desc">Görsel, video ve ses üretimi için tüm araçlar</div>
+                </div>
+
+                <div class="card">
+                    <!-- Main Tabs -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" onclick="switchTab('tab-t2i')"><span class="tab-icon">🖼️</span> Text to Image</button>
+                        <button class="tab-btn" onclick="switchTab('tab-i2i')"><span class="tab-icon">🔄</span> Image to Image</button>
+                        <button class="tab-btn" onclick="switchTab('tab-t2v')"><span class="tab-icon">🎬</span> Text to Video</button>
+                        <button class="tab-btn" onclick="switchTab('tab-i2v')"><span class="tab-icon">🎞️</span> Image to Video</button>
+                        <button class="tab-btn" onclick="switchTab('tab-tts')"><span class="tab-icon">🔊</span> Text to Speech</button>
+                        <button class="tab-btn" onclick="switchTab('tab-music')"><span class="tab-icon">🎵</span> Music</button>
+                    </div>
+
+                    <!-- Text to Image -->
+                    <div class="tab-panel" id="tab-t2i">
+                        <div class="form-group">
+                            <label for="imagePrompt">prompt *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="imagePrompt" maxlength="5000" oninput="updateCounter('imagePrompt','imagePromptCounter',5000)" placeholder="Oluşturmak istediğiniz görselin detaylı açıklaması..."></textarea>
+                                <span id="imagePromptCounter" class="prompt-counter">0/5000</span>
+                            </div>
+                        </div>
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label for="imageModel">model</label>
+                                <select id="imageModel" onchange="onImageModelChange()">
+                                    <option value="NANO_BANANA_PRO" selected>NANO_BANANA_PRO</option>
+                                    <option value="NANO_BANANA">NANO_BANANA</option>
+                                    <option value="NANO_BANANA_2">NANO_BANANA_2</option>
+                                    <option value="GPT_IMAGE_2">GPT_IMAGE_2</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageSize">size</label>
+                                <select id="imageSize">
+                                    <option value="16:9" selected>16:9</option>
+                                    <option value="9:16">9:16</option>
+                                    <option value="1:1">1:1</option>
+                                    <option value="3:4">3:4</option>
+                                    <option value="4:3">4:3</option>
+                                    <option value="3:2">3:2</option>
+                                    <option value="2:3">2:3</option>
+                                    <option value="AUTO">AUTO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="imageResolutionGroup">
+                            <label for="imageResolution">resolution</label>
+                            <select id="imageResolution">
+                                <option value="2K" selected>2K</option>
+                                <option value="1K">1K</option>
+                                <option value="4K">4K</option>
+                            </select>
+                        </div>
+                        <small style="color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-size: 0.75rem;"><span style="font-size:0.75rem; flex-shrink:0;">ℹ️</span>NANO_BANANA_PRO, NANO_BANANA_2 ve GPT_IMAGE_2 modelleri Resolution seçeneği sunar.</small>
+                        <button onclick="generateImage()">✨ Görsel Oluştur</button>
+                        <div id="imageResponse" class="response-box" style="display:none;"></div>
+                        <div id="imageReadable" style="display:none; margin-top:1.25rem; width:100%; max-width:100%; overflow:hidden;"></div>
+                    </div>
+
+                    <!-- Image to Image -->
+                    <div class="tab-panel" id="tab-i2i" style="display:none;">
+                        <div class="form-group">
+                            <label for="i2iPrompt">prompt *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="i2iPrompt" maxlength="5000" oninput="updateCounter('i2iPrompt','i2iPromptCounter',5000)" placeholder="Görseli nasıl dönüştürmek istediğinizi açıklayın..."></textarea>
+                                <span id="i2iPromptCounter" class="prompt-counter">0/5000</span>
+                            </div>
+                        </div>
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label for="i2iModel">model</label>
+                                <select id="i2iModel" onchange="onI2iModelChange()">
+                                    <option value="NANO_BANANA_PRO" selected>NANO_BANANA_PRO</option>
+                                    <option value="NANO_BANANA">NANO_BANANA</option>
+                                    <option value="NANO_BANANA_2">NANO_BANANA_2</option>
+                                    <option value="GPT_IMAGE_2">GPT_IMAGE_2</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="i2iSize">size</label>
+                                <select id="i2iSize">
+                                    <option value="16:9" selected>16:9</option>
+                                    <option value="9:16">9:16</option>
+                                    <option value="1:1">1:1</option>
+                                    <option value="3:4">3:4</option>
+                                    <option value="4:3">4:3</option>
+                                    <option value="3:2">3:2</option>
+                                    <option value="2:3">2:3</option>
+                                    <option value="AUTO">AUTO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="i2iResolutionGroup">
+                            <label for="i2iResolution">resolution</label>
+                            <select id="i2iResolution">
+                                <option value="2K" selected>2K</option>
+                                <option value="1K">1K</option>
+                                <option value="4K">4K</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="i2iRefImages">reference image *</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="i2iRefImages" accept="image/*" multiple onchange="onI2iRefChange(this)">
+                                <label for="i2iRefImages" class="file-input-label" id="i2iRefImagesLabel">RESİM SEÇ (MAKS. 5)</label>
+                            </div>
+                            
+                        </div>
+                        <small style="color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-size: 0.75rem;"><span style="font-size:0.75rem; flex-shrink:0;">ℹ️</span>NANO_BANANA_PRO, NANO_BANANA_2 ve GPT_IMAGE_2 modelleri Resolution seçeneği sunar.</small>
+                        <button onclick="generateImageToImage()">🔄 Görsel Dönüştür</button>
+                        <div id="i2iResponse" class="response-box" style="display:none;"></div>
+                        <div id="i2iReadable" style="display:none; margin-top:1.25rem; width:100%; max-width:100%; overflow:hidden;"></div>
+                    </div>
+
+                    <!-- Text to Video -->
+                    <div class="tab-panel" id="tab-t2v" style="display:none;">
+                        <div class="form-group">
+                            <label for="t2vPrompt">prompt *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="t2vPrompt" maxlength="2000" oninput="updateCounter('t2vPrompt','t2vPromptCounter',2000)" placeholder="Oluşturmak istediğiniz videonun detaylı açıklaması..."></textarea>
+                                <span id="t2vPromptCounter" class="prompt-counter">0/2000</span>
+                            </div>
+                        </div>
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label for="t2vModel">model</label>
+                                <select id="t2vModel" onchange="onT2vModelChange()">
+                                    <option value="SORA_2" selected>SORA_2</option>
+                                    <option value="VEO_3">VEO_3</option>
+                                    <option value="SEEDANCE_2_0">SEEDANCE_2_0</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="t2vSize">size</label>
+                                <select id="t2vSize">
+                                    <option value="16:9" selected>16:9</option>
+                                    <option value="9:16">9:16</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Model Spec Row: Resolution + Duration -->
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label>resolution</label>
+                                <select id="t2vResolutionDisplay" disabled>
+                                    <option>720p</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>duration</label>
+                                <select id="t2vDurationDisplay" disabled>
+                                    <option>10 saniye</option>
+                                </select>
+                            </div>
+                        </div>
+                        <small style="color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-size: 0.75rem;"><span style="font-size:0.75rem; flex-shrink:0;">ℹ️</span>SORA_2: 720p · 10 sn &nbsp;|&nbsp; VEO_3: 720p · 8 sn &nbsp;|&nbsp; SEEDANCE_2_0: 480p · 5 sn</small>
+                        <button onclick="generateTextToVideo()">🎬 Video Oluştur</button>
+                        <div id="t2vResponse" class="response-box" style="display:none;"></div>
+                        <div id="t2vReadable" style="display:none; margin-top:1.25rem; width:100%; max-width:100%; overflow:hidden;"></div>
+                    </div>
+
+                    <!-- Image to Video -->
+                    <div class="tab-panel" id="tab-i2v" style="display:none;">
+                        <div class="form-group">
+                            <label for="i2vPrompt">prompt *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="i2vPrompt" maxlength="2000" oninput="updateCounter('i2vPrompt','i2vPromptCounter',2000)" placeholder="Oluşturmak istediğiniz videonun detaylı açıklaması..."></textarea>
+                                <span id="i2vPromptCounter" class="prompt-counter">0/2000</span>
+                            </div>
+                        </div>
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label for="i2vModel">model</label>
+                                <select id="i2vModel" onchange="onI2vModelChange()">
+                                    <option value="SORA_2" selected>SORA_2</option>
+                                    <option value="VEO_3">VEO_3</option>
+                                    <option value="VIDU_Q3">VIDU_Q3</option>
+                                    <option value="SEEDANCE_2_0">SEEDANCE_2_0</option>
+                                    <option value="QUALITY_V2_5">QUALITY_V2_5</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="i2vSizeGroup">
+                                <label for="i2vSize">size</label>
+                                <select id="i2vSize">
+                                    <option value="16:9" selected>16:9</option>
+                                    <option value="9:16">9:16</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Model Spec Row: Resolution + Duration -->
+                        <div class="form-row cols-2" id="i2vSpecRow">
+                            <div class="form-group">
+                                <label for="i2vResolution">resolution</label>
+                                <select id="i2vResolution" onchange="onI2vResolutionChange()">
+                                    <option value="720p" selected>720p</option>
+                                    <option value="512p">512p</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="i2vDurationSelect">duration</label>
+                                <select id="i2vDurationSelect" disabled onchange="onI2vDurationChange()">
+                                    <option value="5">5 saniye</option>
+                                </select>
+                                <input type="hidden" id="i2vDuration" value="5">
+                            </div>
+                        </div>
+                        <!-- Sub Tabs -->
+                        <div class="sub-tab-nav" id="i2vSubTabNav" style="display:none;">
+                            <button class="sub-tab-btn active" onclick="switchSubTab('subtab-startend')">🎬 Start / End Frame</button>
+                            <button class="sub-tab-btn" onclick="switchSubTab('subtab-refimages')">🖼️ Reference Images</button>
+                        </div>
+                        <!-- Start / End Frame -->
+                        <div class="sub-tab-panel" id="subtab-startend">
+                            <div class="form-group">
+                                <label for="i2vStartFrame">start frame *</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="i2vStartFrame" accept="image/*" onchange="updateFileLabel(this, 'i2vStartFrameLabel')">
+                                    <label for="i2vStartFrame" class="file-input-label" id="i2vStartFrameLabel">RESİM SEÇ</label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="i2vEndFrameGroup" style="display:none;">
+                                <label for="i2vEndFrame" id="i2vEndFrameLabel">end frame *</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="i2vEndFrame" accept="image/*" onchange="updateFileLabel(this, 'i2vEndFrameLabel2')">
+                                    <label for="i2vEndFrame" class="file-input-label" id="i2vEndFrameLabel2">RESİM SEÇ</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Reference Images -->
+                        <div class="sub-tab-panel" id="subtab-refimages" style="display:none;">
+                            <div class="form-group">
+                                <label for="i2vRefImages" id="i2vRefImagesFormLabel">REFERENCE IMAGES *</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="i2vRefImages" accept="image/*" multiple onchange="onI2vRefChange(this)">
+                                    <label for="i2vRefImages" class="file-input-label" id="i2vRefImagesLabel">RESİM SEÇ (MAKS. 3)</label>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <small style="color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-size: 0.75rem;"><span style="font-size:0.75rem; flex-shrink:0;">ℹ️</span>SORA_2: 720p · 10 sn &nbsp;|&nbsp; VEO_3: 720p · 8 sn &nbsp;|&nbsp; SEEDANCE_2_0: 480p · 5 sn &nbsp;|&nbsp; VIDU_Q3: 720p/5sn · 512p/5-10sn &nbsp;|&nbsp; QUALITY_V2_5: 720p/5sn · 480p/5-10sn</small>
+                        <button onclick="generateImageToVideo()">🎞️ Video Oluştur</button>
+                        <div id="i2vResponse" class="response-box" style="display:none;"></div>
+                        <div id="i2vReadable" style="display:none; margin-top:1.25rem; width:100%; max-width:100%; overflow:hidden;"></div>
+                    </div>
+
+                    <!-- Text to Speech -->
+                    <div class="tab-panel" id="tab-tts" style="display:none;">
+
+                        <!-- Model + Ses -->
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label for="ttsModel">model</label>
+                                <select id="ttsModel">
+                                    <option value="MINIMAX-TURBO" selected>MINIMAX-TURBO</option>
+                                    <option value="MINIMAX">MINIMAX</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ttsVoice">ses</label>
+                                <div style="display:flex; gap:8px; align-items:stretch;">
+                                    <select id="ttsVoice" style="flex:1;">
+                                        <option value="" disabled selected>— Sesleri yükleyin —</option>
+                                    </select>
+                                    <button type="button" onclick="loadTtsVoices()" style="flex-shrink:0; padding:0 14px; font-size:0.78rem; white-space:nowrap;">🔄 Yükle</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emotion -->
+                        <div class="form-group" id="ttsEmotionGroup">
+                            <label>duygu (emotion)</label>
+                            <div id="ttsEmotionContainer" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:36px; padding:6px 0;"></div>
+                        </div>
+
+                        <!-- Text -->
+                        <div class="form-group">
+                            <label for="ttsText">metin *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="ttsText" maxlength="6000" oninput="updateCounter('ttsText','ttsTextCounter',6000)" placeholder="Seslendirilecek metni girin..." style="min-height:100px;"></textarea>
+                                <span id="ttsTextCounter" class="prompt-counter">0/6000</span>
+                            </div>
+                        </div>
+
+                        <!-- Speed & Pitch -->
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label>hız — <span id="ttsSpeedVal">1.0</span></label>
+                                <input type="range" id="ttsSpeed" class="tts-range" min="0.5" max="2.0" step="0.1" value="1.0"
+                                       oninput="syncTtsSlider(this,'ttsSpeedVal')">
+                                <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                                    <span>0.5×</span><span>2.0×</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>perde — <span id="ttsPitchVal">0</span></label>
+                                <input type="range" id="ttsPitch" class="tts-range" min="-12" max="12" step="1" value="0"
+                                       oninput="syncTtsSlider(this,'ttsPitchVal')">
+                                <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                                    <span>-12</span><span>+12</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Volume -->
+                        <div class="form-group">
+                            <label>ses seviyesi — <span id="ttsVolumeVal">1.0</span></label>
+                            <input type="range" id="ttsVolume" class="tts-range" min="0" max="2.0" step="0.1" value="1.0"
+                                   oninput="syncTtsSlider(this,'ttsVolumeVal')">
+                            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                                <span>0</span><span>2.0</span>
+                            </div>
+                        </div>
+
+                        <button onclick="generateTts()">🔊 Seslendirmeyi Başlat</button>
+                        <div id="ttsResponse" class="response-box" style="display:none;"></div>
+                        <div id="ttsReadable" style="display:none; margin-top:1.25rem;"></div>
+                    </div>
+
+                    <!-- Music -->
+                    <div class="tab-panel" id="tab-music" style="display:none;">
+                        <div class="form-row cols-2">
+                            <div class="form-group">
+                                <label>model</label>
+                                <select id="musicModel" disabled>
+                                    <option value="SUNO" selected>SUNO</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="musicStyle">stil (style)</label>
+                                <input type="text" id="musicStyle" placeholder="Örn: rock, jazz, hip-hop...">
+                            </div>
+                        </div>
+
+                        <!-- MAIN MODE toggle -->
+                        <div class="form-group">
+                            <label>main mode</label>
+                            <div class="seg-group" id="musicInstrumentalGroup">
+                                <button class="seg-btn active" data-val="false" onclick="onMusicInstrumentalChange(this)">Vocal</button>
+                                <button class="seg-btn" data-val="true" onclick="onMusicInstrumentalChange(this)">Instrumental</button>
+                            </div>
+                        </div>
+
+                        <!-- MODE selector -->
+                        <div class="form-group">
+                            <label>mode</label>
+                            <div class="seg-group seg-group--wrap" id="musicModeGroup">
+                                <button class="seg-btn active" data-val="TEXT" onclick="onMusicModeChange(this)">Text</button>
+                                <button class="seg-btn" data-val="COVER" onclick="onMusicModeChange(this)">Cover</button>
+                                <button class="seg-btn" data-val="ADD_INSTRUMENTAL" onclick="onMusicModeChange(this)">Add Instrumental</button>
+                                <button class="seg-btn" data-val="ADD_VOCAL" onclick="onMusicModeChange(this)">Add Vocal</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="musicPrompt">prompt *</label>
+                            <div class="prompt-wrap">
+                                <textarea id="musicPrompt" maxlength="3000" oninput="updateCounter('musicPrompt','musicPromptCounter',3000)" placeholder="Müziği tarif edin — örn: upbeat rock anthem, melancholic piano..." style="min-height:80px;"></textarea>
+                                <span id="musicPromptCounter" class="prompt-counter">0/3000</span>
+                            </div>
+                        </div>
+
+                        <!-- Lyrics — only Vocal + Text -->
+                        <div class="form-group" id="musicLyricsGroup">
+                            <label for="musicLyrics">sözler (lyrics)</label>
+                            <div class="prompt-wrap">
+                                <textarea id="musicLyrics" maxlength="3000" oninput="updateCounter('musicLyrics','musicLyricsCounter',3000)" placeholder="Şarkı sözlerini girin (opsiyonel)..." style="min-height:80px;"></textarea>
+                                <span id="musicLyricsCounter" class="prompt-counter">0/3000</span>
+                            </div>
+                        </div>
+
+                        <!-- Audio upload — required for COVER / ADD_INSTRUMENTAL / ADD_VOCAL -->
+                        <div class="form-group" id="musicAudioGroup" style="display:none;">
+                            <label for="musicAudioFile" id="musicAudioLabel">referans ses <span style="color:var(--rose);">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="musicAudioFile" accept="audio/mp3,audio/mpeg,.mp3" onchange="updateMusicAudioLabel(this)">
+                                <label for="musicAudioFile" class="file-input-label" id="musicAudioFileLabel">MP3 SEÇ</label>
+                            </div>
+                        </div>
+
+                        <small style="color:var(--text-muted); display:flex; align-items:center; gap:0.4rem; margin-bottom:0.75rem; font-size:0.75rem;"><span style="font-size:0.75rem; flex-shrink:0;">ℹ️</span>Her istekte 2 versiyon üretilir — task tamamlandığında her ikisi de döner.</small>
+                        <button onclick="generateMusic()">🎵 Müzik Oluştur</button>
+                        <div id="musicResponse" class="response-box" style="display:none;"></div>
+                        <div id="musicReadable" style="display:none; margin-top:1.25rem;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ─── PAGE: TASK STATUS ─── -->
+            <div class="page" id="page-tasks">
+                <div class="page-header">
+                    <div class="page-eyebrow">İzleme</div>
+                    <div class="page-title">Task <span>Durumu</span></div>
+                    <div class="page-desc">Görev takibi ve otomatik yenileme</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🔍 Sorgulama</div>
+                    <div class="form-group">
+                        <label for="taskId">TASK ID</label>
+                        <input type="text" id="taskId" placeholder="Örn: abc123-def456">
+                    </div>
+                    <div class="btn-group task-btn-group">
+                        <button onclick="checkTaskStatus()">🔎 Durumu Kontrol Et</button>
+                        <button class="btn-secondary" onclick="checkAllTasks()">📋 Tüm Taskler</button>
+                        <button class="btn-amber" onclick="startAutoRefresh()">⏱️ Oto. Yenile (5sn)</button>
+                        <button class="btn-danger" onclick="stopAutoRefresh()">⏹️ Yenilemeyi Durdur</button>
+                    </div>
+                    <div id="statusResponse" class="response-box" style="display:none;"></div>
+                    <div id="tasksContainer"></div>
+                    <div id="paginationContainer"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        /* ══════════════════════════════════════
+           PAGE NAVIGATION (sidebar)
+        ══════════════════════════════════════ */
+        const PAGE_TITLES = {
+            'page-settings': 'API Ayarları',
+            'page-quota':    'Quota Kontrolü',
+            'page-generate': 'İçerik Oluşturma',
+            'page-tasks':    'Task Durumu',
+        };
+
+        function showPage(pageId, navEl) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (navEl) navEl.classList.add('active');
+            document.getElementById('topbarPageTitle').textContent = PAGE_TITLES[pageId] || '';
+            closeSidebar();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+        }
+
+        /* ══════════════════════════════════════
+           ACCORDION COMPAT SHIM (JS kept intact)
+        ══════════════════════════════════════ */
+        function toggleSection(headerElement) {
+            const section = headerElement.parentElement;
+            section.classList.toggle('collapsed');
+        }
+
+        /* ══════════════════════════════════════
+           LOCALSTORAGE — API SETTINGS
+        ══════════════════════════════════════ */
+        function saveApiSettings() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            
+            if (apiKey) localStorage.setItem('creativelabs_api_key', apiKey);
+            if (apiUrl) localStorage.setItem('creativelabs_api_url', apiUrl);
+            
+            alert('✅ Ayarlar kaydedildi!');
+        }
+
+        function clearApiSettings() {
+            if (confirm('API ayarlarını silmek istediğinizden emin misiniz?')) {
+                localStorage.removeItem('creativelabs_api_key');
+                localStorage.removeItem('creativelabs_api_url');
+                document.getElementById('apiKey').value = '';
+                document.getElementById('apiUrl').value = '';
+                alert('✅ Ayarlar temizlendi!');
+            }
+        }
+
+        function loadApiSettings() {
+            const savedKey = localStorage.getItem('creativelabs_api_key');
+            const savedUrl = localStorage.getItem('creativelabs_api_url');
+            
+            if (savedKey) document.getElementById('apiKey').value = savedKey;
+            if (savedUrl) document.getElementById('apiUrl').value = savedUrl;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadApiSettings();
+            updateCounter('imagePrompt', 'imagePromptCounter', 5000);
+            updateCounter('t2vPrompt', 't2vPromptCounter', 2000);
+            updateCounter('i2vPrompt', 'i2vPromptCounter', 2000);
+            updateCounter('i2iPrompt', 'i2iPromptCounter', 5000);
+            onI2vModelChange();
+            onT2vModelChange();
+        });
+
+        const API_BASE = () => document.getElementById('apiUrl').value;
+        const API_KEY = () => document.getElementById('apiKey').value;
+        let autoRefreshInterval = null;
+        let currentViewMode = 'all'; // 'all' veya 'single'
+        
+        // Pagination variables
+        let allTasks = [];
+        let currentPage = 1;
+        const tasksPerPage = 6;
+
+        // Helper function for API calls
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const apiKey = API_KEY();
+            if (!apiKey) {
+                alert('Lütfen API Key girin!');
+                throw new Error('API Key gerekli');
+            }
+
+            const options = {
+                method: method,
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            const response = await fetch(`${API_BASE()}${endpoint}`, options);
+            const data = await response.json();
+            
+            return { response, data };
+        }
+
+        /* ══════════════════════════════════════
+           DISPLAY SETTINGS (JSON toggle)
+        ══════════════════════════════════════ */
+        function toggleDisplaySettings() {
+            const panel = document.getElementById('displaySettingsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Close settings panel when clicking outside
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('displaySettingsPanel');
+            const btn = document.querySelector('.topbar-settings-btn');
+            if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+                panel.style.display = 'none';
+            }
+        });
+
+        // Store last responses for re-render when settings change
+        const lastResponses = {};
+
+        function applyDisplaySettings() {
+            const showJson = document.getElementById('settingShowJson')?.checked ?? true;
+            // Re-render stored responses with new settings
+            for (const [key, stored] of Object.entries(lastResponses)) {
+                displayResponseWithReadable(stored.jsonId, stored.readableId, stored.data, stored.isError, stored.type);
+            }
+            // Also toggle statusResponse box visibility
+            const statusBox = document.getElementById('statusResponse');
+            if (statusBox && statusBox.innerHTML) {
+                statusBox.style.display = showJson ? 'block' : 'none';
+            }
+        }
+
+        // Unified display function that respects JSON toggle setting
+        function displayResponseWithReadable(jsonId, readableId, data, isError, type) {
+            // Store for re-render
+            lastResponses[jsonId] = { jsonId, readableId, data, isError, type };
+
+            const jsonEl = document.getElementById(jsonId);
+            const readableEl = document.getElementById(readableId);
+
+            const showJson = document.getElementById('settingShowJson') ? document.getElementById('settingShowJson').checked : true;
+
+            // Always write content — toggle only controls visibility
+            if (jsonEl) {
+                jsonEl.innerHTML = `<span class="${isError ? 'error' : 'success'}">${isError ? '❌ Hata' : '✅ Başarılı'}</span>\n\n${JSON.stringify(data, null, 2)}`;
+                jsonEl.style.display = showJson ? 'block' : 'none';
+            }
+
+            if (readableEl) {
+                if (!isError) {
+                    if (type === 'quota') {
+                        readableEl.innerHTML = renderQuotaReadable(data);
+                    } else if (type === 'task') {
+                        readableEl.innerHTML = renderTaskIdReadable(data);
+                    }
+                    readableEl.style.display = showJson ? 'none' : 'block';
+                } else {
+                    // Error: show readable error card when JSON is off
+                    if (!showJson) {
+                        readableEl.innerHTML = renderErrorReadable(data);
+                        readableEl.style.display = 'block';
+                    } else {
+                        readableEl.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // Render quota as nice cards
+        function renderQuotaReadable(data) {
+            const labelMap = {
+                available_slots: 'Müsait Slot',
+                max_concurrent: 'Maks. Eş Zamanlı',
+                quota: 'Toplam Kota',
+                running_tasks: 'Çalışan Task'
+            };
+            const colorMap = {
+                available_slots: 'var(--emerald)',
+                max_concurrent: 'var(--cyan)',
+                quota: 'var(--violet)',
+                running_tasks: 'var(--amber)'
+            };
+            let html = '<div class="quota-grid">';
+            for (const [key, val] of Object.entries(data)) {
+                const label = labelMap[key] || key;
+                const color = colorMap[key] || 'var(--violet)';
+                html += `
+                    <div class="quota-stat">
+                        <div class="quota-stat-num" style="color:${color};">${val}</div>
+                        <div class="quota-stat-label">${label}</div>
+                    </div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // Render task_id response as readable card
+        function renderTaskIdReadable(data) {
+            if (!data.task_id) return '';
+            return `
+                <div style="background:var(--panel); border:1px solid var(--border-bright); border-radius:var(--radius-sm); padding:0.75rem 1rem; width:100%; box-sizing:border-box;">
+                    <div style="display:flex; align-items:center; gap:0.625rem; margin-bottom:6px;">
+                        <span style="font-size:1.1rem; flex-shrink:0;">🎯</span>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--violet); flex:1;">Task Oluşturuldu</div>
+                        <button onclick="quickQueryTask('${data.task_id}')" style="flex-shrink:0; padding:4px 12px; font-size:0.6rem; background:var(--cyan-dim); border:1px solid rgba(34,211,238,0.3); color:var(--cyan); box-shadow:none; transform:none; border-radius:6px; white-space:nowrap;">🔍 Sorgula</button>
+                    </div>
+                    <div style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%; box-sizing:border-box;">${data.task_id}</div>
+                </div>`;
+        }
+
+        function renderErrorReadable(data) {
+            const title = data.error || 'Hata';
+            const message = data.message || JSON.stringify(data);
+            return `
+                <div style="background:var(--rose-dim); border:1px solid rgba(244,63,94,0.35); border-radius:var(--radius-sm); padding:1rem 1.25rem; display:flex; align-items:flex-start; gap:0.875rem;">
+                    <span style="font-size:1.4rem; flex-shrink:0;">❌</span>
+                    <div style="min-width:0;">
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--rose); margin-bottom:4px;">Hata</div>
+                        <div style="font-size:0.85rem; color:var(--text); font-weight:600; margin-bottom:2px;">${title}</div>
+                        ${message !== title ? `<div style="font-size:0.8rem; color:var(--text-dim);">${message}</div>` : ''}
+                    </div>
+                </div>`;
+        }
+
+        
+        function quickQueryTask(taskId) {
+            document.getElementById('taskId').value = taskId;
+            currentViewMode = 'single';
+            showPage('page-tasks', document.getElementById('nav-tasks'));
+            checkTaskStatus();
+        }
+
+        // Display response helper (legacy — kept for compatibility)
+        function displayResponse(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            element.style.display = 'block';
+            element.innerHTML = `<span class="${isError ? 'error' : 'success'}">${isError ? '❌ Hata' : '✅ Başarılı'}</span>\n\n${JSON.stringify(data, null, 2)}`;
+        }
+
+        // Check Quota
+        async function checkQuota() {
+            try {
+                const { response, data } = await apiCall('/api/quota');
+                displayResponseWithReadable('quotaResponse', 'quotaReadable', data, !response.ok, 'quota');
+            } catch (error) {
+                displayResponseWithReadable('quotaResponse', 'quotaReadable', { error: error.message }, true, 'quota');
+            }
+        }
+
+        // Generate Image
+        async function generateImage() {
+            const prompt = document.getElementById('imagePrompt').value;
+            if (!prompt) {
+                alert('Lütfen prompt girin!');
+                return;
+            }
+
+            const body = {
+                prompt: prompt,
+                model: document.getElementById('imageModel').value,
+                size: document.getElementById('imageSize').value
+            };
+
+            // NANO_PRO / NANO_2 / GPT_IMAGE_2 için resolution ekle
+            if (body.model === 'NANO_BANANA_PRO' || body.model === 'NANO_BANANA_2' || body.model === 'GPT_IMAGE_2') {
+                body.resolution = document.getElementById('imageResolution').value;
+            }
+
+            // Image-to-Image için base64 dönüşümü
+            const fileInput = document.getElementById('imageFile');
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                const images = [];
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    const base64 = await fileToBase64(fileInput.files[i]);
+                    images.push(base64);
+                }
+                body.reference_images = images;
+            }
+
+            try {
+                const { response, data } = await apiCall('/api/generate/image', 'POST', body);
+                displayResponseWithReadable('imageResponse', 'imageReadable', data, !response.ok, 'task');
+                
+                if (response.ok && data.task_id) {
+                    document.getElementById('taskId').value = data.task_id;
+                }
+            } catch (error) {
+                displayResponseWithReadable('imageResponse', 'imageReadable', { error: error.message }, true, 'task');
+            }
+        }
+
+        function onI2vModelChange() {
+            const model = document.getElementById('i2vModel').value;
+            const isVeo = model === 'VEO_3';
+            const isViduQ3 = model === 'VIDU_Q3';
+            const isKling = model === 'SEEDANCE_2_0';
+            const isQuality = model === 'QUALITY_V2_5';
+
+            // Size selector
+            const sizeSelect = document.getElementById('i2vSize');
+            if (isViduQ3 || isQuality) {
+                sizeSelect.innerHTML = '<option value="AUTO">AUTO</option>';
+                sizeSelect.disabled = true;
+            } else if (isKling) {
+                sizeSelect.innerHTML = '<option value="16:9">16:9</option><option value="9:16">9:16</option><option value="1:1">1:1</option><option value="4:3">4:3</option><option value="3:4">3:4</option>';
+                sizeSelect.disabled = false;
+                sizeSelect.value = '16:9';
+            } else {
+                sizeSelect.innerHTML = '<option value="16:9">16:9</option><option value="9:16">9:16</option>';
+                sizeSelect.disabled = false;
+                sizeSelect.value = '16:9';
+            }
+
+            // Sub-tab nav: VEO_3 ve SEEDANCE_2_0'de göster
+            document.getElementById('i2vSubTabNav').style.display = (isVeo || isKling) ? 'flex' : 'none';
+
+            // End Frame: VEO_3 ve SEEDANCE_2_0'de göster
+            document.getElementById('i2vEndFrameGroup').style.display = (isVeo || isKling) ? 'block' : 'none';
+
+            // End Frame label
+            const endFrameLabel = document.getElementById('i2vEndFrameLabel');
+            if (endFrameLabel) endFrameLabel.textContent = (isVeo || isKling) ? 'End Frame' : 'End Frame *';
+
+            // Reference Images label
+            const refImagesLabel = document.getElementById('i2vRefImagesFormLabel');
+            if (refImagesLabel) refImagesLabel.textContent = (isVeo || isKling) ? 'REFERENCE IMAGES *' : 'REFERENCE IMAGES';
+
+            // Reference Images paneli: VEO_3 ve SEEDANCE_2_0'de erişilebilir
+            document.getElementById('subtab-refimages').style.display = 'none';
+            document.getElementById('subtab-startend').style.display = 'block';
+
+            // Sub-tab butonlarını sıfırla
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            const firstSubBtn = document.querySelector('.sub-tab-btn');
+            if (firstSubBtn) firstSubBtn.classList.add('active');
+
+            // Resolution select + Duration select
+            const resSelect = document.getElementById('i2vResolution');
+            const durSelect = document.getElementById('i2vDurationSelect');
+            const durInput  = document.getElementById('i2vDuration');
+
+            if (isViduQ3) {
+                resSelect.innerHTML = '<option value="720p">720p</option><option value="512p">512p</option>';
+                resSelect.disabled = false;
+                durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                durSelect.disabled = true;
+                durInput.value = '5';
+            } else if (isVeo) {
+                resSelect.innerHTML = '<option value="720p">720p</option>';
+                resSelect.disabled = true;
+                durSelect.innerHTML = '<option value="8">8 saniye</option>';
+                durSelect.disabled = true;
+                durInput.value = '8';
+            } else if (isKling) {
+                resSelect.innerHTML = '<option value="480p">480p</option>';
+                resSelect.disabled = true;
+                durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                durSelect.disabled = true;
+                durInput.value = '5';
+            } else if (isQuality) {
+                // QUALITY_V2_5: kullanıcı resolution seçer, duration otomatik türetilir
+                resSelect.innerHTML = '<option value="720p">720p</option><option value="480p">480p</option>';
+                resSelect.disabled = false;
+                durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                durSelect.disabled = true;
+                durInput.value = '5';
+            } else {
+                resSelect.innerHTML = '<option value="720p">720p</option>';
+                resSelect.disabled = true;
+                durSelect.innerHTML = '<option value="10">10 saniye</option>';
+                durSelect.disabled = true;
+                durInput.value = '10';
+            }
+        }
+
+        function onI2vResolutionChange() {
+            const model = document.getElementById('i2vModel').value;
+            const res = document.getElementById('i2vResolution').value;
+            const durSelect = document.getElementById('i2vDurationSelect');
+            const durInput = document.getElementById('i2vDuration');
+            if (model === 'VIDU_Q3') {
+                if (res === '512p') {
+                    durSelect.innerHTML = '<option value="5">5 saniye</option><option value="10">10 saniye</option>';
+                    durSelect.disabled = false;
+                } else {
+                    durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                    durSelect.disabled = true;
+                }
+                durInput.value = durSelect.value;
+            } else if (model === 'QUALITY_V2_5') {
+                if (res === '480p') {
+                    durSelect.innerHTML = '<option value="5">5 saniye</option><option value="10">10 saniye</option>';
+                    durSelect.disabled = false;
+                } else {
+                    durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                    durSelect.disabled = true;
+                }
+                durInput.value = durSelect.value;
+            }
+        }
+
+        function onI2vDurationChange() {
+            document.getElementById('i2vDuration').value = document.getElementById('i2vDurationSelect').value;
+        }
+
+        function onT2vModelChange() {
+            const model = document.getElementById('t2vModel').value;
+            const durSelect = document.getElementById('t2vDurationDisplay');
+            const resSelect = document.getElementById('t2vResolutionDisplay');
+            const sizeSelect = document.getElementById('t2vSize');
+
+            if (model === 'VEO_3') {
+                durSelect.innerHTML = '<option value="8">8 saniye</option>';
+                resSelect.innerHTML = '<option value="720p">720p</option>';
+                sizeSelect.innerHTML = '<option value="16:9">16:9</option><option value="9:16">9:16</option>';
+            } else if (model === 'SEEDANCE_2_0') {
+                durSelect.innerHTML = '<option value="5">5 saniye</option>';
+                resSelect.innerHTML = '<option value="480p">480p</option>';
+                sizeSelect.innerHTML = '<option value="16:9">16:9</option><option value="9:16">9:16</option><option value="1:1">1:1</option><option value="4:3">4:3</option><option value="3:4">3:4</option>';
+            } else {
+                durSelect.innerHTML = '<option value="10">10 saniye</option>';
+                resSelect.innerHTML = '<option value="720p">720p</option>';
+                sizeSelect.innerHTML = '<option value="16:9">16:9</option><option value="9:16">9:16</option>';
+            }
+        }
+
+        function onI2iRefChange(input) {
+            if (input.files && input.files.length > 5) {
+                alert('En fazla 5 görsel seçebilirsiniz!');
+                input.value = '';
+                document.getElementById('i2iRefImagesLabel').textContent = 'RESİM SEÇ (MAKS. 5)';
+                document.getElementById('i2iRefImagesLabel').classList.remove('file-selected');
+                return;
+            }
+            updateFileLabel(input, 'i2iRefImagesLabel');
+        }
+
+        function onI2iModelChange() {
+            const model = document.getElementById('i2iModel').value;
+            document.getElementById('i2iResolutionGroup').style.display =
+                (model === 'NANO_BANANA_PRO' || model === 'NANO_BANANA_2' || model === 'GPT_IMAGE_2') ? 'block' : 'none';
+        }
+
+        async function generateImageToImage() {
+            const prompt = document.getElementById('i2iPrompt').value;
+            if (!prompt) { alert('Lütfen prompt girin!'); return; }
+
+            const refInput = document.getElementById('i2iRefImages');
+            if (!refInput.files || refInput.files.length === 0) {
+                alert('Lütfen en az 1 referans görsel seçin!');
+                return;
+            }
+
+            const body = {
+                prompt,
+                model: document.getElementById('i2iModel').value,
+                size: document.getElementById('i2iSize').value
+            };
+
+            if (body.model === 'NANO_BANANA_PRO' || body.model === 'NANO_BANANA_2' || body.model === 'GPT_IMAGE_2') {
+                body.resolution = document.getElementById('i2iResolution').value;
+            }
+
+            if (refInput.files && refInput.files.length > 0) {
+                const images = [];
+                for (let i = 0; i < refInput.files.length; i++) {
+                    images.push(await fileToBase64(refInput.files[i]));
+                }
+                body.reference_images = images;
+            }
+
+            try {
+                const { response, data } = await apiCall('/api/generate/image', 'POST', body);
+                displayResponseWithReadable('i2iResponse', 'i2iReadable', data, !response.ok, 'task');
+                if (response.ok && data.task_id) document.getElementById('taskId').value = data.task_id;
+            } catch (error) {
+                displayResponseWithReadable('i2iResponse', 'i2iReadable', { error: error.message }, true, 'task');
+            }
+        }
+
+        function onImageModelChange() {
+            const model = document.getElementById('imageModel').value;
+            document.getElementById('imageResolutionGroup').style.display = 
+                (model === 'NANO_BANANA_PRO' || model === 'NANO_BANANA_2' || model === 'GPT_IMAGE_2') ? 'block' : 'none';
+        }
+
+        function updateCounter(textareaId, counterId, max) {
+            const len = document.getElementById(textareaId).value.length;
+            const counter = document.getElementById(counterId);
+            counter.textContent = `${len}/${max}`;
+            counter.style.color = len >= max * 0.9 ? 'var(--warning)' : len >= max ? 'var(--error)' : 'var(--text-muted)';
+        }
+
+        // Tab switching
+        function switchTab(id) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            event.currentTarget.classList.add('active');
+            if (id === 'tab-tts') {
+                initTtsEmotions();
+                updateCounter('ttsText', 'ttsTextCounter', 6000);
+            }
+            if (id === 'tab-music') {
+                updateCounter('musicPrompt', 'musicPromptCounter', 3000);
+                updateCounter('musicLyrics', 'musicLyricsCounter', 3000);
+            }
+        }
+
+        function switchSubTab(id) {
+            document.querySelectorAll('.sub-tab-panel').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            event.currentTarget.classList.add('active');
+        }
+
+        // Generate Text to Video
+        async function generateTextToVideo() {
+            const prompt = document.getElementById('t2vPrompt').value;
+            if (!prompt) { alert('Lütfen prompt girin!'); return; }
+
+            const body = {
+                prompt,
+                model: document.getElementById('t2vModel').value,
+                size: document.getElementById('t2vSize').value,
+                resolution: document.getElementById('t2vResolutionDisplay').value,
+                duration: parseInt(document.getElementById('t2vDurationDisplay').value)
+            };
+
+            try {
+                const { response, data } = await apiCall('/api/generate/video', 'POST', body);
+                displayResponseWithReadable('t2vResponse', 't2vReadable', data, !response.ok, 'task');
+                if (response.ok && data.task_id) document.getElementById('taskId').value = data.task_id;
+            } catch (error) {
+                displayResponseWithReadable('t2vResponse', 't2vReadable', { error: error.message }, true, 'task');
+            }
+        }
+
+        // Generate Image to Video
+        async function generateImageToVideo() {
+            const prompt = document.getElementById('i2vPrompt').value;
+            if (!prompt) { alert('Lütfen prompt girin!'); return; }
+
+            const body = {
+                prompt,
+                model: document.getElementById('i2vModel').value,
+            };
+
+            // VIDU_Q3 ve QUALITY_V2_5 için size AUTO, diğerleri seçilen değer
+            if (body.model === 'VIDU_Q3' || body.model === 'QUALITY_V2_5') {
+                body.size = 'AUTO';
+            } else {
+                body.size = document.getElementById('i2vSize').value;
+            }
+
+            // Her model için resolution ve duration her zaman gönderilir
+            body.duration = parseInt(document.getElementById('i2vDuration').value) || 5;
+            body.resolution = document.getElementById('i2vResolution').value;
+
+            // Determine active sub-tab
+            const startEndActive = document.getElementById('subtab-startend').style.display !== 'none';
+
+            if (startEndActive) {
+                const startInput = document.getElementById('i2vStartFrame');
+                if (!startInput.files || startInput.files.length === 0) {
+                    alert('Lütfen Start Frame resmi seçin!'); return;
+                }
+                body.start_frame = await fileToBase64(startInput.files[0]);
+
+                const endInput = document.getElementById('i2vEndFrame');
+                if (endInput.files && endInput.files.length > 0) {
+                    // End frame yalnızca VEO_3 ve SEEDANCE_2_0 destekler;
+                    // diğer modellerde seçili dosya olsa dahi payload'a eklenmez (hata verilmez)
+                    if (body.model === 'VEO_3' || body.model === 'SEEDANCE_2_0') {
+                        body.end_frame = await fileToBase64(endInput.files[0]);
+                    }
+                }
+            } else {
+                if (body.model !== 'VEO_3' && body.model !== 'SEEDANCE_2_0') { alert('Reference Images yalnızca VEO_3 ve SEEDANCE_2_0 modelleriyle kullanılabilir!'); return; }
+                const refInput = document.getElementById('i2vRefImages');
+                if (!refInput.files || refInput.files.length === 0) {
+                    alert('Lütfen en az 1 referans görsel seçin!'); return;
+                }
+                const refs = [];
+                for (let i = 0; i < refInput.files.length; i++) refs.push(await fileToBase64(refInput.files[i]));
+                body.reference_images = refs;
+            }
+
+            try {
+                const { response, data } = await apiCall('/api/generate/video', 'POST', body);
+                displayResponseWithReadable('i2vResponse', 'i2vReadable', data, !response.ok, 'task');
+                if (response.ok && data.task_id) document.getElementById('taskId').value = data.task_id;
+            } catch (error) {
+                displayResponseWithReadable('i2vResponse', 'i2vReadable', { error: error.message }, true, 'task');
+            }
+        }
+
+        // Reference images max-3 check
+        function onI2vRefChange(input) {
+            if (input.files && input.files.length > 3) {
+                alert('En fazla 3 referans görsel seçebilirsiniz!');
+                input.value = '';
+                document.getElementById('i2vRefImagesLabel').textContent = 'RESİM SEÇ (MAKS. 3)';
+                document.getElementById('i2vRefImagesLabel').classList.remove('file-selected');
+                return;
+            }
+            updateFileLabel(input, 'i2vRefImagesLabel');
+        }
+
+        // Helper function: File to Base64 (with compression)
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const MAX_SIDE = 3000;
+                        let { width, height } = img;
+
+                        if (width > MAX_SIDE || height > MAX_SIDE) {
+                            if (width > height) {
+                                height = Math.round((height / width) * MAX_SIDE);
+                                width = MAX_SIDE;
+                            } else {
+                                width = Math.round((width / height) * MAX_SIDE);
+                                height = MAX_SIDE;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        const ctx = canvas.getContext('2d');
+
+                        // JPEG doesn't support transparency — fill background white
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, width, height);
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob(
+                            (blob) => {
+                                const blobReader = new FileReader();
+                                blobReader.onload = () => {
+                                    const base64 = blobReader.result.split(',')[1];
+                                    resolve(base64);
+                                };
+                                blobReader.onerror = reject;
+                                blobReader.readAsDataURL(blob);
+                            },
+                            'image/jpeg',
+                            0.92
+                        );
+                    };
+                    img.onerror = reject;
+                    img.src = reader.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Check Task Status
+        async function checkTaskStatus() {
+            const taskId = document.getElementById('taskId').value;
+            if (!taskId) {
+                alert('Lütfen Task ID girin!');
+                return;
+            }
+            currentViewMode = 'single';
+
+            try {
+                const { response, data } = await apiCall(`/api/status/${taskId}`);
+                const showJson = document.getElementById('settingShowJson')?.checked ?? true;
+                const statusBox = document.getElementById('statusResponse');
+                statusBox.innerHTML = `<span class="${response.ok ? 'success' : 'error'}">${response.ok ? '✅ Başarılı' : '❌ Hata'}</span>\n\n${JSON.stringify(data, null, 2)}`;
+                statusBox.style.display = showJson ? 'block' : 'none';
+                if (response.ok) {
+                    displayTaskCard(taskId, data);
+                } else if (!showJson) {
+                    // JSON kapalıyken hata kartı göster
+                    const container = document.getElementById('tasksContainer');
+                    container.innerHTML = renderErrorReadable(data);
+                }
+            } catch (error) {
+                alert('Hata: ' + error.message);
+            }
+        }
+
+        // Check All Tasks
+        async function checkAllTasks() {
+            currentViewMode = 'all';
+            try {
+                const { response, data } = await apiCall(`/api/status?page=${currentPage}&per_page=${tasksPerPage}`);
+                const showJson = document.getElementById('settingShowJson')?.checked ?? true;
+                const statusBox = document.getElementById('statusResponse');
+                statusBox.innerHTML = `<span class="${response.ok ? 'success' : 'error'}">${response.ok ? '✅ Başarılı' : '❌ Hata'}</span>\n\n${JSON.stringify(data, null, 2)}`;
+                statusBox.style.display = showJson ? 'block' : 'none';
+                if (response.ok && data.tasks) {
+                    displayAllTasks(data);
+                } else if (!response.ok && !showJson) {
+                    // JSON kapalıyken hata kartı göster
+                    const container = document.getElementById('tasksContainer');
+                    container.innerHTML = renderErrorReadable(data);
+                }
+            } catch (error) {
+                alert('Hata: ' + error.message);
+            }
+        }
+
+        // Display single task card
+        function displayTaskCard(taskId, taskData) {
+            const container = document.getElementById('tasksContainer');
+            const paginationContainer = document.getElementById('paginationContainer');
+            const section = document.querySelector('.card:has(#tasksContainer)');
+            const statusClass = `status-${taskData.status}`;
+            
+            // Add single task view class
+            if (section) {
+                section.classList.add('single-task-view');
+            }
+            
+            // Clear pagination for single task view
+            paginationContainer.innerHTML = '';
+            
+            let resultHTML = '';
+            let parsedTracks = [];
+            if (taskData.mode === 'music') {
+                if (taskData.result_url) {
+                    try { parsedTracks = JSON.parse(taskData.result_url); } catch(e) {}
+                }
+                resultHTML = renderMusicTracks(parsedTracks);
+            } else if (taskData.result_url) {
+                if (taskData.mode === 'image') {
+                    resultHTML = `<img src="${taskData.result_url}" class="result-image" alt="Result">`;
+                } else if (taskData.mode === 'video') {
+                    resultHTML = `<video src="${taskData.result_url}" class="result-video" controls></video>`;
+                } else if (taskData.mode === 'tts') {
+                    resultHTML = `<audio src="${taskData.result_url}" controls style="width:100%; margin-top:1rem; border-radius:var(--radius-sm);"></audio>`;
+                }
+            }
+
+            const refImagesHTML = taskData.reference_image_urls && taskData.reference_image_urls.length > 0
+                ? `<div class="task-info-item" style="grid-column:1/-1"><strong>Referans Görseller:</strong><br>${taskData.reference_image_urls.map(url =>
+                    `<a href="${url}" target="_blank"><img src="${url}" style="height:60px;border-radius:6px;margin:4px;object-fit:cover;"></a>`
+                ).join('')}</div>`
+                : '';
+
+            const frameImagesHTML = [
+                taskData.start_frame_url ? `<a href="${taskData.start_frame_url}" target="_blank"><img src="${taskData.start_frame_url}" style="height:60px;border-radius:6px;margin:4px;object-fit:cover;" title="Start Frame"></a>` : '',
+                taskData.end_frame_url   ? `<a href="${taskData.end_frame_url}"   target="_blank"><img src="${taskData.end_frame_url}"   style="height:60px;border-radius:6px;margin:4px;object-fit:cover;" title="End Frame"></a>`   : ''
+            ].filter(Boolean).join('');
+            const frameHTML = frameImagesHTML
+                ? `<div class="task-info-item" style="grid-column:1/-1"><strong>${taskData.start_frame_url && taskData.end_frame_url ? 'Start / End Frame:' : taskData.start_frame_url ? 'Start Frame:' : 'End Frame:'}</strong><br>${frameImagesHTML}</div>`
+                : '';
+
+            // Meta items — flex row, equal width, wraps on mobile
+            const metaItems = [
+                { label: 'Mod',        val: taskData.mode },
+            ];
+
+            // Music: Sonuç URL kutuları (her track için ayrı)
+            if (taskData.mode === 'music' && parsedTracks.length > 0) {
+                parsedTracks.forEach((t, i) => {
+                    metaItems.push({ label: `Sonuç URL ${i+1}`, val: `<a href="${t.musicUrl}" target="_blank" style="color:var(--cyan);text-decoration:none;">Aç</a>` });
+                });
+            } else if (taskData.result_url && taskData.mode !== 'music') {
+                metaItems.push({ label: 'Sonuç URL', val: `<a href="${taskData.result_url}" target="_blank" style="color:var(--cyan);text-decoration:none;">Aç</a>` });
+            }
+
+            // Ortak alanlar
+            if (taskData.model)      metaItems.push({ label: 'Model',      val: taskData.model });
+            if (taskData.resolution) metaItems.push({ label: 'Resolution', val: taskData.resolution });
+            if (taskData.size)       metaItems.push({ label: 'Size',       val: taskData.size });
+            if (taskData.duration)   metaItems.push({ label: 'Duration',   val: taskData.duration });
+
+            // Music'e özgü alanlar
+            if (taskData.mode === 'music') {
+                metaItems.push({ label: 'Main Mode', val: taskData.instrumental ? 'Instrumental' : 'Vocal' });
+                if (taskData.audio_usage) metaItems.push({ label: 'Mode', val: taskData.audio_usage });
+                if (taskData.style)       metaItems.push({ label: 'Style', val: taskData.style });
+            }
+
+            // TTS'e özgü alanlar
+            if (taskData.mode === 'tts') {
+                if (taskData.voice_id) metaItems.push({ label: 'Voice',   val: taskData.voice_id });
+                if (taskData.speed != null)    metaItems.push({ label: 'Speed',   val: taskData.speed });
+                if (taskData.pitch != null)    metaItems.push({ label: 'Pitch',   val: taskData.pitch });
+                if (taskData.volume != null)   metaItems.push({ label: 'Volume',  val: taskData.volume });
+                if (taskData.emotion)  metaItems.push({ label: 'Emotion', val: taskData.emotion });
+            }
+
+            const metaHTML = metaItems.map(item => `
+                <div class="task-meta-item" style="background:var(--panel); border:1px solid transparent; border-radius:var(--radius-sm); padding:0.625rem 0.875rem;">
+                    <strong style="color:var(--violet);font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;display:block;margin-bottom:2px;">${item.label}:</strong>
+                    <span style="font-size:0.82rem;color:var(--text-dim);">${item.val}</span>
+                </div>
+            `).join('');
+
+            // Prompt — full width, modern scrollbar, animated copy button
+            const promptHTML = taskData.prompt ? `
+                <div style="background:var(--panel); border:1px solid transparent; border-radius:var(--radius-sm); padding:0.625rem 0.875rem; margin-top:0.625rem;">
+                    <strong style="color:var(--violet);font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;display:block;margin-bottom:6px;">Prompt:</strong>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div id="promptTextDisplay" style="
+                            flex:1; overflow-x:auto; white-space:nowrap;
+                            background:var(--input-bg); border:1px solid var(--border);
+                            border-radius:8px; padding:8px 12px;
+                            font-family:'JetBrains Mono',monospace; font-size:0.8rem;
+                            color:var(--text-dim); line-height:1.5;
+                            scrollbar-width:thin;
+                            scrollbar-color:rgba(139,92,246,0.4) transparent;
+                        "></div>
+                        <button id="promptCopyBtn" style="
+                            flex-shrink:0; width:34px; height:34px;
+                            display:flex; align-items:center; justify-content:center;
+                            font-size:0.85rem;
+                            background:var(--violet-dim); border:1px solid var(--border-bright);
+                            color:var(--violet); border-radius:8px;
+                            cursor:pointer; box-shadow:none; transform:none;
+                            transition:background 0.2s, border-color 0.2s, color 0.2s;
+                        ">📋</button>
+                    </div>
+                </div>` : '';
+
+            // Music lyrics — tam genişlik kutu (prompt gibi, kopyalama butonlu)
+            const lyricsHTML = (taskData.mode === 'music' && taskData.lyrics) ? `
+                <div style="background:var(--panel); border:1px solid transparent; border-radius:var(--radius-sm); padding:0.625rem 0.875rem; margin-top:0.625rem;">
+                    <strong style="color:var(--violet);font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;display:block;margin-bottom:6px;">Lyrics:</strong>
+                    <div style="display:flex;align-items:flex-start;gap:8px;">
+                        <div id="lyricsTextDisplay" style="
+                            flex:1; overflow-x:auto; white-space:pre-wrap; word-break:break-word;
+                            background:var(--input-bg); border:1px solid var(--border);
+                            border-radius:8px; padding:8px 12px;
+                            font-family:'JetBrains Mono',monospace; font-size:0.8rem;
+                            color:var(--text-dim); line-height:1.5; max-height:120px; overflow-y:auto;
+                            scrollbar-width:thin; scrollbar-color:rgba(139,92,246,0.4) transparent;
+                        "></div>
+                        <button id="lyricsCopyBtn" style="
+                            flex-shrink:0; width:34px; height:34px;
+                            display:flex; align-items:center; justify-content:center;
+                            font-size:0.85rem;
+                            background:var(--violet-dim); border:1px solid var(--border-bright);
+                            color:var(--violet); border-radius:8px;
+                            cursor:pointer; box-shadow:none; transform:none;
+                            transition:background 0.2s, border-color 0.2s, color 0.2s;
+                        ">📋</button>
+                    </div>
+                </div>` : '';
+
+            // Referans audio — music task'larında referans audio player göster
+            const referenceAudioHTML = taskData.reference_audio_url ? `
+                <div class="task-info-item" style="grid-column:1/-1">
+                    <strong>Referans Audio:</strong>
+                    <audio src="${taskData.reference_audio_url}" controls style="width:100%;margin-top:6px;height:36px;"></audio>
+                </div>` : '';
+
+            container.innerHTML = `
+                <div class="task-card">
+                    <h3>Task: ${taskId}</h3>
+                    <span class="status-badge ${statusClass}">${taskData.status.toUpperCase()}</span>
+                    <div class="task-meta-row">
+                        ${metaHTML}
+                    </div>
+                    ${promptHTML}
+                    ${lyricsHTML}
+                    <div style="margin-top:0.625rem;">
+                        ${frameHTML}
+                        ${refImagesHTML}
+                        ${referenceAudioHTML}
+                    </div>
+                    ${resultHTML}
+                </div>
+            `;
+
+            // Set prompt text & wire copy button after render
+            const promptTextEl = document.getElementById('promptTextDisplay');
+            const promptCopyBtn = document.getElementById('promptCopyBtn');
+            if (promptTextEl) promptTextEl.textContent = taskData.prompt;
+            if (promptCopyBtn) {
+                promptCopyBtn.onclick = () => {
+                    navigator.clipboard.writeText(taskData.prompt).then(() => {
+                        promptCopyBtn.textContent = '✓';
+                        promptCopyBtn.style.background = 'rgba(16,185,129,0.2)';
+                        promptCopyBtn.style.borderColor = 'rgba(16,185,129,0.6)';
+                        promptCopyBtn.style.color = 'var(--emerald)';
+                        setTimeout(() => {
+                            promptCopyBtn.textContent = '📋';
+                            promptCopyBtn.style.background = 'var(--violet-dim)';
+                            promptCopyBtn.style.borderColor = 'var(--border-bright)';
+                            promptCopyBtn.style.color = 'var(--violet)';
+                        }, 1500);
+                    });
+                };
+            }
+
+            // Set lyrics text & wire lyrics copy button after render
+            const lyricsTextEl = document.getElementById('lyricsTextDisplay');
+            const lyricsCopyBtn = document.getElementById('lyricsCopyBtn');
+            if (lyricsTextEl) lyricsTextEl.textContent = taskData.lyrics;
+            if (lyricsCopyBtn) {
+                lyricsCopyBtn.onclick = () => {
+                    navigator.clipboard.writeText(taskData.lyrics).then(() => {
+                        lyricsCopyBtn.textContent = '✓';
+                        lyricsCopyBtn.style.background = 'rgba(16,185,129,0.2)';
+                        lyricsCopyBtn.style.borderColor = 'rgba(16,185,129,0.6)';
+                        lyricsCopyBtn.style.color = 'var(--emerald)';
+                        setTimeout(() => {
+                            lyricsCopyBtn.textContent = '📋';
+                            lyricsCopyBtn.style.background = 'var(--violet-dim)';
+                            lyricsCopyBtn.style.borderColor = 'var(--border-bright)';
+                            lyricsCopyBtn.style.color = 'var(--violet)';
+                        }, 1500);
+                    });
+                };
+            }
+        }
+
+        // Display all tasks with pagination
+        function displayAllTasks(data) {
+            const container = document.getElementById('tasksContainer');
+            const paginationContainer = document.getElementById('paginationContainer');
+            const section = document.querySelector('.card:has(#tasksContainer)');
+            
+            // Remove single task view class
+            if (section) {
+                section.classList.remove('single-task-view');
+            }
+            
+            if (!data.tasks || data.tasks.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">Henüz task bulunamadı.</div>';
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            // Server already returns only current page's tasks
+            const total = data.total || data.tasks.length;
+            const totalPages = data.total_pages || Math.ceil(total / tasksPerPage);
+            allTasks = data.tasks.map(t => [t.task_id, t]);
+
+            // Ensure current page is valid
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            // Display tasks (server already sliced them)
+            container.innerHTML = '';
+            allTasks.forEach(([taskId, taskData]) => {
+                const statusClass = `status-${taskData.status}`;
+                
+                let resultHTML = '';
+                if (taskData.result_url) {
+                    if (taskData.mode === 'image') {
+                        resultHTML = `<img src="${taskData.result_url}" class="result-image" alt="Result">`;
+                    } else if (taskData.mode === 'video') {
+                        resultHTML = `<video src="${taskData.result_url}" class="result-video" controls></video>`;
+                    } else if (taskData.mode === 'tts') {
+                        resultHTML = `<audio src="${taskData.result_url}" controls style="width:100%; margin-top:1rem; border-radius:var(--radius-sm);"></audio>`;
+                    }
+                }
+
+                if (taskData.mode === 'music') {
+                    let tracks = [];
+                    if (taskData.result_url) {
+                        try { tracks = JSON.parse(taskData.result_url); } catch(e) {}
+                    }
+                    taskData._parsedTracks = tracks;
+                    resultHTML = renderMusicTracks(tracks);
+                }
+
+                const logsHTML = ''; // Loglar kaldırıldı (madde 3)
+
+                const refImagesHTML = taskData.reference_image_urls && taskData.reference_image_urls.length > 0
+                    ? `<div class="task-info-item" style="grid-column:1/-1"><strong>Referans Görseller:</strong><br>${taskData.reference_image_urls.map(url =>
+                        `<a href="${url}" target="_blank"><img src="${url}" style="height:60px;border-radius:6px;margin:4px;object-fit:cover;"></a>`
+                    ).join('')}</div>`
+                    : '';
+
+                const frameImagesHTML2 = [
+                    taskData.start_frame_url ? `<a href="${taskData.start_frame_url}" target="_blank"><img src="${taskData.start_frame_url}" style="height:60px;border-radius:6px;margin:4px;object-fit:cover;" title="Start Frame"></a>` : '',
+                    taskData.end_frame_url   ? `<a href="${taskData.end_frame_url}"   target="_blank"><img src="${taskData.end_frame_url}"   style="height:60px;border-radius:6px;margin:4px;object-fit:cover;" title="End Frame"></a>`   : ''
+                ].filter(Boolean).join('');
+                const frameHTML2 = frameImagesHTML2
+                    ? `<div class="task-info-item" style="grid-column:1/-1"><strong>${taskData.start_frame_url && taskData.end_frame_url ? 'Start / End Frame:' : taskData.start_frame_url ? 'Start Frame:' : 'End Frame:'}</strong><br>${frameImagesHTML2}</div>`
+                    : '';
+
+                const card = document.createElement('div');
+                card.className = 'task-card';
+
+                // Build music Sonuç URL kutuları
+                let musicUrlItems = '';
+                if (taskData.mode === 'music' && taskData._parsedTracks && taskData._parsedTracks.length > 0) {
+                    musicUrlItems = taskData._parsedTracks.map((t, i) => `
+                        <div class="task-info-item">
+                            <strong>Sonuç URL ${i+1}:</strong> <a href="${t.musicUrl}" target="_blank">Aç</a>
+                        </div>
+                    `).join('');
+                }
+
+                // Referans audio kutusu
+                const refAudioItem = taskData.reference_audio_url ? `
+                    <div class="task-info-item" style="grid-column:1/-1">
+                        <strong>Referans Audio:</strong>
+                        <audio src="${taskData.reference_audio_url}" controls style="width:100%;margin-top:6px;height:36px;"></audio>
+                    </div>` : '';
+
+                card.innerHTML = `
+                    <h3 style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                        <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Task: ${taskId}</span>
+                        <button onclick="quickQueryTask('${taskId}')" style="flex-shrink:0; padding:4px 10px; font-size:0.58rem; background:var(--cyan-dim); border:1px solid rgba(34,211,238,0.3); color:var(--cyan); box-shadow:none; transform:none; border-radius:6px; white-space:nowrap;" title="Bu task'ı sorgula">🔍 Sorgula</button>
+                    </h3>
+                    <span class="status-badge ${statusClass}">${taskData.status.toUpperCase()}</span>
+                    <div class="task-info">
+                        <div class="task-info-item">
+                            <strong>Mod:</strong> ${taskData.mode}
+                        </div>
+                        ${taskData.mode !== 'music' && taskData.result_url ? `
+                        <div class="task-info-item">
+                            <strong>Sonuç URL:</strong> <a href="${taskData.result_url}" target="_blank">Aç</a>
+                        </div>` : ''}
+                        ${musicUrlItems}
+                        ${frameHTML2}
+                        ${refImagesHTML}
+                        ${refAudioItem}
+                    </div>
+                    ${logsHTML}
+                    ${resultHTML}
+                `;
+                container.appendChild(card);
+            });
+            
+            // Display pagination
+            displayPagination(totalPages, total);
+        }
+        
+        // Display pagination controls
+        function displayPagination(totalPages, serverTotal) {
+            const paginationContainer = document.getElementById('paginationContainer');
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '<div class="pagination">';
+            
+            // Previous button
+            paginationHTML += `
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    ← Önceki
+                </button>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                // Show first page, last page, current page, and pages around current
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    paginationHTML += `
+                        <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    paginationHTML += '<span style="color: var(--text-muted);">...</span>';
+                }
+            }
+            
+            // Next button
+            paginationHTML += `
+                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Sonraki →
+                </button>
+            `;
+            
+            // Pagination info
+            const startIndex = (currentPage - 1) * tasksPerPage + 1;
+            const endIndex = Math.min(currentPage * tasksPerPage, serverTotal);
+            paginationHTML += `
+                <div class="pagination-info">
+                    ${startIndex}-${endIndex} arası gösteriliyor (Toplam: ${serverTotal} task)
+                </div>
+            `;
+            
+            paginationHTML += '</div>';
+
+            // Go to page row
+            paginationHTML += `
+                <div class="pagination-goto">
+                    <label for="gotoPageInput">sayfaya git:</label>
+                    <input
+                        type="number"
+                        id="gotoPageInput"
+                        min="1"
+                        max="${totalPages}"
+                        placeholder="No"
+                        onkeydown="if(event.key==='Enter') goToPage(${totalPages})"
+                    >
+                    <button onclick="goToPage(${totalPages})">Git →</button>
+                </div>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Go to specific page
+        function goToPage(totalPages) {
+            const input = document.getElementById('gotoPageInput');
+            if (!input) return;
+            let page = parseInt(input.value);
+            if (isNaN(page)) return;
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            changePage(page);
+        }
+        
+        // Change page
+        function changePage(page) {
+            const totalPages = Math.ceil((allTasks.length > 0 ? allTasks.length : 1) / tasksPerPage);
+            if (page < 1) return;
+            
+            currentPage = page;
+            checkAllTasks();
+        }
+
+        // Auto refresh
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                alert('Otomatik yenileme zaten çalışıyor!');
+                return;
+            }
+            
+            autoRefreshInterval = setInterval(() => {
+                if (currentViewMode === 'single' && document.getElementById('taskId').value) {
+                    checkTaskStatus();
+                } else {
+                    checkAllTasks();
+                }
+            }, 5000);
+            
+            alert('Otomatik yenileme başlatıldı! (5 saniyede bir)');
+            // İlk kontrolü hemen yap
+            if (currentViewMode === 'single' && document.getElementById('taskId').value) {
+                checkTaskStatus();
+            } else {
+                checkAllTasks();
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                alert('Otomatik yenileme durduruldu.');
+            } else {
+                alert('Otomatik yenileme zaten çalışmıyor.');
+            }
+        }
+
+        function onImageFileChange(input) {
+            if (input.files && input.files.length > 5) {
+                alert('En fazla 5 görsel seçebilirsiniz!');
+                input.value = '';
+                document.getElementById('imageFileLabel').textContent = 'RESİM SEÇ (MAKS. 5)';
+                document.getElementById('imageFileLabel').classList.remove('file-selected');
+                return;
+            }
+            updateFileLabel(input, 'imageFileLabel');
+        }
+
+        // Update file input label
+        function updateFileLabel(input, labelId) {
+            const label = document.getElementById(labelId);
+            if (input.files && input.files.length > 0) {
+                const fileCount = input.files.length;
+                const fileName = input.files[0].name;
+                if (fileCount === 1) {
+                    label.textContent = fileName;
+                } else {
+                    label.textContent = `${fileCount} dosya seçildi`;
+                }
+                label.classList.add('file-selected');
+            } else {
+                label.textContent = labelId === 'imageFileLabel' ? 'RESİM SEÇ (MAKS. 5)' : 'RESİM SEÇ';
+                label.classList.remove('file-selected');
+            }
+        }
+
+        /* ══════════════════════════════════════
+           MUSIC
+        ══════════════════════════════════════ */
+
+        // Returns current instrumental value (true/false)
+        function getMusicInstrumental() {
+            const active = document.querySelector('#musicInstrumentalGroup .seg-btn.active');
+            return active ? active.dataset.val === 'true' : false;
+        }
+
+        // Returns current audioUsage value
+        function getMusicMode() {
+            const active = document.querySelector('#musicModeGroup .seg-btn.active');
+            return active ? active.dataset.val : 'TEXT';
+        }
+
+        // Modes that require audio upload
+        const AUDIO_REQUIRED_MODES = ['COVER', 'ADD_INSTRUMENTAL', 'ADD_VOCAL'];
+
+        function onMusicInstrumentalChange(btn) {
+            document.querySelectorAll('#musicInstrumentalGroup .seg-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateMusicVisibility();
+        }
+
+        function onMusicModeChange(btn) {
+            document.querySelectorAll('#musicModeGroup .seg-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateMusicVisibility();
+        }
+
+        function updateMusicVisibility() {
+            const mode = getMusicMode();
+            // MP3 upload: sadece COVER, ADD_INSTRUMENTAL, ADD_VOCAL modlarında gerekli
+            // Vocal ya da Instrumental fark etmez — mod belirler
+            const audioRequired = AUDIO_REQUIRED_MODES.includes(mode);
+
+            // Lyrics: her zaman görünür
+            const lyricsGroup = document.getElementById('musicLyricsGroup');
+            if (lyricsGroup) lyricsGroup.style.display = '';
+
+            // MP3 upload alanı: TEXT modunda gizli, diğer 3 modda (6 kombinasyon) her zaman açık
+            const audioGroup = document.getElementById('musicAudioGroup');
+            if (audioGroup) audioGroup.style.display = audioRequired ? '' : 'none';
+        }
+
+        function updateMusicAudioLabel(input) {
+            const label = document.getElementById('musicAudioFileLabel');
+            if (input.files && input.files.length > 0) {
+                label.textContent = input.files[0].name;
+                label.classList.add('file-selected');
+            } else {
+                label.textContent = 'MP3 SEÇ';
+                label.classList.remove('file-selected');
+            }
+        }
+
+        function audioFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderMusicTracks(tracks) {
+            if (!tracks || tracks.length === 0) return '';
+            return tracks.map((t, i) => `
+                <div style="
+                    display:flex; align-items:center; gap:12px;
+                    background:var(--panel); border:1px solid var(--border);
+                    border-radius:var(--radius-sm); padding:10px 14px; margin-top:10px;
+                ">
+                    ${t.coverImageUrl ? `<img src="${t.coverImageUrl}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : ''}
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--violet);text-transform:uppercase;margin-bottom:4px;">
+                            ${t.musicName || ('Versiyon ' + t.version)}
+                        </div>
+                        <audio src="${t.musicUrl}" controls style="width:100%;height:32px;"></audio>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function generateMusic() {
+            const prompt = document.getElementById('musicPrompt').value.trim();
+            if (!prompt) { alert('Lütfen prompt girin!'); return; }
+
+            const instrumental = getMusicInstrumental();
+            const audioUsage = getMusicMode();
+            const style = document.getElementById('musicStyle').value.trim();
+            const lyrics = document.getElementById('musicLyrics').value.trim();
+
+            // Validate audio for required modes
+            const audioInput = document.getElementById('musicAudioFile');
+            const hasAudio = audioInput && audioInput.files && audioInput.files.length > 0;
+            if (AUDIO_REQUIRED_MODES.includes(audioUsage) && !hasAudio) {
+                alert(`"${audioUsage}" modu için MP3 dosyası zorunludur!`);
+                return;
+            }
+
+            const body = { prompt, model: 'SUNO', main_mode: instrumental ? 'Instrumental' : 'Vocal', mode: audioUsage, style, lyrics };
+
+            // audio_base64 yalnızca COVER / ADD_INSTRUMENTAL / ADD_VOCAL için gönderilir
+            if (AUDIO_REQUIRED_MODES.includes(audioUsage) && hasAudio) {
+                body.audio = await audioFileToBase64(audioInput.files[0]);
+            }
+
+            try {
+                const { response, data } = await apiCall('/api/generate/music', 'POST', body);
+                displayResponseWithReadable('musicResponse', 'musicReadable', data, !response.ok, 'task');
+                if (response.ok && data.task_id) document.getElementById('taskId').value = data.task_id;
+            } catch (error) {
+                displayResponseWithReadable('musicResponse', 'musicReadable', { error: error.message }, true, 'task');
+            }
+        }
+
+        /* ══════════════════════════════════════
+           TTS
+        ══════════════════════════════════════ */
+        const TTS_EMOTIONS = ['auto', 'happy', 'sad', 'angry', 'fearful', 'disgusted', 'surprised'];
+
+        function initTtsEmotions() {
+            const container = document.getElementById('ttsEmotionContainer');
+            if (!container || container.children.length > 0) return;
+            TTS_EMOTIONS.forEach(emo => {
+                const chip = document.createElement('span');
+                chip.className = 'tts-emotion-chip' + (emo === 'auto' ? ' active' : '');
+                chip.textContent = emo;
+                chip.dataset.emo = emo;
+                chip.onclick = () => {
+                    container.querySelectorAll('.tts-emotion-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                };
+                container.appendChild(chip);
+            });
+        }
+
+        function syncTtsSlider(input, labelId) {
+            const val = parseFloat(input.value);
+            const label = document.getElementById(labelId);
+            if (label) label.textContent = Number.isInteger(val) ? val : val.toFixed(1);
+        }
+
+        async function loadTtsVoices() {
+            const btn = document.querySelector('#tab-tts button[onclick="loadTtsVoices()"]');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+            try {
+                const res = await fetch(`${API_BASE()}/api/tts/voices`, {
+                    headers: { 'Authorization': `Bearer ${API_KEY()}` }
+                });
+                const data = await res.json();
+                const sel = document.getElementById('ttsVoice');
+                sel.innerHTML = '';
+                if (data.voices && data.voices.length > 0) {
+                    data.voices.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v.voiceId || v.voice_id || v.id || v.name;
+                        opt.textContent = v.displayName || v.display_name || v.name || opt.value;
+                        sel.appendChild(opt);
+                    });
+                } else {
+                    sel.innerHTML = '<option value="" disabled selected>Ses bulunamadı</option>';
+                }
+            } catch(e) {
+                alert('Sesler yüklenirken hata: ' + e.message);
+            }
+            if (btn) { btn.disabled = false; btn.textContent = '🔄 Yükle'; }
+        }
+
+        async function generateTts() {
+            const text = document.getElementById('ttsText').value.trim();
+            if (!text) { alert('Lütfen metin girin!'); return; }
+            const voiceId = document.getElementById('ttsVoice').value;
+            if (!voiceId) { alert('Lütfen önce sesleri yükleyip bir ses seçin!'); return; }
+
+            const activeEmo = document.querySelector('.tts-emotion-chip.active');
+            const emotion = activeEmo ? activeEmo.dataset.emo : 'auto';
+
+            const payload = {
+                text,
+                voiceId,
+                model: document.getElementById('ttsModel').value,
+                speed: parseFloat(document.getElementById('ttsSpeed').value),
+                pitch: parseInt(document.getElementById('ttsPitch').value),
+                volume: parseFloat(document.getElementById('ttsVolume').value),
+                emotion,
+            };
+
+            try {
+                const res = await fetch(`${API_BASE()}/api/generate/tts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY()}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                displayResponseWithReadable('ttsResponse', 'ttsReadable', data, !res.ok, 'task');
+            } catch(e) {
+                displayResponseWithReadable('ttsResponse', 'ttsReadable', { error: e.message }, true, 'task');
+            }
+        }
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+        });
+    </script>
+</body>
+</html>
