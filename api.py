@@ -171,16 +171,12 @@ def process_image_task(task_id, params, api_key_id):
 
             if status == 'completed' and image_urls:
                 db.update_task_status(task_id, 'completed', image_urls[0])
-                db.add_task_log(task_id, f"Image generation successful. URLs: {len(image_urls)}")
                 
                 # Save the dynamically created account as USED in the database
                 db.add_account(api_key_id, email, password, used=1)
-                db.add_task_log(task_id, f"Account saved to DB: {email} (used=1)")
                 
                 # Consume one random unused account in the database (mark as USED = 1)
-                consumed_email = db.consume_random_unused_account(api_key_id)
-                if consumed_email:
-                    db.add_task_log(task_id, f"Quota consumption: marked random account '{consumed_email}' as USED.")
+                db.consume_random_unused_account(api_key_id)
             elif status == 'shutdown':
                 return  # Let recovery handle it
             else:
@@ -335,14 +331,11 @@ def poll_image_recovery(task_id, ext_task_id, session, account_email=None, api_k
         status, image_urls = services.poll_image_morph(session, ext_task_id, _shutdown_event)
         if status == 'completed' and image_urls:
             db.update_task_status(task_id, 'completed', image_urls[0])
-            db.add_task_log(task_id, "[RECOVERY] Image generation completed.")
             if account_email and api_key_id:
                 # Save dynamically created recovery account as used
                 db.add_account(api_key_id, account_email, "gAAAAABpxPNrzSpgynpZv_bnHzlIf--xIbpSHDNVbLKG6nsox_eUgWjgfoyXdTPe6gPw2ELclPktqE59ViIQB8WR2AoT2wUh2Q==", used=1)
                 # Mark one random unused account from DB as USED
-                consumed_email = db.consume_random_unused_account(api_key_id)
-                if consumed_email:
-                    db.add_task_log(task_id, f"[RECOVERY] Quota consumption: marked random account '{consumed_email}' as USED.")
+                db.consume_random_unused_account(api_key_id)
         elif status != 'shutdown':
             db.update_task_status(task_id, status or 'failed')
             db.add_task_log(task_id, f"[RECOVERY] Image ended: {status}")
