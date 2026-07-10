@@ -321,7 +321,7 @@ def get_or_create_api_key(key):
 
 # --- Account Functions ---
 
-def add_account(api_key_id, email, password):
+def add_account(api_key_id, email, password, used=0):
     """Adds an account for a specific API key."""
     with (db_lock if DB_TYPE != 'postgresql' else contextlib.nullcontext()):
         conn = get_connection()
@@ -329,8 +329,8 @@ def add_account(api_key_id, email, password):
             cursor = conn.cursor()
             try:
                 cursor.execute(
-                    'INSERT INTO accounts (api_key_id, email, password) VALUES (%s, %s, %s)',
-                    (api_key_id, email, password)
+                    'INSERT INTO accounts (api_key_id, email, password, used) VALUES (%s, %s, %s, %s) ON CONFLICT (api_key_id, email) DO UPDATE SET used = EXCLUDED.used',
+                    (api_key_id, email, password, used)
                 )
                 conn.commit()
                 conn.close()
@@ -344,8 +344,8 @@ def add_account(api_key_id, email, password):
             cursor = conn.cursor()
             try:
                 cursor.execute(
-                    'INSERT INTO accounts (api_key_id, email, password) VALUES (?, ?, ?)',
-                    (api_key_id, email, password)
+                    'INSERT OR REPLACE INTO accounts (api_key_id, email, password, used) VALUES (?, ?, ?, ?)',
+                    (api_key_id, email, password, used)
                 )
                 conn.commit()
                 conn.close()
@@ -769,3 +769,47 @@ def recover_stale_tasks():
         
         conn.close()
         return result
+
+
+def consume_random_unused_account(api_key_id):
+    """Finds a random unused account (used = 0) and marks it as USED (used = 1)."""
+    with (db_lock if DB_TYPE != 'postgresql' else contextlib.nullcontext()):
+        conn = get_connection()
+        try:
+            if DB_TYPE == 'postgresql':
+                cursor = conn.cursor(cursor_factory=RealDictCursor)
+                cursor.execute(
+                    'SELECT email FROM accounts WHERE api_key_id = %s AND used = 0 ORDER BY RANDOM() LIMIT 1',
+                    (api_key_id,)
+                )
+                account = cursor.fetchone()
+                if account:
+                    cursor.execute(
+                        'UPDATE accounts SET used = 1 WHERE api_key_id = %s AND email = %s',
+                        (api_key_id, account['email'])
+                    )
+                    conn.commit()
+                    return account['email']
+            else:
+                cursor = conn.cursor()
+                cursor.execute(
+                    'SELECT email FROM accounts WHERE api_key_id = ? AND used = 0 ORDER BY RANDOM() LIMIT 1',
+                    (api_key_id,)
+                )
+                row = cursor.fetchone()
+                if row:
+                    email = row[0] if isinstance(row, tuple) else row['email']
+                    cursor.execute(
+                        'UPDATE accounts SET used = 1 WHERE api_key_id = ? AND email = ?',
+                        (api_key_id, email)
+                    )
+                    conn.commit()
+                    return email
+        except Exception as e:
+            print(f"Db Error in consume_random_unused_account: {e}")
+            if conn:
+                conn.rollback()
+        finally:
+            if conn:
+                conn.close()
+        return None
