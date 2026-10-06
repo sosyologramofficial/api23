@@ -377,7 +377,7 @@ WHITELIST_DOMAINS = [
     #"cmail.asia",
     #"tempmailt.com",
     #"t-mail.asia",
-    "okyre.com",
+    #"okyre.com",
     "asia.banglatip.com",
     "pmail.asia",
     "1mail.edu.pl",
