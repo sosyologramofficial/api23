@@ -380,7 +380,7 @@ WHITELIST_DOMAINS = [
     #"okyre.com",
     #"asia.banglatip.com",
     #"pmail.asia",
-    "1mail.edu.pl",
+    #"1mail.edu.pl",
     "asia.1maill.com",
     "bd.1maill.com",
     "in.1maill.com",
