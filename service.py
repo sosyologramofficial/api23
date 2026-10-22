@@ -381,7 +381,7 @@ WHITELIST_DOMAINS = [
     #"asia.banglatip.com",
     #"pmail.asia",
     #"1mail.edu.pl",
-    "asia.1maill.com",
+    #"asia.1maill.com",
     "bd.1maill.com",
     "in.1maill.com",
     "bd.5secmail.com",
