@@ -99,47 +99,38 @@ MEMBER_HEADERS = {
 # RESIM MODEL CONFIGURATIONS
 # ==============================================================================
 IMAGE_MODELS_CONFIG = {
-    "gemini_2_5_flash": {
-        "name": "Nano Banana",
-        "vendor": "Google",
-        "actionId_prefix": "genimage_1_img_google_gemini2.5flash",
-        "promptLength": 2500,
-        "ref_img_limit": 3,
-        "supported_resolutions": ["1K"],
+    # ==========================================================================
+    # FEATURED (ANA LISTE)
+    # ==========================================================================
+    "gpt_image_2_5_sunburst": {
+        "name": "GPT Image 2.5 Sunburst",
+        "vendor": "OpenAI",
+        "actionId_prefix": "genimage_1_img_openai_gptimage2.5sunburst",
+        "promptLength": 32000,
+        "ref_img_limit": 16,
+        "supported_resolutions": ["1K", "2K"],
         "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
         "credits": {
-            "none": {"1K": 2},
-            "enable": {"1K": 2}
+            "none": {"1K": 3, "2K": 6},
+            "enable": {"1K": 3, "2K": 6},
         },
-        "default_style": "Style_3003_Custom_Gemini"
+        "default_style": "Style_1003_Custom_ChatGPT",
+        "process_time": 90,
     },
-    "gemini_3_1_flash": {
-        "name": "Nano Banana 2",
-        "vendor": "Google",
-        "actionId_prefix": "genimage_1_img_google_gemini3.1flash",
-        "promptLength": 2500,
-        "ref_img_limit": 14,
-        "supported_resolutions": ["1K", "2K", "4K"],
+    "gpt_image_2_5_flare": {
+        "name": "GPT-Image-2.5 Flare",
+        "vendor": "OpenAI",
+        "actionId_prefix": "genimage_1_img_openai_gptimage2.5flare",
+        "promptLength": 32000,
+        "ref_img_limit": 16,
+        "supported_resolutions": ["1K", "2K"],
         "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
         "credits": {
-            "none": {"1K": 3, "2K": 5, "4K": 7},
-            "enable": {"1K": 3, "2K": 5, "4K": 7}
+            "none": {"1K": 3, "2K": 6},
+            "enable": {"1K": 3, "2K": 6},
         },
-        "default_style": "Style_3002_Custom_Gemini"
-    },
-    "gemini_3_pro": {
-        "name": "Nano Banana Pro",
-        "vendor": "Google",
-        "actionId_prefix": "genimage_1_img_google_gemini3pro",
-        "promptLength": 2500,
-        "ref_img_limit": 14,
-        "supported_resolutions": ["1K", "2K", "4K"],
-        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
-        "credits": {
-            "none": {"1K": 6, "2K": 6, "4K": 12},
-            "enable": {"1K": 6, "2K": 6, "4K": 12}
-        },
-        "default_style": "Style_3001_Custom_Gemini"
+        "default_style": "Style_1004_Custom_ChatGPT",
+        "process_time": 90,
     },
     "gpt_image_2": {
         "name": "GPT-Image-2",
@@ -151,11 +142,271 @@ IMAGE_MODELS_CONFIG = {
         "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
         "credits": {
             "none": {"1K": 3, "2K": 6},
-            "enable": {"1K": 3, "2K": 6}
+            "enable": {"1K": 3, "2K": 6},
         },
-        "default_style": "Style_1002_Custom_ChatGPT"
-    }
+        "default_style": "Style_1002_Custom_ChatGPT",
+        "process_time": 90,
+    },
+    "gemini_3_pro": {
+        "name": "Gemini 3 Pro (Nano Banana Pro)",
+        "vendor": "Google",
+        "actionId_prefix": "genimage_1_img_google_gemini3pro",
+        "promptLength": 2500,
+        "ref_img_limit": 14,
+        "supported_resolutions": ["1K", "2K", "4K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 6, "2K": 6, "4K": 12},
+            "enable": {"1K": 6, "2K": 6, "4K": 12},
+        },
+        "default_style": "Style_3001_Custom_Gemini",
+        "process_time": 60,
+    },
+    "gemini_3_1_flash": {
+        "name": "Gemini 3.1 Flash (Nano Banana 2)",
+        "vendor": "Google",
+        "actionId_prefix": "genimage_1_img_google_gemini3.1flash",
+        "promptLength": 2500,
+        "ref_img_limit": 14,
+        "supported_resolutions": ["1K", "2K", "4K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 5, "4K": 7},
+            "enable": {"1K": 3, "2K": 5, "4K": 7},
+        },
+        "default_style": "Style_3002_Custom_Gemini",
+        "process_time": 60,
+    },
+    "gemini_nanobanana_2_1": {
+        "name": "Gemini Nano Banana 2.1",
+        "vendor": "Google",
+        "actionId_prefix": "genimage_1_img_google_gemininanobanana2.1",
+        "promptLength": 2500,
+        "ref_img_limit": 14,
+        "supported_resolutions": ["1K", "2K", "4K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 4, "4K": 8},
+            "enable": {"1K": 3, "2K": 4, "4K": 8},
+        },
+        "default_style": "Style_3004_Custom_Gemini",
+        "process_time": 60,
+    },
+    "seedream_5_pro": {
+        "name": "SeeDream 5.0 Pro",
+        "vendor": "ByteDance",
+        "actionId_prefix": "genimage_1_img_bytedance_seedream5.0pro",
+        "promptLength": 600,
+        "ref_img_limit": 10,
+        "supported_resolutions": ["1K", "2K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 5},
+            "enable": {"1K": 3, "2K": 5},
+        },
+        "default_style": "Style_9001_Custom_Seedream",
+        "process_time": 120,
+    },
+    "flux_2_pro": {
+        "name": "Flux 2 Pro",
+        "vendor": "BlackForest",
+        "actionId_prefix": "genimage_1_img_blackforest_flux2pro",
+        "promptLength": 2500,
+        "ref_img_limit": 4,
+        "supported_resolutions": ["1K", "2K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 2, "2K": 5},
+            "enable": {"1K": 3, "2K": 6},
+        },
+        "default_style": "Style_7000_Custom_FluxAPI",
+        "process_time": 40,
+    },
+    "qwen_image_3_pro": {
+        "name": "Qwen Image 3.0 Pro",
+        "vendor": "Alibaba",
+        "actionId_prefix": "genimage_1_img_alibaba_qwenimage3.0pro",
+        "promptLength": 4500,
+        "ref_img_limit": 3,
+        "supported_resolutions": ["1K", "2K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 5},
+            "enable": {"1K": 3, "2K": 5},
+        },
+        "default_style": "Style_001_Custom_QwenAPI",
+        "process_time": 100,
+    },
+    "qwen_image_3": {
+        "name": "Qwen Image 3.0",
+        "vendor": "Alibaba",
+        "actionId_prefix": "genimage_1_img_alibaba_qwenimage3.0",
+        "promptLength": 4500,
+        "ref_img_limit": 3,
+        "supported_resolutions": ["1K", "2K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 2, "2K": 3},
+            "enable": {"1K": 2, "2K": 3},
+        },
+        "default_style": "Style_000_Custom_QwenAPI",
+        "process_time": 100,
+    },
+
+    # ==========================================================================
+    # MORE MODELS (ALT LISTE)
+    # ==========================================================================
+    "gemini_3_1_flash_lite": {
+        "name": "Gemini 3.1 Flash Lite (Nano Banana 2 Lite)",
+        "vendor": "Google",
+        "actionId_prefix": "genimage_1_img_google_gemini3.1flashlite",
+        "promptLength": 2500,
+        "ref_img_limit": 14,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 2},
+            "enable": {"1K": 2},
+        },
+        "default_style": "Style_3003_Custom_Gemini",
+        "process_time": 60,
+    },
+    "gemini_2_5_flash": {
+        "name": "Gemini 2.5 Flash (Nano Banana)",
+        "vendor": "Google",
+        "actionId_prefix": "genimage_1_img_google_gemini2.5flash",
+        "promptLength": 2500,
+        "ref_img_limit": 3,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 2},
+            "enable": {"1K": 2},
+        },
+        "default_style": "Style_3000_Custom_Gemini",
+        "process_time": 30,
+    },
+    "seedream_5_lite": {
+        "name": "SeeDream 5.0 Lite",
+        "vendor": "ByteDance",
+        "actionId_prefix": "genimage_1_img_bytedance_seedream5.0lite",
+        "promptLength": 600,
+        "ref_img_limit": 14,
+        "supported_resolutions": ["2K", "3K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"2K": 3, "3K": 3},
+            "enable": {"2K": 3, "3K": 3},
+        },
+        "default_style": "Style_9000_Custom_Seedream",
+        "process_time": 60,
+    },
+    "gpt_image_1_5": {
+        "name": "GPT-Image-1.5",
+        "vendor": "OpenAI",
+        "actionId_prefix": "genimage_1_img_openai_gptimage1.5",
+        "promptLength": 2500,
+        "ref_img_limit": 16,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3},
+            "enable": {"1K": 3},
+        },
+        "default_style": "Style_1001_Custom_ChatGPT",
+        "process_time": 30,
+    },
+    "gpt_image_1": {
+        "name": "GPT-Image-1",
+        "vendor": "OpenAI",
+        "actionId_prefix": "genimage_1_img_openai_gptimage1",
+        "promptLength": 2500,
+        "ref_img_limit": 16,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 2},
+            "enable": {"1K": 2},
+        },
+        "default_style": "Style_1000_Custom_ChatGPT",
+        "process_time": 30,
+    },
+    "z_image": {
+        "name": "Z-Image",
+        "vendor": "CyberLink",
+        "actionId_prefix": "genimage_1_img_cyberlink_zimageturbo",
+        "promptLength": 800,
+        "ref_img_limit": 0,
+        "supported_resolutions": ["1K", "2K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 1, "2K": 2},
+        },
+        "default_style": "Style_000_Custom_ZImage",
+        "process_time": 15,
+    },
+    "kling_o3": {
+        "name": "Kling O3",
+        "vendor": "Kling",
+        "actionId_prefix": "genimage_1_img_kling_o3",
+        "promptLength": 2500,
+        "ref_img_limit": 10,
+        "supported_resolutions": ["1K", "2K", "4K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 3, "4K": 5},
+            "enable": {"1K": 3, "2K": 3, "4K": 5},
+        },
+        "default_style": "Style_5001_Custom_Kling",
+        "process_time": 60,
+    },
+    "kling_o1": {
+        "name": "Kling O1",
+        "vendor": "Kling",
+        "actionId_prefix": "genimage_1_img_kling_o1",
+        "promptLength": 2500,
+        "ref_img_limit": 10,
+        "supported_resolutions": ["1K", "2K", "4K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 3, "2K": 3, "4K": 5},
+            "enable": {"1K": 3, "2K": 3, "4K": 5},
+        },
+        "default_style": "Style_5000_Custom_Kling",
+        "process_time": 40,
+    },
+    "flux_dev": {
+        "name": "Flux Dev 1",
+        "vendor": "CyberLink",
+        "actionId_prefix": "genimage_1_img_cyberlink_fluxdev1",
+        "promptLength": 800,
+        "ref_img_limit": 0,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 1},
+        },
+        "default_style": "Style_047_None_Flux",
+        "process_time": 20,
+    },
+    "stable_diffusion": {
+        "name": "Stable Diffusion XL",
+        "vendor": "CyberLink",
+        "actionId_prefix": "genimage_1_img_cyberlink_stablediffusion",
+        "promptLength": 800,
+        "ref_img_limit": 1,
+        "supported_resolutions": ["1K"],
+        "supported_aspect_ratios": ["1:1", "16:9", "9:16", "4:3", "3:4"],
+        "credits": {
+            "none": {"1K": 1},
+            "enable": {"1K": 1},
+        },
+        "default_style": "Style_Default",
+        "effect_type": "TtiStyleRef",
+        "process_time": 15,
+    },
 }
+
 
 # Image Model ID Mapping (Frontend / API ID -> Backend Model ID)
 IMAGE_MODEL_MAPPING = {
@@ -179,48 +430,1028 @@ IMAGE_MODELS_CONFIG["NANO_BANANA_2"] = IMAGE_MODELS_CONFIG["gemini_3_1_flash"]
 IMAGE_MODELS_CONFIG["NANO_BANANA_PRO"] = IMAGE_MODELS_CONFIG["gemini_3_pro"]
 IMAGE_MODELS_CONFIG["GPT_IMAGE_2"] = IMAGE_MODELS_CONFIG["gpt_image_2"]
 
-
-# ==============================================================================
-# VIDEO MODEL CONFIGURATIONS
-# ==============================================================================
 VIDEO_MODELS_CONFIG = {
+    # ==========================================================================
+    # SEEDANCE (BytePlus)
+    # ==========================================================================
+    "seedance_2_0_fast": {
+        "name": "Seedance 2.0 Fast",
+        "model": "dreamina-seedance-2-0-fast-260128",
+        "vendor": "BytePlus",
+        "promptLength": 20000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "720p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(4, 16)),
+        "duration_config": {'type': 'continuous', 'min': 4, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p"],
+            "TextToVideo": ["480p", "720p"],
+            "ReferenceToVideo": ["480p", "720p"],
+        },
+        "action_id": "genvideo_1_sec_bytedance_seedance2.0fast_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_bytedance_custom_seedance2.0fast_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("none", "480p"): 3,
+            ("none", "720p"): 6,
+            ("vendor", "480p"): 3,
+            ("vendor", "720p"): 6,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 9,
+            "max_videos": 3,
+            "max_total": 12,
+            "max_video_duration": 15,
+        },
+    },
+    "seedance_2_0_mini": {
+        "name": "Seedance 2.0 Mini",
+        "model": "dreamina-seedance-2-0-mini-260615",
+        "vendor": "BytePlus",
+        "promptLength": 20000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "720p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(4, 16)),
+        "duration_config": {'type': 'continuous', 'min': 4, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p"],
+            "TextToVideo": ["480p", "720p"],
+            "ReferenceToVideo": ["480p", "720p"],
+        },
+        "action_id": "genvideo_1_sec_bytedance_seedance2.0mini_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_bytedance_custom_seedance2.0mini_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("none", "480p"): 2,
+            ("none", "720p"): 4,
+            ("vendor", "480p"): 2,
+            ("vendor", "720p"): 4,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 9,
+            "max_videos": 3,
+            "max_total": 12,
+            "max_video_duration": 15,
+        },
+    },
+    "seedance_2_0_pro": {
+        "name": "Seedance 2.0 Pro",
+        "model": "dreamina-seedance-2-0-260128",
+        "vendor": "BytePlus",
+        "promptLength": 20000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "720p", "1080p", "4K"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(4, 16)),
+        "duration_config": {'type': 'continuous', 'min': 4, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["480p", "720p", "1080p", "4K"],
+            "ReferenceToVideo": ["480p", "720p", "1080p", "4K"],
+        },
+        "action_id": "genvideo_1_sec_bytedance_seedance2.0std_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_bytedance_custom_seedance2.0std_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("none", "480p"): 4,
+            ("none", "720p"): 8,
+            ("none", "1080p"): 18,
+            ("none", "4K"): 32,
+            ("vendor", "480p"): 4,
+            ("vendor", "720p"): 8,
+            ("vendor", "1080p"): 18,
+            ("vendor", "4K"): 32,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 9,
+            "max_videos": 3,
+            "max_total": 12,
+            "max_video_duration": 15,
+        },
+    },
+    "seedance_2_5": {
+        "name": "Seedance 2.5",
+        "model": "dreamina-seedance-2-5-260628",
+        "vendor": "BytePlus",
+        "promptLength": 20000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(4, 31)),
+        "duration_config": {'type': 'continuous', 'min': 4, 'max': 30, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["480p", "720p", "1080p"],
+            "TextToVideo": ["480p", "720p", "1080p"],
+            "ReferenceToVideo": ["480p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_bytedance_seedance2.5std_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_bytedance_custom_seedance2.5std_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("none", "480p"): 6,
+            ("none", "720p"): 12,
+            ("none", "1080p"): 24,
+            ("vendor", "480p"): 6,
+            ("vendor", "720p"): 12,
+            ("vendor", "1080p"): 24,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 20,
+            "max_videos": 10,
+            "max_total": 20,
+            "max_video_duration": 30,
+        },
+    },
+
+    # ==========================================================================
+    # ALIBABA (Wan & Happy Horse)
+    # ==========================================================================
+    "happy_horse_1_1": {
+        "name": "Happy Horse 1.1",
+        "model": {
+            "TextToVideo": "happyhorse-1.1-t2v",
+            "ImageToVideo": "happyhorse-1.1-i2v",
+            "ReferenceToVideo": "happyhorse-1.1-r2v",
+        },
+        "vendor": "Alibaba",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1"],
+        "supported_durations": list(range(3, 16)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["720p", "1080p"],
+            "ReferenceToVideo": ["720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_alibaba_happyhorse1.1_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_alibaba_custom_happyhorse1.1_{sound}_{frame_mode}_1080p",
+        "credit_map": {
+            ("none", "720p"): 5,
+            ("none", "1080p"): 8,
+            ("vendor", "720p"): 5,
+            ("vendor", "1080p"): 8,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 9,
+            "max_media": 9,
+        },
+    },
+    "happy_horse_1_0": {
+        "name": "Happy Horse 1.0",
+        "model": {
+            "TextToVideo": "happyhorse-1.0-t2v",
+            "ImageToVideo": "happyhorse-1.0-i2v",
+            "ReferenceToVideo": "happyhorse-1.0-r2v",
+        },
+        "vendor": "Alibaba",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1"],
+        "supported_durations": list(range(3, 16)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["720p", "1080p"],
+            "ReferenceToVideo": ["720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_alibaba_happyhorse1.0_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_alibaba_custom_happyhorse1.0_{sound}_{frame_mode}_1080p",
+        "credit_map": {
+            ("none", "720p"): 5,
+            ("none", "1080p"): 8,
+            ("vendor", "720p"): 5,
+            ("vendor", "1080p"): 8,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 9,
+            "max_media": 9,
+        },
+    },
+    "wan_2_7": {
+        "name": "Wan 2.7",
+        "model": {
+            "TextToVideo": "wan2.7-t2v",
+            "ImageToVideo": "wan2.7-i2v",
+            "ReferenceToVideo": "wan2.7-r2v",
+        },
+        "vendor": "Alibaba",
+        "promptLength": 5000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1"],
+        "supported_durations": list(range(2, 16)),
+        "duration_config": {'type': 'continuous', 'min': 2, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["720p", "1080p"],
+            "ReferenceToVideo": ["720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_alibaba_wan2.7_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_alibaba_custom_wan2.7_{sound}_{frame_mode}_1080p",
+        "credit_map": {
+            ("none", "720p"): 5,
+            ("none", "1080p"): 8,
+            ("vendor", "720p"): 5,
+            ("vendor", "1080p"): 8,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 5,
+            "max_videos": 5,
+            "max_total": 5,
+            "max_video_duration": 30,
+        },
+    },
+    "wan_3_0": {
+        "name": "Wan 3.0",
+        "model": "wan3.0-video",
+        "vendor": "Alibaba",
+        "promptLength": 19000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(2, 31)),
+        "duration_config": {'type': 'continuous', 'min': 2, 'max': 30, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["480p", "720p", "1080p"],
+            "ReferenceToVideo": ["480p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_alibaba_wan3.0_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_alibaba_custom_wan3.0_{sound}_{frame_mode}_1080p",
+        "credit_map": {
+            ("none", "480p"): 2,
+            ("none", "720p"): 4,
+            ("none", "1080p"): 8,
+            ("vendor", "480p"): 2,
+            ("vendor", "720p"): 4,
+            ("vendor", "1080p"): 8,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 10,
+            "max_videos": 5,
+            "max_total": 15,
+            "max_video_duration": 15,
+        },
+    },
+
+    # ==========================================================================
+    # GOOGLE (Veo & Gemini Omni)
+    # ==========================================================================
+    "veo_3_1": {
+        "name": "Veo 3.1",
+        "model": "veo-3.1-generate-preview",
+        "vendor": "Google",
+        "promptLength": 4000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": [4, 6, 8],
+        "duration_config": {'type': 'discrete', 'options': [4, 6, 8], 'default': 4},
+        "action_id": "genvideo_1_sec_google_veo3.1std_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_google_custom_veo3.1std_{sound}_{frame_mode}",
+        "credit_map": {
+            ("TextToVideo", "none", "720p"): 10,
+            ("TextToVideo", "none", "1080p"): 10,
+            ("TextToVideo", "none", "4k"): 20,
+            ("TextToVideo", "vendor", "720p"): 18,
+            ("TextToVideo", "vendor", "1080p"): 18,
+            ("TextToVideo", "vendor", "4k"): 30,
+            ("ImageToVideo", "none", "single", "720p"): 10,
+            ("ImageToVideo", "none", "single", "1080p"): 10,
+            ("ImageToVideo", "none", "single", "4k"): 10,
+            ("ImageToVideo", "none", "startend", "720p"): 10,
+            ("ImageToVideo", "none", "startend", "1080p"): 10,
+            ("ImageToVideo", "none", "startend", "4k"): 10,
+            ("ImageToVideo", "vendor", "single", "720p"): 18,
+            ("ImageToVideo", "vendor", "single", "1080p"): 18,
+            ("ImageToVideo", "vendor", "single", "4k"): 18,
+            ("ImageToVideo", "vendor", "startend", "720p"): 18,
+            ("ImageToVideo", "vendor", "startend", "1080p"): 18,
+            ("ImageToVideo", "vendor", "startend", "4k"): 18,
+        },
+    },
+    "veo_3_1_fast": {
+        "name": "Veo 3.1 Fast",
+        "model": "veo-3.1-fast-generate-preview",
+        "vendor": "Google",
+        "promptLength": 4000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": [4, 6, 8],
+        "duration_config": {'type': 'discrete', 'options': [4, 6, 8], 'default': 4},
+        "action_id": "genvideo_1_sec_google_veo3.1fast_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_google_custom_veo3.1fast_{sound}_{frame_mode}",
+        "credit_map": {
+            ("TextToVideo", "none", "720p"): 5,
+            ("TextToVideo", "none", "1080p"): 7,
+            ("TextToVideo", "none", "4k"): 14,
+            ("TextToVideo", "vendor", "720p"): 7,
+            ("TextToVideo", "vendor", "1080p"): 9,
+            ("TextToVideo", "vendor", "4k"): 16,
+            ("ImageToVideo", "none", "single", "720p"): 5,
+            ("ImageToVideo", "none", "single", "1080p"): 5,
+            ("ImageToVideo", "none", "single", "4k"): 5,
+            ("ImageToVideo", "none", "startend", "720p"): 5,
+            ("ImageToVideo", "none", "startend", "1080p"): 5,
+            ("ImageToVideo", "none", "startend", "4k"): 5,
+            ("ImageToVideo", "vendor", "single", "720p"): 8,
+            ("ImageToVideo", "vendor", "single", "1080p"): 8,
+            ("ImageToVideo", "vendor", "single", "4k"): 8,
+            ("ImageToVideo", "vendor", "startend", "720p"): 8,
+            ("ImageToVideo", "vendor", "startend", "1080p"): 8,
+            ("ImageToVideo", "vendor", "startend", "4k"): 8,
+        },
+    },
     "veo_3_1_lite": {
         "name": "Veo 3.1 Lite",
         "model": "veo-3.1-lite-generate-001",
         "vendor": "Google",
+        "promptLength": 4000,
         "supported_modes": ["TextToVideo", "ImageToVideo"],
         "supported_frame_modes": ["single", "startend"],
-        "supported_resolutions": ["1080p"],
+        "supported_resolutions": ["720p", "1080p"],
         "supported_aspect_ratios": ["16:9", "9:16"],
         "supported_durations": [4, 6, 8],
-        "supported_resolutions_by_mode": {
-            "ImageToVideo": ["1080p"],
-            "TextToVideo": ["720p", "1080p"],
-        },
-        "supported_durations_by_mode": {
-            "ImageToVideo": [4, 6, 8],
-            "TextToVideo": [4, 8],
-        },
+        "duration_config": {'type': 'discrete', 'options': [4, 6, 8], 'default': 4},
         "action_id": "genvideo_1_sec_google_veo3.1lite_{sound}_{resolution}",
         "action_id_i2v": "genvideo_1_sec_google_custom_veo3.1lite_{sound}_{frame_mode}_{resolution}",
         "credit_map": {
-            ("ImageToVideo", "none", "720p"): 3,
-            ("ImageToVideo", "none", "1080p"): 5,
-            ("ImageToVideo", "vendor", "720p"): 3,
-            ("ImageToVideo", "vendor", "1080p"): 5,
-            ("TextToVideo", "none", "720p"): 2,
-            ("TextToVideo", "none", "1080p"): 3,
-            ("TextToVideo", "vendor", "720p"): 3,
-            ("TextToVideo", "vendor", "1080p"): 5,
             ("none", "720p"): 2,
             ("none", "1080p"): 3,
             ("vendor", "720p"): 3,
             ("vendor", "1080p"): 5,
         },
-        "credit": 3,
-        "mode": "std",
-    }
+    },
+    "gemini_omni_flash": {
+        "name": "Gemini Omni 1.1 Flash",
+        "model": "gemini-omni-1.1-flash-preview",
+        "vendor": "Google",
+        "promptLength": 3500,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["360p", "720p", "1080p", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": list(range(3, 11)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 10, 'step': 1, 'default': 5},
+        "action_id": "genvideo_1_sec_google_geminiomni1.1flash_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_google_custom_geminiomni1.1flash_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("TextToVideo", "none", "360p"): 2,
+            ("TextToVideo", "none", "720p"): 5,
+            ("TextToVideo", "none", "1080p"): 8,
+            ("TextToVideo", "none", "4k"): 8,
+            ("TextToVideo", "vendor", "360p"): 2,
+            ("TextToVideo", "vendor", "720p"): 5,
+            ("TextToVideo", "vendor", "1080p"): 8,
+            ("TextToVideo", "vendor", "4k"): 8,
+            ("ImageToVideo", "none", "360p"): 2,
+            ("ImageToVideo", "none", "720p"): 5,
+            ("ImageToVideo", "none", "1080p"): 8,
+            ("ImageToVideo", "none", "4k"): 15,
+            ("ImageToVideo", "vendor", "360p"): 2,
+            ("ImageToVideo", "vendor", "720p"): 5,
+            ("ImageToVideo", "vendor", "1080p"): 8,
+            ("ImageToVideo", "vendor", "4k"): 15,
+            ("ReferenceToVideo", "none", "360p"): 2,
+            ("ReferenceToVideo", "none", "720p"): 5,
+            ("ReferenceToVideo", "none", "1080p"): 8,
+            ("ReferenceToVideo", "none", "4k"): 15,
+            ("ReferenceToVideo", "vendor", "360p"): 2,
+            ("ReferenceToVideo", "vendor", "720p"): 5,
+            ("ReferenceToVideo", "vendor", "1080p"): 8,
+            ("ReferenceToVideo", "vendor", "4k"): 15,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 5,
+            "max_media": 5,
+        },
+    },
+
+    # ==========================================================================
+    # KLING (Kuaishou)
+    # ==========================================================================
+        "kling_4_0": {
+        "name": "Kling 4.0",
+        "model": "kling-4.0",
+        "vendor": "Kling",
+        "mode": "pro",
+        "promptLength": 11000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(3, 31)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 30, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p", "1080p"],
+            "TextToVideo": ["720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_kling_4.0std_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_kling_custom_4.0std_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("TextToVideo", "none", "720p"): 9,
+            ("TextToVideo", "enable", "720p"): 11,
+            ("TextToVideo", "vendor", "720p"): 11,
+            ("TextToVideo", "none", "1080p"): 14,
+            ("TextToVideo", "enable", "1080p"): 16,
+            ("TextToVideo", "vendor", "1080p"): 16,
+            ("ImageToVideo", "none", "single", "720p"): 9,
+            ("ImageToVideo", "enable", "single", "720p"): 9,
+            ("ImageToVideo", "vendor", "single", "720p"): 9,
+            ("ImageToVideo", "none", "startend", "720p"): 9,
+            ("ImageToVideo", "enable", "startend", "720p"): 9,
+            ("ImageToVideo", "vendor", "startend", "720p"): 9,
+            ("ImageToVideo", "none", "single", "1080p"): 14,
+            ("ImageToVideo", "enable", "single", "1080p"): 14,
+            ("ImageToVideo", "vendor", "single", "1080p"): 14,
+            ("ImageToVideo", "none", "startend", "1080p"): 14,
+            ("ImageToVideo", "enable", "startend", "1080p"): 14,
+            ("ImageToVideo", "vendor", "startend", "1080p"): 14,
+            ("none", "720p"): 9,
+            ("vendor", "720p"): 11,
+            ("enable", "720p"): 11,
+            ("none", "1080p"): 14,
+            ("vendor", "1080p"): 16,
+            ("enable", "1080p"): 16,
+        },
+    },
+"kling_3_0": {
+        "name": "Kling 3.0",
+        "model": "kling-v3",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(3, 16)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p", "1080p"],
+            "TextToVideo": ["720p", "1080p", "4k"],
+        },
+        "action_id": "genvideo_1_sec_kling_3.0pro_{sound}_1080p",
+        "action_id_overrides": {
+            "720p": "genvideo_1_sec_kling_3.0std_{sound}_720p",
+            "1080p": "genvideo_1_sec_kling_3.0pro_{sound}_1080p",
+            "4k": "genvideo_1_sec_kling_3.04k_{sound}_4k",
+        },
+        "action_id_i2v": "genvideo_1_sec_kling_custom_3.0pro_{sound}_{frame_mode}_1080p",
+        "action_id_i2v_overrides": {
+            "720p": "genvideo_1_sec_kling_custom_3.0std_{sound}_{frame_mode}_720p",
+            "1080p": "genvideo_1_sec_kling_custom_3.0pro_{sound}_{frame_mode}_1080p",
+        },
+        "credit_map": {
+            ("none", "720p"): 4,
+            ("none", "1080p"): 5,
+            ("none", "4k"): 14,
+            ("vendor", "720p"): 6,
+            ("vendor", "1080p"): 8,
+            ("vendor", "4k"): 14,
+        },
+    },
+    "kling_o3": {
+        "name": "Kling O3",
+        "model": "kling-v3-omni",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(3, 16)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p", "1080p"],
+            "TextToVideo": ["720p", "1080p", "4k"],
+            "ReferenceToVideo": ["720p", "1080p", "4k"],
+        },
+        "action_id": "genvideo_1_sec_kling_o3pro_{sound}_1080p",
+        "action_id_overrides": {
+            "720p": "genvideo_1_sec_kling_o3std_{sound}_720p",
+            "1080p": "genvideo_1_sec_kling_o3pro_{sound}_1080p",
+            "4k": "genvideo_1_sec_kling_o34k_{sound}_4k",
+        },
+        "action_id_i2v": "genvideo_1_sec_kling_custom_o3pro_{sound}_{frame_mode}_1080p",
+        "action_id_i2v_overrides": {
+            "720p": "genvideo_1_sec_kling_custom_o3std_{sound}_{frame_mode}_720p",
+            "1080p": "genvideo_1_sec_kling_custom_o3pro_{sound}_{frame_mode}_1080p",
+        },
+        "credit_map": {
+            ("none", "720p"): 4,
+            ("none", "1080p"): 5,
+            ("none", "4k"): 14,
+            ("vendor", "720p"): 5,
+            ("vendor", "1080p"): 6,
+            ("vendor", "4k"): 14,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 7,
+            "max_media": 7,
+        },
+    },
+    "kling_2_6": {
+        "name": "Kling 2.6",
+        "model": "kling-v2-6",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id": "genvideo_1_sec_kling_2.6pro_{sound}_1080p",
+        "action_id_i2v": "genvideo_1_sec_kling_custom_2.6pro_{sound}_{frame_mode}",
+        "credit_map": {
+            ("ImageToVideo", "none", "1080p"): 5,
+            ("ImageToVideo", "vendor", "1080p"): 8,
+            ("TextToVideo", "none", "1080p"): 4,
+            ("TextToVideo", "vendor", "1080p"): 8,
+        },
+    },
+    "kling_2_5_pro": {
+        "name": "Kling 2.5 Pro",
+        "model": "kling-v2-5-turbo",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id": "genvideo_1_sec_kling_2.5pro_{sound}_1080p",
+        "action_id_i2v": "genvideo_1_sec_kling_custom_2.5pro_{sound}_{frame_mode}",
+        "credit_map": {
+            ("ImageToVideo", "none", "1080p"): 5,
+            ("ImageToVideo", "vendor", "1080p"): 5,
+            ("TextToVideo", "none", "1080p"): 4,
+            ("TextToVideo", "vendor", "1080p"): 4,
+        },
+    },
+    "kling_2_5_std": {
+        "name": "Kling 2.5 Standard",
+        "model": "kling-v2-5-turbo",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id": "genvideo_1_sec_kling_2.5std_{sound}_720p",
+        "action_id_i2v": "genvideo_1_sec_kling_custom_2.5std_{sound}_single",
+        "credit_map": {
+            ("ImageToVideo", "none", "720p"): 3,
+            ("ImageToVideo", "vendor", "720p"): 3,
+            ("TextToVideo", "none", "720p"): 2,
+            ("TextToVideo", "vendor", "720p"): 2,
+        },
+    },
+    "kling_o1_pro": {
+        "name": "Kling O1 Pro",
+        "model": "kling-video-o1",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id_i2v": "genvideo_1_sec_kling_custom_o1pro_{sound}_{frame_mode}",
+        "credit_map": {
+            ("none", "1080p"): 6,
+            ("vendor", "1080p"): 6,
+        },
+    },
+    "kling_o1_std": {
+        "name": "Kling O1 Standard",
+        "model": "kling-video-o1",
+        "vendor": "Kling",
+        "promptLength": 2500,
+        "supported_modes": ["ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id_i2v": "genvideo_1_sec_kling_custom_o1std_{sound}_{frame_mode}",
+        "credit_map": {
+            ("none", "720p"): 4,
+            ("vendor", "720p"): 4,
+        },
+    },
+
+    # ==========================================================================
+    # VIDU (ShengShu)
+    # ==========================================================================
+        "vidu_q4": {
+        "name": "Vidu Q4",
+        "model": "viduq4",
+        "vendor": "Vidu",
+        "promptLength": 5000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(3, 17)),
+        "duration_config": {'type': 'continuous', 'min': 3, 'max': 16, 'step': 1, 'default': 5},
+        "action_id": "genvideo_1_sec_vidu_custom_q4_{sound}_single_1080p",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q4_{sound}_single_1080p",
+        "credit_map": {
+            ("none", "1080p"): 6,
+            ("vendor", "1080p"): 6,
+            ("enable", "1080p"): 6,
+        },
+    },
+"vidu_q3_pro": {
+        "name": "Vidu Q3 Pro",
+        "model": "viduq3-pro",
+        "vendor": "Vidu",
+        "promptLength": 2000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 17)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 16, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["540p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_vidu_q3pro_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q3pro_{sound}_{frame_mode}_1080p",
+        "credit_map": {
+            ("none", "540p"): 3,
+            ("none", "720p"): 5,
+            ("none", "1080p"): 6,
+            ("vendor", "540p"): 3,
+            ("vendor", "720p"): 5,
+            ("vendor", "1080p"): 6,
+        },
+    },
+    "vidu_q3_turbo": {
+        "name": "Vidu Q3 Turbo",
+        "model": "viduq3-turbo",
+        "vendor": "Vidu",
+        "promptLength": 2000,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 17)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 16, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p"],
+            "TextToVideo": ["540p", "720p", "1080p"],
+            "ReferenceToVideo": ["540p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_vidu_q3turbo_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q3turbo_{sound}_{frame_mode}_720p",
+        "credit_map": {
+            ("none", "540p"): 2,
+            ("none", "720p"): 3,
+            ("none", "1080p"): 4,
+            ("vendor", "540p"): 2,
+            ("vendor", "720p"): 3,
+            ("vendor", "1080p"): 4,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 7,
+            "max_media": 7,
+        },
+    },
+    "vidu_q2_pro": {
+        "name": "Vidu Q2 Pro",
+        "model": {
+            "TextToVideo": "viduq2",
+            "ImageToVideo": "viduq2-pro",
+        },
+        "vendor": "Vidu",
+        "promptLength": 2000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 11)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 10, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["1080p"],
+            "TextToVideo": ["540p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_vidu_q2_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q2pro_{sound}_{frame_mode}",
+        "credit_map": {
+            ("ImageToVideo", "none", "1080p"): 3,
+            ("ImageToVideo", "vendor", "1080p"): 3,
+            ("TextToVideo", "none", "540p"): 1,
+            ("TextToVideo", "none", "720p"): 2,
+            ("TextToVideo", "none", "1080p"): 3,
+            ("TextToVideo", "vendor", "540p"): 1,
+            ("TextToVideo", "vendor", "720p"): 2,
+            ("TextToVideo", "vendor", "1080p"): 3,
+        },
+    },
+    "vidu_q2_turbo": {
+        "name": "Vidu Q2 Turbo",
+        "model": {
+            "TextToVideo": "viduq2",
+            "ImageToVideo": "viduq2-turbo",
+        },
+        "vendor": "Vidu",
+        "promptLength": 2000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 11)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 10, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["540p", "720p"],
+            "TextToVideo": ["540p", "720p"],
+        },
+        "action_id": "genvideo_1_sec_vidu_q2_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q2turbo_{sound}_{frame_mode}",
+        "credit_map": {
+            ("ImageToVideo", "none", "540p"): 3,
+            ("ImageToVideo", "none", "720p"): 3,
+            ("ImageToVideo", "vendor", "540p"): 3,
+            ("ImageToVideo", "vendor", "720p"): 3,
+            ("TextToVideo", "none", "540p"): 1,
+            ("TextToVideo", "none", "720p"): 2,
+            ("TextToVideo", "vendor", "540p"): 1,
+            ("TextToVideo", "vendor", "720p"): 2,
+        },
+    },
+    "vidu_q2": {
+        "name": "Vidu Q2",
+        "model": {
+            "TextToVideo": "viduq2",
+            "ImageToVideo": "viduq2-turbo",
+        },
+        "vendor": "Vidu",
+        "promptLength": 2000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 11)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 10, 'step': 1, 'default': 5},
+        "action_id": "genvideo_1_sec_vidu_q2_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_vidu_custom_q2turbo_{sound}_{frame_mode}",
+        "action_id_i2v_overrides": {
+            "1080p": "genvideo_1_sec_vidu_custom_q2pro_{sound}_{frame_mode}",
+            "720p": "genvideo_1_sec_vidu_custom_q2turbo_{sound}_{frame_mode}",
+            "540p": "genvideo_1_sec_vidu_custom_q2turbo_{sound}_{frame_mode}",
+        },
+        "credit_map": {
+            ("ImageToVideo", "none", "540p"): 3,
+            ("ImageToVideo", "none", "720p"): 3,
+            ("ImageToVideo", "none", "1080p"): 3,
+            ("ImageToVideo", "vendor", "540p"): 3,
+            ("ImageToVideo", "vendor", "720p"): 3,
+            ("ImageToVideo", "vendor", "1080p"): 3,
+            ("TextToVideo", "none", "540p"): 1,
+            ("TextToVideo", "none", "720p"): 2,
+            ("TextToVideo", "none", "1080p"): 3,
+            ("TextToVideo", "vendor", "540p"): 1,
+            ("TextToVideo", "vendor", "720p"): 2,
+            ("TextToVideo", "vendor", "1080p"): 3,
+        },
+    },
+
+    # ==========================================================================
+    # PIXVERSE
+    # ==========================================================================
+    "pixverse_v6": {
+        "name": "PixVerse V6",
+        "model": "v6",
+        "vendor": "Pixverse",
+        "promptLength": 4900,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["540p", "720p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(1, 16)),
+        "duration_config": {'type': 'continuous', 'min': 1, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p", "1080p"],
+            "TextToVideo": ["540p", "720p", "1080p"],
+            "ReferenceToVideo": ["540p", "720p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_motivai_pixverse6_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_motivai_custom_pixverse6_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("TextToVideo", "none", "540p"): 1,
+            ("TextToVideo", "none", "720p"): 2,
+            ("TextToVideo", "none", "1080p"): 4,
+            ("TextToVideo", "vendor", "540p"): 2,
+            ("TextToVideo", "vendor", "720p"): 3,
+            ("TextToVideo", "vendor", "1080p"): 6,
+            ("ReferenceToVideo", "none", "540p"): 1,
+            ("ReferenceToVideo", "none", "720p"): 2,
+            ("ReferenceToVideo", "none", "1080p"): 4,
+            ("ReferenceToVideo", "vendor", "540p"): 2,
+            ("ReferenceToVideo", "vendor", "720p"): 3,
+            ("ReferenceToVideo", "vendor", "1080p"): 6,
+            ("ImageToVideo", "none", "single", "720p"): 2,
+            ("ImageToVideo", "none", "startend", "720p"): 3,
+            ("ImageToVideo", "none", "single", "1080p"): 4,
+            ("ImageToVideo", "none", "startend", "1080p"): 6,
+            ("ImageToVideo", "vendor", "single", "720p"): 2,
+            ("ImageToVideo", "vendor", "startend", "720p"): 3,
+            ("ImageToVideo", "vendor", "single", "1080p"): 4,
+            ("ImageToVideo", "vendor", "startend", "1080p"): 6,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image"],
+            "max_images": 7,
+            "max_media": 7,
+        },
+    },
+
+    # ==========================================================================
+    # OPENAI (Sora)
+    # ==========================================================================
+    "sora_2_pro": {
+        "name": "Sora 2 Pro",
+        "model": "sora-2-pro",
+        "vendor": "OpenAI",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p", "1024p", "1080p"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": [4, 8, 12],
+        "duration_config": {'type': 'discrete', 'options': [4, 8, 12], 'default': 4},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["720p", "1080p"],
+            "TextToVideo": ["720p", "1024p", "1080p"],
+        },
+        "action_id": "genvideo_1_sec_openai_sora2pro_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_openai_custom_sora2pro_{sound}_single",
+        "credit_map": {
+            ("TextToVideo", "none", "720p"): 16,
+            ("TextToVideo", "none", "1024p"): 22,
+            ("TextToVideo", "none", "1080p"): 28,
+            ("TextToVideo", "vendor", "720p"): 16,
+            ("TextToVideo", "vendor", "1024p"): 22,
+            ("TextToVideo", "vendor", "1080p"): 28,
+            ("ImageToVideo", "none", "single", "720p"): 18,
+            ("ImageToVideo", "none", "single", "1080p"): 18,
+            ("ImageToVideo", "vendor", "single", "720p"): 18,
+            ("ImageToVideo", "vendor", "single", "1080p"): 18,
+        },
+    },
+    "sora_2_std": {
+        "name": "Sora 2 Standard",
+        "model": "sora-2",
+        "vendor": "OpenAI",
+        "promptLength": 2500,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": [4, 8, 12],
+        "duration_config": {'type': 'discrete', 'options': [4, 8, 12], 'default': 4},
+        "action_id": "genvideo_1_sec_openai_sora2_{sound}_720p",
+        "action_id_i2v": "genvideo_1_sec_openai_custom_sora2std_{sound}_single",
+        "credit_map": {
+            ("none", "720p"): 6,
+            ("vendor", "720p"): 6,
+        },
+    },
+
+    # ==========================================================================
+    # RUNWAY
+    # ==========================================================================
+    "runway_gen4_turbo": {
+        "name": "Runway Gen4",
+        "model": "gen4_turbo",
+        "vendor": "Runway",
+        "promptLength": 2500,
+        "supported_modes": ["ImageToVideo"],
+        "supported_frame_modes": ["single"],
+        "supported_resolutions": ["720p"],
+        "supported_aspect_ratios": ["16:9", "9:16"],
+        "supported_durations": [5, 10],
+        "duration_config": {'type': 'discrete', 'options': [5, 10], 'default': 5},
+        "action_id_i2v": "genvideo_1_sec_runway_custom_gen4turbo_{sound}_single",
+        "credit_map": {
+            ("none", "720p"): 3,
+            ("vendor", "720p"): 3,
+        },
+    },
+    # ==========================================================================
+    # HAILUO (MiniMax)
+    # ==========================================================================
+    "minimax_h3": {
+        "name": "MiniMax H3",
+        "model": {
+            "std": "MiniMax-H3",
+            "max": "MiniMax-H3-Max",
+        },
+        "vendor": "Hailuo",
+        "promptLength": 6900,
+        "supported_modes": ["TextToVideo", "ImageToVideo", "ReferenceToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["480p", "768p", "2k"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(5, 16)),
+        "duration_config": {'type': 'continuous', 'min': 5, 'max': 15, 'step': 1, 'default': 5},
+        "supported_resolutions_by_mode": {
+            "ImageToVideo": ["480p", "768p", "2k"],
+            "TextToVideo": ["480p", "768p", "2k"],
+            "ReferenceToVideo": ["480p", "768p", "2k"],
+        },
+        "action_id": "genvideo_1_sec_minimax_minimaxh3_{sound}_{resolution}",
+        "action_id_overrides": {
+            "480p": "genvideo_1_sec_minimax_minimaxh3max_{sound}_480p",
+        },
+        "action_id_i2v": "genvideo_1_sec_minimax_custom_minimaxh3_{sound}_{frame_mode}_{resolution}",
+        "action_id_i2v_overrides": {
+            "480p": "genvideo_1_sec_minimax_custom_minimaxh3max_{sound}_{frame_mode}_480p",
+        },
+        "credit_map": {
+            ("none", "480p"): 3,
+            ("vendor", "480p"): 3,
+            ("enable", "480p"): 3,
+            ("none", "768p"): 5,
+            ("vendor", "768p"): 5,
+            ("enable", "768p"): 5,
+            ("none", "2k"): 8,
+            ("vendor", "2k"): 8,
+            ("enable", "2k"): 8,
+        },
+        "reference_media_limit": {
+            "supported_types": ["image", "video"],
+            "max_images": 9,
+            "max_videos": 3,
+            "max_total": 12,
+            "max_video_duration": 15,
+        },
+    },
+
+    # ==========================================================================
+    # BLACKFOREST (Flux)
+    # ==========================================================================
+    "flux_3": {
+        "name": "Flux 3",
+        "model": "flux-3-video",
+        "vendor": "Flux",
+        "promptLength": 7000,
+        "supported_modes": ["TextToVideo", "ImageToVideo"],
+        "supported_frame_modes": ["single", "startend"],
+        "supported_resolutions": ["720p", "1080p", "2k", "4k"],
+        "supported_aspect_ratios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+        "supported_durations": list(range(5, 21)),
+        "duration_config": {'type': 'continuous', 'min': 5, 'max': 20, 'step': 1, 'default': 5},
+        "action_id": "genvideo_1_sec_blackforest_flux3_{sound}_{resolution}",
+        "action_id_i2v": "genvideo_1_sec_blackforest_custom_flux3_{sound}_{frame_mode}_{resolution}",
+        "credit_map": {
+            ("none", "720p"): 9,
+            ("vendor", "720p"): 9,
+            ("enable", "720p"): 9,
+            ("none", "1080p"): 15,
+            ("vendor", "1080p"): 15,
+            ("enable", "1080p"): 15,
+            ("none", "2k"): 20,
+            ("vendor", "2k"): 20,
+            ("enable", "2k"): 20,
+            ("none", "4k"): 35,
+            ("vendor", "4k"): 35,
+            ("enable", "4k"): 35,
+        },
+    },
+
 }
+
 
 # Video Model ID Mapping (Frontend / API ID -> Backend Model ID)
 VIDEO_MODEL_MAPPING = {
@@ -235,6 +1466,7 @@ VIDEO_MODEL_MAPPING = {
 # Direct mapping in VIDEO_MODELS_CONFIG for safety
 VIDEO_MODELS_CONFIG["VEO_3_1"] = VIDEO_MODELS_CONFIG["veo_3_1_lite"]
 VIDEO_MODELS_CONFIG["GROK_VIDEO"] = VIDEO_MODELS_CONFIG["veo_3_1_lite"]
+
 
 MODELS = {} # Compatibility mapping
 
@@ -327,6 +1559,7 @@ AVAILABLE_MODELS = {
     "music": []
 }
 
+
 def get_available_models(mode=None):
     import copy
     models = copy.deepcopy(AVAILABLE_MODELS)
@@ -335,6 +1568,8 @@ def get_available_models(mode=None):
         config = VIDEO_MODELS_CONFIG.get(actual_model_id, {})
         if 'supported_modes' in config:
             model['supported_modes'] = config['supported_modes']
+        if 'promptLength' in config:
+            model['max_prompt_length'] = config['promptLength']
         if 'reference_media_limit' in config:
             model['reference_media_limit'] = config['reference_media_limit']
         if 'supported_frame_modes' in config:
@@ -354,14 +1589,14 @@ def get_available_models(mode=None):
 
 def make_proxy_url(raw_url):
     """
-    Wraps a direct media URL with the local /api/proxy endpoint.
+    Doğrudan ham medya URL'sini döner (proxy sarmalamasını devre dışı bırakır).
     """
     if not raw_url or not isinstance(raw_url, str):
         return raw_url
-    if raw_url.startswith("/api/proxy"):
-        return raw_url
-    import urllib.parse
-    return f"/api/proxy?url={urllib.parse.quote(raw_url, safe='')}"
+    if raw_url.startswith("/api/proxy?url="):
+        import urllib.parse
+        return urllib.parse.unquote(raw_url.split("/api/proxy?url=", 1)[1])
+    return raw_url
 
 
 from bs4 import BeautifulSoup
@@ -373,14 +1608,14 @@ from bs4 import BeautifulSoup
 # İSTEDİĞİN DOMAİNLERİ BURAYA GİREBİLİRSİN
 # CyberLink ile stabil çalıştığı test edilen domainler listenin başındadır.
 WHITELIST_DOMAINS = [
-    #"umail.asia",
-    #"cmail.asia",
-    #"tempmailt.com",
-    #"t-mail.asia",
-    #"okyre.com",
-    #"asia.banglatip.com",
-    #"pmail.asia",
-    #"1mail.edu.pl",
+    # "umail.asia",
+    # "cmail.asia",
+    # "tempmailt.com",
+    # "t-mail.asia",
+    # "okyre.com",
+    # "asia.banglatip.com",
+    # "pmail.asia",
+    # "1mail.edu.pl",
     "asia.1maill.com",
     "bd.1maill.com",
     "in.1maill.com",
@@ -466,7 +1701,7 @@ class TempMailClient:
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/147.0.0.0 Safari/537.36"
+                "Chrome/147.0.0.0 Safari/437.36"
             ),
             "upgrade-insecure-requests": "1",
         }
@@ -1041,7 +2276,7 @@ def check_task_bonus(member_token: str, feature_id: str = "TextToImage"):
         return None
 
 def collect_all_bonuses(member_token: str):
-    """Kullanicinin tum aktif task bonuslarini (kredilerini) ve gunluk bonusunu toplar (toplam 174 kredi)."""
+    """Kullanicinin tum aktif task bonuslarini (kredilerini) ve gunluk bonusunu toplar (toplam 334 kredi)."""
     print("\n[Bonuses] Tum gunluk ve gorev bonuslari toplaniyor...")
     
     # 1. Gunluk Bonus (+3 Kredi)
@@ -1051,15 +2286,26 @@ def collect_all_bonuses(member_token: str):
     except Exception as e:
         print(f"  [!] Gunluk bonus toplama hatasi: {e}")
         
-    # 2. Aktif Gorev Bonuslari (Toplam 171 Kredi)
+    # 2. Aktif Gorev Bonuslari (Toplam 331 Kredi + 3 Gunluk = 334 Kredi)
     active_tasks = [
-        "TextToImage",      # 14 Kredi
-        "AICollage",        # 6 Kredi
-        "AIReplacement",    # 6 Kredi
-        "TextToVideo",      # 50 Kredi
-        "ImageToVideo",     # 50 Kredi
-        "Storytelling",     # 40 Kredi
-        "LyricsToSong"      # 5 Kredi
+        "TextToImage",          # 14 Kredi
+        "AICollage",            # 3 Kredi
+        "AIReplacement",        # 6 Kredi
+        "TextToVideo",          # 50 Kredi
+        "ImageToVideo",         # 50 Kredi
+        "Storytelling",         # 40 Kredi
+        "LyricsToSong",         # 5 Kredi
+        "VideoToVideo",         # 50 Kredi (Sohbetle Video Duzenleme)
+        "AICinematicShorts",    # 40 Kredi (CineStory Sinematik Video)
+        "VideoAutoReframe",     # 20 Kredi (Video Kadrajlama)
+        "AITryOn_1",            # 6 Kredi (Kiyafet Deneme 1)
+        "AITryOn_2",            # 6 Kredi (Evcil Hayvan Kiyafet)
+        "AITryOn",              # 6 Kredi (Genel Kiyafet Deneme)
+        "TrendingAITemplates",  # 6 Kredi (Trend AI Sablonlari)
+        "AIHairstyleV2",        # 6 Kredi (AI Sac Modeli)
+        "AIPhotoSlideshow",     # 6 Kredi (AI Foto Slayt Gosterisi)
+        "AIHeadshotV2",         # 6 Kredi (AI Portre / Vesikalik)
+        "AIMusicGeneratorV2",   # 11 Kredi (AI Muzik Uretici)
     ]
     
     for task_id in active_tasks:
@@ -1293,6 +2539,133 @@ class AuthExpiredError(Exception):
     """Raised when a member token is invalid or expired (Unauthorized)."""
     pass
 
+
+# ==============================================================================
+# CYBERLINK LIVE ACTION CREDITS MAPPING (Direct from CyberLink Featurelist SID ae44600d)
+# ==============================================================================
+CYBERLINK_ACTION_CREDITS = json.loads(
+    r"""{"genvideo_1_sec_alibaba_happyhorse1.0_enable_1080p":8,"genvideo_1_sec_alibaba_happyhorse1.0_none_1080p":8,"genvideo_1_sec_bytedance_seedance2.0std_enable_720p":10,"genvideo_1_sec_bytedance_seedance2.0std_none_720p":10,"genvideo_1_sec_kling_o3pro_enable_1080p":6,"genvideo_1_sec_kling_o3pro_none_1080p":5,"genimage_1_img_google_gemini3pro_custom":3,"genimage_1_img_google_gemini3pro_template":6,"genimage_1_img_google_gemini3pro_template_none":6,"genimage_1_img_openai_gptimage2_custom":6,"genimage_1_img_openai_gptimage2_custom_enable":3,"genimage_1_img_openai_gptimage2_custom_none":3,"genimage_1_img_openai_gptimage2_template":6,"genimage_1_img_openai_gptimage2_template_none":3,"genvideo_1_sec_bytedance_seedance2.5std_enable_enable_720p":14,"genvideo_1_sec_bytedance_seedance2.5std_enable_none_720p":14,"genvideo_1_sec_bytedance_seedance2.5std_none_enable_720p":14,"genvideo_1_sec_bytedance_seedance2.5std_none_none_720p":14,"genimage_1_img_google_gemini3.1flash_custom_none":3,"genimage_1_img_google_gemini3.1flash_template_none":8,"genimage_1_img_google_gemini3pro_custom_enable":6,"genimage_1_img_openai_gptimage2.5sunburst_template_none":8,"genvideo_1_video_cyberlink_remotion_export":1,"genvideo_60_img_cyberlink_remotion_edit":5,"genimage_1_img_cyberlink_fluxdev1_none":1,"genimage_1_img_google_gemini3pro_enable":6,"genimage_1_img_openai_gptimage2_enable":5,"genimage_1_img_google_gemini2.5flash_template_none":3,"genimage_1_img_google_gemini3.1flash_custom_enable_pet":6,"genimage_1_img_google_gemini3.1flash_custom_none_pet":6,"genimage_1_img_google_gemini3pro_template_none_pet":6,"genimage_1_img_kling_o1_custom_enable":6,"genimage_1_img_kling_o1_custom_none":3,"genimage_1_img_kling_o1_template_none":3,"genimage_1_img_kling_o3_custom_enable":6,"genimage_1_img_kling_o3_custom_none":6,"genimage_1_img_alibaba_qwenimage3.0_enable":3,"genimage_1_img_alibaba_qwenimage3.0_none":3,"genimage_1_img_alibaba_qwenimage3.0pro_enable":5,"genimage_1_img_alibaba_qwenimage3.0pro_none":5,"genimage_1_img_blackforest_flux2pro":5,"genimage_1_img_blackforest_flux2pro_enable":6,"genimage_1_img_blackforest_flux2pro_none":3,"genimage_1_img_bytedance_seedream5.0lite_enable":3,"genimage_1_img_bytedance_seedream5.0lite_none":3,"genimage_1_img_bytedance_seedream5.0pro_enable":5,"genimage_1_img_bytedance_seedream5.0pro_none":5,"genimage_1_img_cyberlink_qwen2511_enable":2,"genimage_1_img_cyberlink_qwen2511_none":2,"genimage_1_img_google_gemini2.5flash":2,"genimage_1_img_google_gemini2.5flash_enable":2,"genimage_1_img_google_gemini2.5flash_none":2,"genimage_1_img_google_gemini3.1flash_enable":5,"genimage_1_img_google_gemini3.1flashlite_enable":2,"genimage_1_img_google_gemini3.1flashlite_none":2,"genimage_1_img_google_gemini3.1flash_none":5,"genimage_1_img_google_gemini3pro":6,"genimage_1_img_google_gemini3pro_none":6,"genimage_1_img_google_gemininanobanana2.1_enable":4,"genimage_1_img_google_gemininanobanana2.1_none":4,"genimage_1_img_kling_o3_enable":3,"genimage_1_img_kling_o3_none":3,"genimage_1_img_openai_gptimage1.5":3,"genimage_1_img_openai_gptimage2.5flare_enable":5,"genimage_1_img_openai_gptimage2.5flare_none":5,"genimage_1_img_openai_gptimage2.5sunburst_enable":5,"genimage_1_img_openai_gptimage2.5sunburst_none":5,"genimage_1_img_openai_gptimage2_none":5,"genvideo_1_sec_alibaba_custom_happyhorse1.0_enable_single_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.0_enable_single_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.0_enable_startend_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.0_enable_startend_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.0_none_single_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.0_none_single_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.0_none_startend_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.0_none_startend_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.1_enable_single_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.1_enable_single_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.1_enable_startend_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.1_enable_startend_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.1_none_single_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.1_none_single_720p":5,"genvideo_1_sec_alibaba_custom_happyhorse1.1_none_startend_1080p":8,"genvideo_1_sec_alibaba_custom_happyhorse1.1_none_startend_720p":5,"genvideo_1_sec_alibaba_custom_wan2.7_enable_single_1080p":8,"genvideo_1_sec_alibaba_custom_wan2.7_enable_single_720p":5,"genvideo_1_sec_alibaba_custom_wan2.7_enable_startend_1080p":8,"genvideo_1_sec_alibaba_custom_wan2.7_enable_startend_720p":5,"genvideo_1_sec_alibaba_custom_wan2.7_none_single_1080p":8,"genvideo_1_sec_alibaba_custom_wan2.7_none_single_720p":5,"genvideo_1_sec_alibaba_custom_wan2.7_none_startend_1080p":8,"genvideo_1_sec_alibaba_custom_wan2.7_none_startend_720p":5,"genvideo_1_sec_alibaba_custom_wan3.0_enable_single_1080p":8,"genvideo_1_sec_alibaba_custom_wan3.0_enable_single_480p":2,"genvideo_1_sec_alibaba_custom_wan3.0_enable_single_720p":4,"genvideo_1_sec_alibaba_custom_wan3.0_enable_startend_1080p":8,"genvideo_1_sec_alibaba_custom_wan3.0_enable_startend_480p":2,"genvideo_1_sec_alibaba_custom_wan3.0_enable_startend_720p":4,"genvideo_1_sec_alibaba_custom_wan3.0_none_single_1080p":8,"genvideo_1_sec_alibaba_custom_wan3.0_none_single_480p":2,"genvideo_1_sec_alibaba_custom_wan3.0_none_single_720p":4,"genvideo_1_sec_alibaba_custom_wan3.0_none_startend_1080p":8,"genvideo_1_sec_alibaba_custom_wan3.0_none_startend_480p":2,"genvideo_1_sec_alibaba_custom_wan3.0_none_startend_720p":4,"genvideo_1_sec_blackforest_custom_flux3_enable_single_1080p":15,"genvideo_1_sec_blackforest_custom_flux3_enable_single_2k":20,"genvideo_1_sec_blackforest_custom_flux3_enable_single_4k":35,"genvideo_1_sec_blackforest_custom_flux3_enable_single_720p":9,"genvideo_1_sec_blackforest_custom_flux3_enable_startend_1080p":15,"genvideo_1_sec_blackforest_custom_flux3_enable_startend_2k":20,"genvideo_1_sec_blackforest_custom_flux3_enable_startend_4k":35,"genvideo_1_sec_blackforest_custom_flux3_enable_startend_720p":9,"genvideo_1_sec_blackforest_custom_flux3_none_single_1080p":15,"genvideo_1_sec_blackforest_custom_flux3_none_single_2k":20,"genvideo_1_sec_blackforest_custom_flux3_none_single_4k":35,"genvideo_1_sec_blackforest_custom_flux3_none_single_720p":9,"genvideo_1_sec_blackforest_custom_flux3_none_startend_1080p":15,"genvideo_1_sec_blackforest_custom_flux3_none_startend_2k":20,"genvideo_1_sec_blackforest_custom_flux3_none_startend_4k":35,"genvideo_1_sec_blackforest_custom_flux3_none_startend_720p":9,"genvideo_1_sec_bytedance_custom_seedance2.0fast_enable_single_480p":4,"genvideo_1_sec_bytedance_custom_seedance2.0fast_enable_single_720p":8,"genvideo_1_sec_bytedance_custom_seedance2.0fast_enable_startend_480p":4,"genvideo_1_sec_bytedance_custom_seedance2.0fast_enable_startend_720p":8,"genvideo_1_sec_bytedance_custom_seedance2.0fast_none_single_480p":4,"genvideo_1_sec_bytedance_custom_seedance2.0fast_none_single_720p":8,"genvideo_1_sec_bytedance_custom_seedance2.0fast_none_startend_480p":4,"genvideo_1_sec_bytedance_custom_seedance2.0fast_none_startend_720p":8,"genvideo_1_sec_bytedance_custom_seedance2.0mini_enable_single_480p":3,"genvideo_1_sec_bytedance_custom_seedance2.0mini_enable_single_720p":5,"genvideo_1_sec_bytedance_custom_seedance2.0mini_enable_startend_480p":3,"genvideo_1_sec_bytedance_custom_seedance2.0mini_enable_startend_720p":5,"genvideo_1_sec_bytedance_custom_seedance2.0mini_none_single_480p":3,"genvideo_1_sec_bytedance_custom_seedance2.0mini_none_single_720p":5,"genvideo_1_sec_bytedance_custom_seedance2.0mini_none_startend_480p":3,"genvideo_1_sec_bytedance_custom_seedance2.0mini_none_startend_720p":5,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_single_1080p":20,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_single_480p":5,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_single_4K":34,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_single_720p":10,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_startend_1080p":20,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_startend_480p":5,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_startend_4K":34,"genvideo_1_sec_bytedance_custom_seedance2.0std_enable_startend_720p":10,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_single_1080p":20,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_single_480p":5,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_single_4K":34,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_single_720p":10,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_startend_1080p":20,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_startend_480p":5,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_startend_4K":34,"genvideo_1_sec_bytedance_custom_seedance2.0std_none_startend_720p":10,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_single_1080p":28,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_single_480p":6,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_single_720p":14,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_startend_1080p":28,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_startend_480p":6,"genvideo_1_sec_bytedance_custom_seedance2.5std_enable_startend_720p":14,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_single_1080p":28,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_single_480p":6,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_single_720p":14,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_startend_1080p":28,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_startend_480p":6,"genvideo_1_sec_bytedance_custom_seedance2.5std_none_startend_720p":14,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_single_1080p":8,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_single_360p":2,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_single_4k":15,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_single_720p":5,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_startend_1080p":8,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_startend_360p":2,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_startend_4k":15,"genvideo_1_sec_google_custom_geminiomni1.1flash_enable_startend_720p":5,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_single_1080p":8,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_single_360p":2,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_single_4k":15,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_single_720p":5,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_startend_1080p":8,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_startend_360p":2,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_startend_4k":15,"genvideo_1_sec_google_custom_geminiomni1.1flash_none_startend_720p":5,"genvideo_1_sec_google_custom_geminiomniflash_enable_single_720p":5,"genvideo_1_sec_google_custom_geminiomniflash_enable_startend_720p":5,"genvideo_1_sec_google_custom_geminiomniflash_none_single_720p":5,"genvideo_1_sec_google_custom_geminiomniflash_none_startend_720p":5,"genvideo_1_sec_google_custom_veo3.1fast_enable_single":8,"genvideo_1_sec_google_custom_veo3.1fast_enable_startend":8,"genvideo_1_sec_google_custom_veo3.1fast_none_single":5,"genvideo_1_sec_google_custom_veo3.1fast_none_startend":5,"genvideo_1_sec_google_custom_veo3.1lite_enable_single_1080p":5,"genvideo_1_sec_google_custom_veo3.1lite_enable_single_720p":3,"genvideo_1_sec_google_custom_veo3.1lite_enable_startend_1080p":5,"genvideo_1_sec_google_custom_veo3.1lite_enable_startend_720p":3,"genvideo_1_sec_google_custom_veo3.1lite_none_single_1080p":3,"genvideo_1_sec_google_custom_veo3.1lite_none_single_720p":2,"genvideo_1_sec_google_custom_veo3.1lite_none_startend_1080p":3,"genvideo_1_sec_google_custom_veo3.1lite_none_startend_720p":2,"genvideo_1_sec_google_custom_veo3.1std_enable_single":18,"genvideo_1_sec_google_custom_veo3.1std_enable_startend":18,"genvideo_1_sec_google_custom_veo3.1std_none_single":10,"genvideo_1_sec_google_custom_veo3.1std_none_startend":10,"genvideo_1_sec_kling_custom_2.5pro_enable_single":5,"genvideo_1_sec_kling_custom_2.5pro_enable_startend":5,"genvideo_1_sec_kling_custom_2.5pro_none_single":5,"genvideo_1_sec_kling_custom_2.5pro_none_startend":5,"genvideo_1_sec_kling_custom_2.5std_enable_single":3,"genvideo_1_sec_kling_custom_2.5std_none_single":3,"genvideo_1_sec_kling_custom_2.6pro_enable_single":8,"genvideo_1_sec_kling_custom_2.6pro_enable_startend":8,"genvideo_1_sec_kling_custom_2.6pro_none_single":5,"genvideo_1_sec_kling_custom_2.6pro_none_startend":5,"genvideo_1_sec_kling_custom_3.0pro_enable_single_1080p":8,"genvideo_1_sec_kling_custom_3.0pro_enable_startend_1080p":8,"genvideo_1_sec_kling_custom_3.0pro_none_single_1080p":5,"genvideo_1_sec_kling_custom_3.0pro_none_startend_1080p":5,"genvideo_1_sec_kling_custom_3.0std_enable_single_720p":6,"genvideo_1_sec_kling_custom_3.0std_enable_startend_720p":6,"genvideo_1_sec_kling_custom_3.0std_none_single_720p":4,"genvideo_1_sec_kling_custom_3.0std_none_startend_720p":4,"genvideo_1_sec_kling_custom_4.0flash_enable_single_720p":6,"genvideo_1_sec_kling_custom_4.0flash_enable_startend_720p":6,"genvideo_1_sec_kling_custom_4.0std_enable_single_1080p":14,"genvideo_1_sec_kling_custom_4.0std_enable_single_720p":9,"genvideo_1_sec_kling_custom_4.0std_enable_startend_1080p":14,"genvideo_1_sec_kling_custom_4.0std_enable_startend_720p":9,"genvideo_1_sec_kling_custom_o1pro_enable_single":6,"genvideo_1_sec_kling_custom_o1pro_enable_startend":6,"genvideo_1_sec_kling_custom_o1pro_none_single":6,"genvideo_1_sec_kling_custom_o1pro_none_startend":6,"genvideo_1_sec_kling_custom_o1std_enable_single":4,"genvideo_1_sec_kling_custom_o1std_enable_startend":4,"genvideo_1_sec_kling_custom_o1std_none_single":4,"genvideo_1_sec_kling_custom_o1std_none_startend":4,"genvideo_1_sec_kling_custom_o3pro_enable_single_1080p":6,"genvideo_1_sec_kling_custom_o3pro_enable_startend_1080p":6,"genvideo_1_sec_kling_custom_o3pro_none_single_1080p":5,"genvideo_1_sec_kling_custom_o3pro_none_startend_1080p":5,"genvideo_1_sec_kling_custom_o3std_enable_single_720p":5,"genvideo_1_sec_kling_custom_o3std_enable_startend_720p":5,"genvideo_1_sec_kling_custom_o3std_none_single_720p":4,"genvideo_1_sec_kling_custom_o3std_none_startend_720p":4,"genvideo_1_sec_minimax_custom_minimaxh3_enable_single_2k":8,"genvideo_1_sec_minimax_custom_minimaxh3_enable_single_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3_enable_startend_2k":8,"genvideo_1_sec_minimax_custom_minimaxh3_enable_startend_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3max_enable_single_480p":3,"genvideo_1_sec_minimax_custom_minimaxh3max_enable_single_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3max_enable_startend_480p":3,"genvideo_1_sec_minimax_custom_minimaxh3max_enable_startend_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3max_none_single_480p":3,"genvideo_1_sec_minimax_custom_minimaxh3max_none_single_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3max_none_startend_480p":3,"genvideo_1_sec_minimax_custom_minimaxh3max_none_startend_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3_none_single_2k":8,"genvideo_1_sec_minimax_custom_minimaxh3_none_single_768p":5,"genvideo_1_sec_minimax_custom_minimaxh3_none_startend_2k":8,"genvideo_1_sec_minimax_custom_minimaxh3_none_startend_768p":5,"genvideo_1_sec_motivai_custom_pixverse6_enable_single_1080p":4,"genvideo_1_sec_motivai_custom_pixverse6_enable_single_720p":2,"genvideo_1_sec_motivai_custom_pixverse6_enable_startend_1080p":6,"genvideo_1_sec_motivai_custom_pixverse6_enable_startend_720p":3,"genvideo_1_sec_motivai_custom_pixverse6_none_single_1080p":4,"genvideo_1_sec_motivai_custom_pixverse6_none_single_720p":2,"genvideo_1_sec_motivai_custom_pixverse6_none_startend_1080p":6,"genvideo_1_sec_motivai_custom_pixverse6_none_startend_720p":3,"genvideo_1_sec_openai_custom_sora2pro_enable_single":18,"genvideo_1_sec_openai_custom_sora2pro_none_single":18,"genvideo_1_sec_openai_custom_sora2std_enable_single":6,"genvideo_1_sec_openai_custom_sora2std_none_single":6,"genvideo_1_sec_runway_custom_gen4turbo_enable_single":3,"genvideo_1_sec_runway_custom_gen4turbo_none_single":3,"genvideo_1_sec_vidu_custom_q2pro_enable_single":5,"genvideo_1_sec_vidu_custom_q2pro_enable_startend":5,"genvideo_1_sec_vidu_custom_q2pro_none_single":5,"genvideo_1_sec_vidu_custom_q2pro_none_startend":5,"genvideo_1_sec_vidu_custom_q2turbo_enable_single":3,"genvideo_1_sec_vidu_custom_q2turbo_enable_startend":3,"genvideo_1_sec_vidu_custom_q2turbo_none_single":3,"genvideo_1_sec_vidu_custom_q2turbo_none_startend":3,"genvideo_1_sec_vidu_custom_q3pro_enable_single_1080p":6,"genvideo_1_sec_vidu_custom_q3pro_enable_startend_1080p":6,"genvideo_1_sec_vidu_custom_q3pro_none_single_1080p":6,"genvideo_1_sec_vidu_custom_q3pro_none_startend_1080p":6,"genvideo_1_sec_vidu_custom_q3turbo_enable_single_720p":3,"genvideo_1_sec_vidu_custom_q3turbo_enable_startend_720p":3,"genvideo_1_sec_vidu_custom_q3turbo_none_single_720p":3,"genvideo_1_sec_vidu_custom_q3turbo_none_startend_720p":3,"genvideo_1_sec_vidu_custom_q4_enable_single_1080p":6,"genvideo_1_sec_vidu_custom_q4_enable_single_2k":9,"genvideo_1_sec_vidu_custom_q4_enable_single_4k":19,"genvideo_1_sec_vidu_custom_q4_enable_single_540p":2,"genvideo_1_sec_vidu_custom_q4_enable_single_720p":5,"genvideo_1_sec_vidu_custom_q4_enable_startend_1080p":6,"genvideo_1_sec_vidu_custom_q4_enable_startend_2k":9,"genvideo_1_sec_vidu_custom_q4_enable_startend_4k":19,"genvideo_1_sec_vidu_custom_q4_enable_startend_540p":2,"genvideo_1_sec_vidu_custom_q4_enable_startend_720p":5,"genvideo_1_sec_vidu_custom_q4_none_single_1080p":6,"genvideo_1_sec_vidu_custom_q4_none_single_2k":9,"genvideo_1_sec_vidu_custom_q4_none_single_4k":19,"genvideo_1_sec_vidu_custom_q4_none_single_540p":2,"genvideo_1_sec_vidu_custom_q4_none_single_720p":5,"genvideo_1_sec_vidu_custom_q4_none_startend_1080p":6,"genvideo_1_sec_vidu_custom_q4_none_startend_2k":9,"genvideo_1_sec_vidu_custom_q4_none_startend_4k":19,"genvideo_1_sec_vidu_custom_q4_none_startend_540p":2,"genvideo_1_sec_vidu_custom_q4_none_startend_720p":5,"genimage_1_img_google_gemini3.1flash":5,"genvideo_1_sec_alibaba_happyhorse1.0_enable_720p":5,"genvideo_1_sec_alibaba_happyhorse1.0_none_720p":5,"genvideo_1_sec_alibaba_happyhorse1.1_enable_1080p":8,"genvideo_1_sec_alibaba_happyhorse1.1_enable_720p":5,"genvideo_1_sec_alibaba_happyhorse1.1_none_1080p":8,"genvideo_1_sec_alibaba_happyhorse1.1_none_720p":5,"genvideo_1_sec_alibaba_wan2.7_enable_1080p":8,"genvideo_1_sec_alibaba_wan2.7_enable_720p":5,"genvideo_1_sec_alibaba_wan2.7_none_1080p":8,"genvideo_1_sec_alibaba_wan2.7_none_720p":5,"genvideo_1_sec_alibaba_wan3.0_enable_1080p":8,"genvideo_1_sec_alibaba_wan3.0_enable_480p":2,"genvideo_1_sec_alibaba_wan3.0_enable_720p":4,"genvideo_1_sec_alibaba_wan3.0_none_1080p":8,"genvideo_1_sec_alibaba_wan3.0_none_480p":2,"genvideo_1_sec_alibaba_wan3.0_none_720p":4,"genvideo_1_sec_blackforest_flux3_enable_1080p":15,"genvideo_1_sec_blackforest_flux3_enable_2k":20,"genvideo_1_sec_blackforest_flux3_enable_4k":35,"genvideo_1_sec_blackforest_flux3_enable_720p":9,"genvideo_1_sec_blackforest_flux3_none_1080p":15,"genvideo_1_sec_blackforest_flux3_none_2k":20,"genvideo_1_sec_blackforest_flux3_none_4k":35,"genvideo_1_sec_blackforest_flux3_none_720p":9,"genvideo_1_sec_bytedance_seedance2.0fast_enable_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_enable_480p_motionbrush":4,"genvideo_1_sec_bytedance_seedance2.0fast_enable_720p":8,"genvideo_1_sec_bytedance_seedance2.0fast_enable_720p_motionbrush":8,"genvideo_1_sec_bytedance_seedance2.0fast_none_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_none_480p_motionbrush":4,"genvideo_1_sec_bytedance_seedance2.0fast_none_720p":8,"genvideo_1_sec_bytedance_seedance2.0fast_none_720p_motionbrush":8,"genvideo_1_sec_bytedance_seedance2.0mini_enable_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_enable_480p_motionbrush":3,"genvideo_1_sec_bytedance_seedance2.0mini_enable_720p":5,"genvideo_1_sec_bytedance_seedance2.0mini_enable_720p_motionbrush":5,"genvideo_1_sec_bytedance_seedance2.0mini_none_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_none_480p_motionbrush":3,"genvideo_1_sec_bytedance_seedance2.0mini_none_720p":5,"genvideo_1_sec_bytedance_seedance2.0mini_none_720p_motionbrush":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_enable_1080p_motionbrush":20,"genvideo_1_sec_bytedance_seedance2.0std_enable_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_480p_motionbrush":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_4K":34,"genvideo_1_sec_bytedance_seedance2.0std_enable_4k_motionbrush":34,"genvideo_1_sec_bytedance_seedance2.0std_enable_720p_motionbrush":10,"genvideo_1_sec_bytedance_seedance2.0std_none_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_none_1080p_motionbrush":20,"genvideo_1_sec_bytedance_seedance2.0std_none_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_none_480p_motionbrush":5,"genvideo_1_sec_bytedance_seedance2.0std_none_4K":34,"genvideo_1_sec_bytedance_seedance2.0std_none_4k_motionbrush":34,"genvideo_1_sec_bytedance_seedance2.0std_none_720p_motionbrush":10,"genvideo_1_sec_bytedance_seedance2.5std_enable_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_enable_480p":6,"genvideo_1_sec_bytedance_seedance2.5std_enable_720p":14,"genvideo_1_sec_bytedance_seedance2.5std_none_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_none_480p":6,"genvideo_1_sec_bytedance_seedance2.5std_none_720p":14,"genvideo_1_sec_google_geminiomni1.1flash_enable_1080p":8,"genvideo_1_sec_google_geminiomni1.1flash_enable_360p":2,"genvideo_1_sec_google_geminiomni1.1flash_enable_4k":15,"genvideo_1_sec_google_geminiomni1.1flash_enable_720p":5,"genvideo_1_sec_google_geminiomni1.1flash_none_1080p":8,"genvideo_1_sec_google_geminiomni1.1flash_none_360p":2,"genvideo_1_sec_google_geminiomni1.1flash_none_4k":15,"genvideo_1_sec_google_geminiomni1.1flash_none_720p":5,"genvideo_1_sec_google_geminiomniflash_enable_720p":5,"genvideo_1_sec_google_geminiomniflash_none_720p":5,"genvideo_1_sec_kling_4.0flash_enable_720p":6,"genvideo_1_sec_kling_4.0std_enable_1080p":14,"genvideo_1_sec_kling_4.0std_enable_720p":9,"genvideo_1_sec_kling_o34k_enable_4k":14,"genvideo_1_sec_kling_o34k_none_4k":14,"genvideo_1_sec_kling_o3std_enable_720p":5,"genvideo_1_sec_kling_o3std_none_720p":4,"genvideo_1_sec_minimax_minimaxh3_enable_2k":8,"genvideo_1_sec_minimax_minimaxh3_enable_768p":5,"genvideo_1_sec_minimax_minimaxh3max_enable_480p":3,"genvideo_1_sec_minimax_minimaxh3max_enable_768p":5,"genvideo_1_sec_minimax_minimaxh3max_none_480p":3,"genvideo_1_sec_minimax_minimaxh3max_none_768p":5,"genvideo_1_sec_minimax_minimaxh3_none_2k":8,"genvideo_1_sec_minimax_minimaxh3_none_768p":5,"genvideo_1_sec_motivai_pixverse6_enable_1080p":6,"genvideo_1_sec_motivai_pixverse6_enable_540p":2,"genvideo_1_sec_motivai_pixverse6_enable_720p":3,"genvideo_1_sec_motivai_pixverse6_none_1080p":4,"genvideo_1_sec_motivai_pixverse6_none_540p":1,"genvideo_1_sec_motivai_pixverse6_none_720p":2,"genvideo_1_sec_vidu_q3_enable_1080p":5,"genvideo_1_sec_vidu_q3_enable_540p":3,"genvideo_1_sec_vidu_q3_enable_720p":4,"genvideo_1_sec_vidu_q3mix_enable_1080p":9,"genvideo_1_sec_vidu_q3mix_enable_720p":7,"genvideo_1_sec_vidu_q3mix_none_1080p":9,"genvideo_1_sec_vidu_q3mix_none_720p":7,"genvideo_1_sec_vidu_q3_none_1080p":5,"genvideo_1_sec_vidu_q3_none_540p":3,"genvideo_1_sec_vidu_q3_none_720p":4,"genvideo_1_sec_vidu_q3turbo_enable_1080p":4,"genvideo_1_sec_vidu_q3turbo_enable_540p":2,"genvideo_1_sec_vidu_q3turbo_enable_720p":3,"genvideo_1_sec_vidu_q3turbo_none_1080p":4,"genvideo_1_sec_vidu_q3turbo_none_540p":2,"genvideo_1_sec_vidu_q3turbo_none_720p":3,"genimage_1_img_alibaba_qwenimage3.0_enable_1k":2,"genimage_1_img_alibaba_qwenimage3.0_enable_2k":3,"genimage_1_img_alibaba_qwenimage3.0_none_1k":2,"genimage_1_img_alibaba_qwenimage3.0_none_2k":3,"genimage_1_img_alibaba_qwenimage3.0pro_enable_1k":3,"genimage_1_img_alibaba_qwenimage3.0pro_enable_2k":5,"genimage_1_img_alibaba_qwenimage3.0pro_none_1k":3,"genimage_1_img_alibaba_qwenimage3.0pro_none_2k":5,"genimage_1_img_blackforest_flux2pro_enable_1k":3,"genimage_1_img_blackforest_flux2pro_enable_1K":3,"genimage_1_img_blackforest_flux2pro_enable_2k":6,"genimage_1_img_blackforest_flux2pro_enable_2K":6,"genimage_1_img_blackforest_flux2pro_none_1k":2,"genimage_1_img_blackforest_flux2pro_none_1K":2,"genimage_1_img_blackforest_flux2pro_none_2k":5,"genimage_1_img_blackforest_flux2pro_none_2K":5,"genimage_1_img_bytedance_seedream5.0lite_enable_2k":3,"genimage_1_img_bytedance_seedream5.0lite_enable_2K":3,"genimage_1_img_bytedance_seedream5.0lite_enable_3k":3,"genimage_1_img_bytedance_seedream5.0lite_enable_3K":3,"genimage_1_img_bytedance_seedream5.0lite_none_2k":3,"genimage_1_img_bytedance_seedream5.0lite_none_2K":3,"genimage_1_img_bytedance_seedream5.0lite_none_3k":3,"genimage_1_img_bytedance_seedream5.0lite_none_3K":3,"genimage_1_img_bytedance_seedream5.0pro_enable_1k":3,"genimage_1_img_bytedance_seedream5.0pro_enable_1K":3,"genimage_1_img_bytedance_seedream5.0pro_enable_2k":5,"genimage_1_img_bytedance_seedream5.0pro_enable_2K":5,"genimage_1_img_bytedance_seedream5.0pro_none_1k":3,"genimage_1_img_bytedance_seedream5.0pro_none_1K":3,"genimage_1_img_bytedance_seedream5.0pro_none_2k":5,"genimage_1_img_bytedance_seedream5.0pro_none_2K":5,"genimage_1_img_cyberlink_fluxdev1_none_1k":1,"genimage_1_img_cyberlink_fluxdev1_none_1K":1,"genimage_1_img_cyberlink_stablediffusion_enable":1,"genimage_1_img_cyberlink_stablediffusion_enable_1k":1,"genimage_1_img_cyberlink_stablediffusion_enable_1K":1,"genimage_1_img_cyberlink_stablediffusion_none":1,"genimage_1_img_cyberlink_stablediffusion_none_1k":1,"genimage_1_img_cyberlink_stablediffusion_none_1K":1,"genimage_1_img_cyberlink_zimageturbo_none":2,"genimage_1_img_cyberlink_zimageturbo_none_1k":1,"genimage_1_img_cyberlink_zimageturbo_none_1K":1,"genimage_1_img_cyberlink_zimageturbo_none_2k":2,"genimage_1_img_cyberlink_zimageturbo_none_2K":2,"genimage_1_img_google_gemini2.5flash_enable_1k":2,"genimage_1_img_google_gemini2.5flash_enable_1K":2,"genimage_1_img_google_gemini2.5flash_none_1k":2,"genimage_1_img_google_gemini2.5flash_none_1K":2,"genimage_1_img_google_gemini3.1flash_enable_1k":3,"genimage_1_img_google_gemini3.1flash_enable_1K":3,"genimage_1_img_google_gemini3.1flash_enable_2k":5,"genimage_1_img_google_gemini3.1flash_enable_2K":5,"genimage_1_img_google_gemini3.1flash_enable_4k":7,"genimage_1_img_google_gemini3.1flash_enable_4K":7,"genimage_1_img_google_gemini3.1flashlite_enable_1k":2,"genimage_1_img_google_gemini3.1flashlite_enable_1K":2,"genimage_1_img_google_gemini3.1flashlite_none_1k":2,"genimage_1_img_google_gemini3.1flashlite_none_1K":2,"genimage_1_img_google_gemini3.1flash_none_1k":3,"genimage_1_img_google_gemini3.1flash_none_1K":3,"genimage_1_img_google_gemini3.1flash_none_2k":5,"genimage_1_img_google_gemini3.1flash_none_2K":5,"genimage_1_img_google_gemini3.1flash_none_4k":7,"genimage_1_img_google_gemini3.1flash_none_4K":7,"genimage_1_img_google_gemini3pro_enable_1k":6,"genimage_1_img_google_gemini3pro_enable_1K":6,"genimage_1_img_google_gemini3pro_enable_2k":6,"genimage_1_img_google_gemini3pro_enable_2K":6,"genimage_1_img_google_gemini3pro_enable_4k":12,"genimage_1_img_google_gemini3pro_enable_4K":12,"genimage_1_img_google_gemini3pro_none_1k":6,"genimage_1_img_google_gemini3pro_none_1K":6,"genimage_1_img_google_gemini3pro_none_2k":6,"genimage_1_img_google_gemini3pro_none_2K":6,"genimage_1_img_google_gemini3pro_none_4k":12,"genimage_1_img_google_gemini3pro_none_4K":12,"genimage_1_img_google_gemininanobanana2.1_enable_1k":3,"genimage_1_img_google_gemininanobanana2.1_enable_2k":4,"genimage_1_img_google_gemininanobanana2.1_enable_4k":8,"genimage_1_img_google_gemininanobanana2.1_none_1k":3,"genimage_1_img_google_gemininanobanana2.1_none_2k":4,"genimage_1_img_google_gemininanobanana2.1_none_4k":8,"genimage_1_img_kling_o1_enable":3,"genimage_1_img_kling_o1_enable_1k":3,"genimage_1_img_kling_o1_enable_1K":3,"genimage_1_img_kling_o1_enable_2k":3,"genimage_1_img_kling_o1_enable_2K":3,"genimage_1_img_kling_o1_enable_4k":5,"genimage_1_img_kling_o1_enable_4K":5,"genimage_1_img_kling_o1_none":3,"genimage_1_img_kling_o1_none_1k":3,"genimage_1_img_kling_o1_none_1K":3,"genimage_1_img_kling_o1_none_2k":3,"genimage_1_img_kling_o1_none_2K":3,"genimage_1_img_kling_o1_none_4k":5,"genimage_1_img_kling_o3_enable_1k":3,"genimage_1_img_kling_o3_enable_1K":3,"genimage_1_img_kling_o3_enable_2k":3,"genimage_1_img_kling_o3_enable_2K":3,"genimage_1_img_kling_o3_enable_4k":5,"genimage_1_img_kling_o3_enable_4K":5,"genimage_1_img_kling_o3_none_1k":3,"genimage_1_img_kling_o3_none_1K":3,"genimage_1_img_kling_o3_none_2k":3,"genimage_1_img_kling_o3_none_2K":3,"genimage_1_img_kling_o3_none_4k":5,"genimage_1_img_kling_o3_none_4K":5,"genimage_1_img_openai_gptimage1.5_enable":3,"genimage_1_img_openai_gptimage1.5_enable_1k":3,"genimage_1_img_openai_gptimage1.5_enable_1K":3,"genimage_1_img_openai_gptimage1.5_none":3,"genimage_1_img_openai_gptimage1.5_none_1k":3,"genimage_1_img_openai_gptimage1.5_none_1K":3,"genimage_1_img_openai_gptimage1_enable":2,"genimage_1_img_openai_gptimage1_enable_1k":2,"genimage_1_img_openai_gptimage1_enable_1K":2,"genimage_1_img_openai_gptimage1_none":2,"genimage_1_img_openai_gptimage1_none_1k":2,"genimage_1_img_openai_gptimage1_none_1K":2,"genimage_1_img_openai_gptimage2.5flare_enable_1k":3,"genimage_1_img_openai_gptimage2.5flare_enable_1K":3,"genimage_1_img_openai_gptimage2.5flare_enable_2k":6,"genimage_1_img_openai_gptimage2.5flare_enable_2K":6,"genimage_1_img_openai_gptimage2.5flare_none_1k":3,"genimage_1_img_openai_gptimage2.5flare_none_1K":3,"genimage_1_img_openai_gptimage2.5flare_none_2k":6,"genimage_1_img_openai_gptimage2.5flare_none_2K":6,"genimage_1_img_openai_gptimage2.5sunburst_enable_1k":3,"genimage_1_img_openai_gptimage2.5sunburst_enable_1K":3,"genimage_1_img_openai_gptimage2.5sunburst_enable_2k":6,"genimage_1_img_openai_gptimage2.5sunburst_enable_2K":6,"genimage_1_img_openai_gptimage2.5sunburst_none_1k":3,"genimage_1_img_openai_gptimage2.5sunburst_none_1K":3,"genimage_1_img_openai_gptimage2.5sunburst_none_2k":6,"genimage_1_img_openai_gptimage2.5sunburst_none_2K":6,"genimage_1_img_openai_gptimage2_enable_1k":3,"genimage_1_img_openai_gptimage2_enable_1K":3,"genimage_1_img_openai_gptimage2_enable_2k":6,"genimage_1_img_openai_gptimage2_enable_2K":6,"genimage_1_img_openai_gptimage2_none_1k":3,"genimage_1_img_openai_gptimage2_none_1K":3,"genimage_1_img_openai_gptimage2_none_2k":6,"genimage_1_img_openai_gptimage2_none_2K":6,"genvideo_1_sec_bytedance_seedance2.0fast_enable_none_1080p":18,"genvideo_1_sec_bytedance_seedance2.0fast_none_none_1080p":18,"genvideo_1_sec_google_veo3.1fast_enable_1080p":9,"genvideo_1_sec_google_veo3.1fast_enable_4k":16,"genvideo_1_sec_google_veo3.1fast_enable_720p":7,"genvideo_1_sec_google_veo3.1fast_none_1080p":7,"genvideo_1_sec_google_veo3.1fast_none_4k":14,"genvideo_1_sec_google_veo3.1fast_none_720p":5,"genvideo_1_sec_google_veo3.1lite_enable_1080p":5,"genvideo_1_sec_google_veo3.1lite_enable_720p":3,"genvideo_1_sec_google_veo3.1lite_none_1080p":3,"genvideo_1_sec_google_veo3.1lite_none_720p":2,"genvideo_1_sec_google_veo3.1std_enable_1080p":18,"genvideo_1_sec_google_veo3.1std_enable_4k":30,"genvideo_1_sec_google_veo3.1std_enable_720p":18,"genvideo_1_sec_google_veo3.1std_none_1080p":10,"genvideo_1_sec_google_veo3.1std_none_4k":20,"genvideo_1_sec_google_veo3.1std_none_720p":10,"genvideo_1_sec_kling_2.5pro_enable_1080p":4,"genvideo_1_sec_kling_2.5pro_none_1080p":4,"genvideo_1_sec_kling_2.5std_enable_720p":2,"genvideo_1_sec_kling_2.5std_none_720p":2,"genvideo_1_sec_kling_2.6pro_enable_1080p":8,"genvideo_1_sec_kling_2.6pro_none_1080p":4,"genvideo_1_sec_kling_3.04k_enable_4k":14,"genvideo_1_sec_kling_3.04k_none_4k":14,"genvideo_1_sec_kling_3.0pro_enable_1080p":8,"genvideo_1_sec_kling_3.0pro_none_1080p":5,"genvideo_1_sec_kling_3.0std_enable_720p":6,"genvideo_1_sec_kling_3.0std_none_720p":4,"genvideo_1_sec_kling_o3pro_enable_enable_720p":6,"genvideo_1_sec_kling_o3pro_none_enable_720p":4,"genvideo_1_sec_kling_o3std_enable_none_1080p":8,"genvideo_1_sec_kling_o3std_none_none_1080p":5,"genvideo_1_sec_openai_sora2_enable_720p":6,"genvideo_1_sec_openai_sora2_none_720p":6,"genvideo_1_sec_openai_sora2pro_enable_1024p":22,"genvideo_1_sec_openai_sora2pro_enable_1080p":28,"genvideo_1_sec_openai_sora2pro_enable_720p":16,"genvideo_1_sec_openai_sora2pro_none_1024p":22,"genvideo_1_sec_openai_sora2pro_none_1080p":28,"genvideo_1_sec_openai_sora2pro_none_720p":16,"genvideo_1_sec_vidu_q2_enable_1080p":3,"genvideo_1_sec_vidu_q2_enable_540p":1,"genvideo_1_sec_vidu_q2_enable_720p":2,"genvideo_1_sec_vidu_q2_none_1080p":3,"genvideo_1_sec_vidu_q2_none_540p":1,"genvideo_1_sec_vidu_q2_none_720p":2,"genvideo_1_sec_vidu_q3pro_enable_1080p":6,"genvideo_1_sec_vidu_q3pro_enable_540p":3,"genvideo_1_sec_vidu_q3pro_enable_720p":5,"genvideo_1_sec_vidu_q3pro_none_1080p":6,"genvideo_1_sec_vidu_q3pro_none_540p":3,"genvideo_1_sec_vidu_q3pro_none_720p":5,"genimage_1_img_google_gemini2.5flash_template":3,"genimage_1_img_openai_gptimage2.5sunburst_template":6,"genvideo_60_sec":2,"genvideo_1_sec_byteplus_pro_hd_1080p_120fps":16,"genvideo_1_sec_byteplus_pro_hd_1080p_30fps":4,"genvideo_1_sec_byteplus_pro_hd_1080p_60fps":8,"genvideo_1_sec_byteplus_pro_hd_4k_120fps":48,"genvideo_1_sec_byteplus_pro_hd_4k_30fps":12,"genvideo_1_sec_byteplus_pro_hd_4k_60fps":24,"genvideo_1_sec_byteplus_pro_hd_720p_120fps":8,"genvideo_1_sec_byteplus_pro_hd_720p_30fps":2,"genvideo_1_sec_byteplus_pro_hd_720p_60fps":4,"genvideo_1_sec_byteplus_pro_natural_1080p_120fps":16,"genvideo_1_sec_byteplus_pro_natural_1080p_30fps":4,"genvideo_1_sec_byteplus_pro_natural_1080p_60fps":8,"genvideo_1_sec_byteplus_pro_natural_4k_120fps":48,"genvideo_1_sec_byteplus_pro_natural_4k_30fps":12,"genvideo_1_sec_byteplus_pro_natural_4k_60fps":24,"genvideo_1_sec_byteplus_pro_natural_720p_120fps":8,"genvideo_1_sec_byteplus_pro_natural_720p_30fps":2,"genvideo_1_sec_byteplus_pro_natural_720p_60fps":4,"genvideo_1_sec_byteplus_std_hd_1080p_120fps":2,"genvideo_1_sec_byteplus_std_hd_1080p_30fps":2,"genvideo_1_sec_byteplus_std_hd_1080p_60fps":2,"genvideo_1_sec_byteplus_std_hd_4k_120fps":8,"genvideo_1_sec_byteplus_std_hd_4k_30fps":3,"genvideo_1_sec_byteplus_std_hd_4k_60fps":6,"genvideo_1_sec_byteplus_std_hd_720p_120fps":1,"genvideo_1_sec_byteplus_std_hd_720p_30fps":1,"genvideo_1_sec_byteplus_std_hd_720p_60fps":1,"genvideo_1_sec_byteplus_std_natural_1080p_120fps":2,"genvideo_1_sec_byteplus_std_natural_1080p_30fps":2,"genvideo_1_sec_byteplus_std_natural_1080p_60fps":2,"genvideo_1_sec_byteplus_std_natural_4k_120fps":8,"genvideo_1_sec_byteplus_std_natural_4k_30fps":3,"genvideo_1_sec_byteplus_std_natural_4k_60fps":6,"genvideo_1_sec_byteplus_std_natural_720p_120fps":1,"genvideo_1_sec_byteplus_std_natural_720p_30fps":1,"genvideo_1_sec_byteplus_std_natural_720p_60fps":1,"genvideo_1_sec_alibaba_happyhorse1.0_enable_enable_1080p":7,"genvideo_1_sec_alibaba_happyhorse1.0_enable_enable_720p":4,"genvideo_1_sec_alibaba_happyhorse1.0_enable_none_1080p":7,"genvideo_1_sec_alibaba_happyhorse1.0_enable_none_720p":4,"genvideo_1_sec_alibaba_happyhorse1.0_none_enable_1080p":7,"genvideo_1_sec_alibaba_happyhorse1.0_none_enable_720p":4,"genvideo_1_sec_alibaba_happyhorse1.0_none_none_1080p":7,"genvideo_1_sec_alibaba_happyhorse1.0_none_none_720p":4,"genvideo_1_sec_alibaba_wan2.7_enable_enable_1080p":5,"genvideo_1_sec_alibaba_wan2.7_enable_enable_720p":3,"genvideo_1_sec_alibaba_wan2.7_enable_none_1080p":5,"genvideo_1_sec_alibaba_wan2.7_enable_none_720p":3,"genvideo_1_sec_alibaba_wan2.7_none_enable_1080p":5,"genvideo_1_sec_alibaba_wan2.7_none_enable_720p":3,"genvideo_1_sec_alibaba_wan2.7_none_none_1080p":5,"genvideo_1_sec_alibaba_wan2.7_none_none_720p":3,"genvideo_1_sec_alibaba_wan3.0_enable_enable_1080p":8,"genvideo_1_sec_alibaba_wan3.0_enable_enable_480p":2,"genvideo_1_sec_alibaba_wan3.0_enable_enable_720p":4,"genvideo_1_sec_alibaba_wan3.0_enable_none_1080p":8,"genvideo_1_sec_alibaba_wan3.0_enable_none_480p":2,"genvideo_1_sec_alibaba_wan3.0_enable_none_720p":4,"genvideo_1_sec_alibaba_wan3.0_none_enable_1080p":8,"genvideo_1_sec_alibaba_wan3.0_none_enable_480p":2,"genvideo_1_sec_alibaba_wan3.0_none_enable_720p":4,"genvideo_1_sec_alibaba_wan3.0_none_none_1080p":8,"genvideo_1_sec_alibaba_wan3.0_none_none_480p":2,"genvideo_1_sec_alibaba_wan3.0_none_none_720p":4,"genvideo_1_sec_blackforest_flux3_enable_enable_1080p":25,"genvideo_1_sec_blackforest_flux3_enable_enable_2k":30,"genvideo_1_sec_blackforest_flux3_enable_enable_4k":40,"genvideo_1_sec_blackforest_flux3_enable_enable_720p":20,"genvideo_1_sec_blackforest_flux3_enable_none_1080p":25,"genvideo_1_sec_blackforest_flux3_enable_none_2k":30,"genvideo_1_sec_blackforest_flux3_enable_none_4k":40,"genvideo_1_sec_blackforest_flux3_enable_none_720p":20,"genvideo_1_sec_blackforest_flux3_none_enable_1080p":25,"genvideo_1_sec_blackforest_flux3_none_enable_2k":30,"genvideo_1_sec_blackforest_flux3_none_enable_4k":40,"genvideo_1_sec_blackforest_flux3_none_enable_720p":20,"genvideo_1_sec_blackforest_flux3_none_none_1080p":25,"genvideo_1_sec_blackforest_flux3_none_none_2k":30,"genvideo_1_sec_blackforest_flux3_none_none_4k":40,"genvideo_1_sec_blackforest_flux3_none_none_720p":20,"genvideo_1_sec_bytedance_seedance2.0fast_enable_enable_1080p":18,"genvideo_1_sec_bytedance_seedance2.0fast_enable_enable_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_enable_enable_4k":32,"genvideo_1_sec_bytedance_seedance2.0fast_enable_enable_720p":8,"genvideo_1_sec_bytedance_seedance2.0fast_enable_none_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_enable_none_4k":32,"genvideo_1_sec_bytedance_seedance2.0fast_enable_none_720p":8,"genvideo_1_sec_bytedance_seedance2.0fast_none_enable_1080p":18,"genvideo_1_sec_bytedance_seedance2.0fast_none_enable_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_none_enable_4k":32,"genvideo_1_sec_bytedance_seedance2.0fast_none_enable_720p":8,"genvideo_1_sec_bytedance_seedance2.0fast_none_none_480p":4,"genvideo_1_sec_bytedance_seedance2.0fast_none_none_4k":32,"genvideo_1_sec_bytedance_seedance2.0fast_none_none_720p":8,"genvideo_1_sec_bytedance_seedance2.0mini_enable_enable_1080p":18,"genvideo_1_sec_bytedance_seedance2.0mini_enable_enable_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_enable_enable_4k":32,"genvideo_1_sec_bytedance_seedance2.0mini_enable_enable_720p":5,"genvideo_1_sec_bytedance_seedance2.0mini_enable_none_1080p":18,"genvideo_1_sec_bytedance_seedance2.0mini_enable_none_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_enable_none_4k":32,"genvideo_1_sec_bytedance_seedance2.0mini_enable_none_720p":5,"genvideo_1_sec_bytedance_seedance2.0mini_none_enable_1080p":18,"genvideo_1_sec_bytedance_seedance2.0mini_none_enable_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_none_enable_4k":32,"genvideo_1_sec_bytedance_seedance2.0mini_none_enable_720p":5,"genvideo_1_sec_bytedance_seedance2.0mini_none_none_1080p":18,"genvideo_1_sec_bytedance_seedance2.0mini_none_none_480p":3,"genvideo_1_sec_bytedance_seedance2.0mini_none_none_4k":32,"genvideo_1_sec_bytedance_seedance2.0mini_none_none_720p":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_enable_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_enable_enable_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_enable_4k":34,"genvideo_1_sec_bytedance_seedance2.0std_enable_enable_720p":10,"genvideo_1_sec_bytedance_seedance2.0std_enable_none_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_enable_none_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_enable_none_4k":34,"genvideo_1_sec_bytedance_seedance2.0std_enable_none_720p":10,"genvideo_1_sec_bytedance_seedance2.0std_none_enable_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_none_enable_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_none_enable_4k":34,"genvideo_1_sec_bytedance_seedance2.0std_none_enable_720p":10,"genvideo_1_sec_bytedance_seedance2.0std_none_none_1080p":20,"genvideo_1_sec_bytedance_seedance2.0std_none_none_480p":5,"genvideo_1_sec_bytedance_seedance2.0std_none_none_4k":34,"genvideo_1_sec_bytedance_seedance2.0std_none_none_720p":10,"genvideo_1_sec_bytedance_seedance2.5std_enable_enable_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_enable_enable_480p":6,"genvideo_1_sec_bytedance_seedance2.5std_enable_none_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_enable_none_480p":6,"genvideo_1_sec_bytedance_seedance2.5std_none_enable_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_none_enable_480p":6,"genvideo_1_sec_bytedance_seedance2.5std_none_none_1080p":28,"genvideo_1_sec_bytedance_seedance2.5std_none_none_480p":6,"genvideo_1_sec_google_geminiomni1.1flash_enable_enable_1080p":8,"genvideo_1_sec_google_geminiomni1.1flash_enable_enable_360p":2,"genvideo_1_sec_google_geminiomni1.1flash_enable_enable_4k":15,"genvideo_1_sec_google_geminiomni1.1flash_enable_enable_720p":5,"genvideo_1_sec_google_geminiomni1.1flash_enable_none_1080p":8,"genvideo_1_sec_google_geminiomni1.1flash_enable_none_360p":2,"genvideo_1_sec_google_geminiomni1.1flash_enable_none_4k":15,"genvideo_1_sec_google_geminiomni1.1flash_enable_none_720p":5,"genvideo_1_sec_kling_4.0flash_enable_enable_720p":8,"genvideo_1_sec_kling_4.0flash_enable_none_720p":8,"genvideo_1_sec_kling_4.0std_enable_enable_1080p":16,"genvideo_1_sec_kling_4.0std_enable_enable_720p":11,"genvideo_1_sec_kling_4.0std_enable_none_1080p":16,"genvideo_1_sec_kling_4.0std_enable_none_720p":11,"genvideo_1_sec_kling_o3pro_enable_enable_1080p":5,"genvideo_1_sec_kling_o3pro_enable_enable_4K":12,"genvideo_1_sec_kling_o3pro_enable_none_1080p":5,"genvideo_1_sec_kling_o3pro_enable_none_4K":12,"genvideo_1_sec_kling_o3pro_none_enable_1080p":5,"genvideo_1_sec_kling_o3pro_none_enable_4K":12,"genvideo_1_sec_kling_o3pro_none_none_1080p":5,"genvideo_1_sec_kling_o3pro_none_none_4K":12,"genvideo_1_sec_kling_o3std_enable_enable_720p":4,"genvideo_1_sec_kling_o3std_enable_none_720p":4,"genvideo_1_sec_kling_o3std_none_enable_720p":4,"genvideo_1_sec_kling_o3std_none_none_720p":4,"genvideo_1_sec_minimax_minimaxh3_enable_enable_2k":16,"genvideo_1_sec_minimax_minimaxh3_enable_enable_768p":10,"genvideo_1_sec_minimax_minimaxh3_enable_none_2k":16,"genvideo_1_sec_minimax_minimaxh3_enable_none_768p":10,"genvideo_1_sec_minimax_minimaxh3max_enable_enable_480p":7,"genvideo_1_sec_minimax_minimaxh3max_enable_enable_768p":14,"genvideo_1_sec_minimax_minimaxh3max_enable_none_480p":7,"genvideo_1_sec_minimax_minimaxh3max_enable_none_768p":14,"genvideo_1_sec_minimax_minimaxh3max_none_enable_480p":7,"genvideo_1_sec_minimax_minimaxh3max_none_enable_768p":14,"genvideo_1_sec_minimax_minimaxh3max_none_none_480p":7,"genvideo_1_sec_minimax_minimaxh3max_none_none_768p":14,"genvideo_1_sec_minimax_minimaxh3_none_enable_2k":16,"genvideo_1_sec_minimax_minimaxh3_none_enable_768p":10,"genvideo_1_sec_minimax_minimaxh3_none_none_2k":16,"genvideo_1_sec_minimax_minimaxh3_none_none_768p":10,"genvideo_1_sec_motivai_pixverse6_enable_enable_360p":1,"genvideo_1_sec_motivai_pixverse6_enable_enable_540p":2,"genvideo_1_sec_motivai_pixverse6_enable_enable_720p":3,"genvideo_1_sec_motivai_pixverse6_enable_none_360p":1,"genvideo_1_sec_motivai_pixverse6_enable_none_540p":2,"genvideo_1_sec_motivai_pixverse6_enable_none_720p":3,"genvideo_1_sec_motivai_pixverse6_none_enable_360p":1,"genvideo_1_sec_motivai_pixverse6_none_enable_540p":2,"genvideo_1_sec_motivai_pixverse6_none_enable_720p":3,"genvideo_1_sec_motivai_pixverse6_none_none_360p":1,"genvideo_1_sec_motivai_pixverse6_none_none_540p":2,"genvideo_1_sec_motivai_pixverse6_none_none_720p":3}"""
+)
+
+
+def resolve_video_action_and_credit(
+    model_key: str,
+    effect_mode: str = "TextToVideo",
+    resolution: str = "720p",
+    sound: str = "none",
+    frame_mode: str = "single"
+):
+    """
+    Verilen model, efekt modu, cozunurluk, ses ve frame moduna gore dogru action_id_str ve credit_cost dondurur.
+    """
+    model_data = VIDEO_MODELS_CONFIG.get(model_key, VIDEO_MODELS_CONFIG["seedance_2_0_fast"])
+    action_id_sound = {"vendor": "enable", "none": "none", "auto": "enable", "on": "enable", "off": "none"}.get(str(sound).lower(), sound)
+    if model_key == "kling_4_0" or model_data.get("always_sound_enable"):
+        action_id_sound = "enable"
+
+    if effect_mode == "ImageToVideo":
+        overrides = model_data.get("action_id_i2v_overrides", {})
+        if resolution in overrides:
+            action_id_str = overrides[resolution].format(sound=action_id_sound, resolution=resolution, frame_mode=frame_mode)
+        elif "action_id_i2v" in model_data:
+            action_id_str = model_data["action_id_i2v"].format(sound=action_id_sound, resolution=resolution, frame_mode=frame_mode)
+        else:
+            overrides_t2v = model_data.get("action_id_overrides", {})
+            if resolution in overrides_t2v:
+                action_id_str = overrides_t2v[resolution].format(sound=action_id_sound, resolution=resolution)
+            else:
+                action_id_str = model_data["action_id"].format(sound=action_id_sound, resolution=resolution)
+    else:
+        overrides = model_data.get("action_id_overrides", {})
+        if resolution in overrides:
+            action_id_str = overrides[resolution].format(sound=action_id_sound, resolution=resolution)
+        else:
+            action_id_str = model_data["action_id"].format(sound=action_id_sound, resolution=resolution)
+
+    credit_cost = None
+    if action_id_str in CYBERLINK_ACTION_CREDITS:
+        credit_cost = CYBERLINK_ACTION_CREDITS[action_id_str]
+    else:
+        credit_map = model_data.get("credit_map")
+        if credit_map:
+            credit_cost = credit_map.get((effect_mode, sound, frame_mode, resolution))
+            if credit_cost is None:
+                credit_cost = credit_map.get((effect_mode, sound, resolution))
+            if credit_cost is None:
+                credit_cost = credit_map.get((sound, resolution))
+        if credit_cost is None:
+            credit_cost = model_data.get("credit", 3)
+
+    return action_id_str, credit_cost
+
+
+def get_model_duration_config(model_key: str) -> dict:
+    """
+    Modelin sure yapilandirmasini dondurur.
+    Ornek: {'type': 'continuous', 'min': 4, 'max': 30, 'step': 1, 'default': 5}
+    veya: {'type': 'discrete', 'options': [4, 6, 8], 'default': 4}
+    """
+    model_data = VIDEO_MODELS_CONFIG.get(model_key, {})
+    cfg = model_data.get("duration_config")
+    if cfg:
+        return cfg
+    durations = model_data.get("supported_durations", [5])
+    return {
+        "type": "discrete",
+        "options": durations,
+        "default": durations[0] if durations else 5
+    }
+
+
+def validate_model_duration(model_key: str, duration: int) -> bool:
+    """
+    Verilen surenin model tarafindan desteklenip desteklenmedigini dogrular.
+    """
+    cfg = get_model_duration_config(model_key)
+    if cfg.get("type") == "continuous":
+        step = cfg.get("step", 1)
+        min_v = cfg.get("min", 1)
+        max_v = cfg.get("max", 30)
+        return min_v <= duration <= max_v and ((duration - min_v) % step == 0)
+    else:
+        return duration in cfg.get("options", [])
+
+
+def resolve_image_action_and_credit(
+    model_key: str,
+    resolution: str = "1K",
+    has_reference: bool = False,
+    batch_size: int = 1
+):
+    """
+    Verilen resim modeli, cozunurluk, referans durumu ve batch size'a gore (feature_id, action_id, unit_credit, total_credit) dondurur.
+    """
+    model_data = IMAGE_MODELS_CONFIG.get(model_key, IMAGE_MODELS_CONFIG["gpt_image_2_5_sunburst"])
+    is_style_ref = model_data.get("effect_type") == "TtiStyleRef"
+    if is_style_ref:
+        feature_id = "TtiStyleRef"
+        action_id = f"gen_{batch_size}_img"
+        unit_credit = 1
+        total_credit = 1 * batch_size
+    else:
+        feature_id = "TextToImage"
+        mode_key = "enable" if (has_reference and model_data.get("ref_img_limit", 0) > 0) else "none"
+        prefix = model_data.get("actionId_prefix", "genimage")
+        res_suffix = resolution.lower() if ("alibaba_qwen" in prefix or "nanobanana2.1" in prefix or "kling_o1" in prefix) else resolution
+        action_id = f"{prefix}_{mode_key}_{res_suffix}"
+
+        if action_id in CYBERLINK_ACTION_CREDITS:
+            unit_credit = CYBERLINK_ACTION_CREDITS[action_id]
+        else:
+            credits_dict = model_data.get("credits", {}).get(mode_key, {})
+            unit_credit = credits_dict.get(resolution, 2)
+        total_credit = unit_credit * batch_size
+
+    return feature_id, action_id, unit_credit, total_credit
+
+
+
+
 def generate_ai_image_service(
     member_token: str,
     user_prompt: str = "a majestic fantasy landscape, digital art, highly detailed 8k",
@@ -1332,17 +2705,12 @@ def generate_ai_image_service(
     except ValueError:
         b_size = 1
 
-    if is_style_ref:
-        feature_id_val = "TtiStyleRef"
-        action_id_val = f"gen_{b_size}_img"
-        total_credit_cost = 1 * b_size
-    else:
-        feature_id_val = "TextToImage"
-        mode_key = "enable" if has_reference else "none"
-        credit_cost = model_data["credits"][mode_key][resolution]
-        total_credit_cost = credit_cost * b_size
-        action_id_val = f"{model_data['actionId_prefix']}_{mode_key}_{resolution}"
-
+    feature_id_val, action_id_val, unit_credit_cost, total_credit_cost = resolve_image_action_and_credit(
+        model_key=model_key,
+        resolution=resolution,
+        has_reference=has_reference,
+        batch_size=b_size
+    )
     sync_feature_credit(feature_id=feature_id_val, action_id=action_id_val, credit=total_credit_cost)
     rsa_pub_key = get_myedit_rsa_public_key()
     sub_token = get_subscription_token(member_token)
@@ -1354,7 +2722,7 @@ def generate_ai_image_service(
                 loaded_images_bytes.append(f.read())
 
     version_val = "4" if ("flux" in model_key or model_key == "z_image") else "5"
-    if (version_val == "5" or is_style_ref) and not loaded_images_bytes:
+    if is_style_ref and not loaded_images_bytes:
         from PIL import Image
         import io
         img = Image.new('RGB', (512, 512), color=(120, 160, 220))
@@ -1510,7 +2878,7 @@ def generate_ai_image_service(
 
         if "flux" not in model_key:
             form_data_apply["resolution"] = resolution
-        if has_reference or "flux" not in model_key:
+        if has_reference:
             form_data_apply["sources"] = sources_str
         if "flux" in model_key:
             form_data_apply["need_translate"] = "true"
@@ -1532,7 +2900,7 @@ def generate_ai_image_service(
     polling = apply_json.get("polling", {})
     delay = polling.get("delay", 5)
 
-    max_attempts = 120
+    max_attempts = 360
     decrypted_files = []
     for i in range(max_attempts):
         time.sleep(delay)
@@ -1580,13 +2948,14 @@ def generate_ai_image_service(
 
     return {"status": "Timeout", "reference_urls": uploaded_reference_urls}
 
+
 def generate_ai_video_service(
     member_token: str,
     user_prompt: str = "a cute astronaut cat floating in space station, cinematic lighting",
-    model_key: str = "VEO_3_1",
+    model_key: str = "sora_2_std",
     aspect_ratio: str = "16:9",
-    resolution: str = "1080p",
-    processing_duration: int = 4,
+    resolution: str = "720p",
+    processing_duration: int = 8,
     sound: str = "none",
     effect_mode: str = "TextToVideo",
     source_image_path: str = None,
@@ -1598,7 +2967,7 @@ def generate_ai_video_service(
     task_id: str = None,
 ):
     actual_model_key = VIDEO_MODEL_MAPPING.get(model_key, model_key)
-    model_data = VIDEO_MODELS_CONFIG.get(actual_model_key, VIDEO_MODELS_CONFIG.get("veo_3_1_lite"))
+    model_data = VIDEO_MODELS_CONFIG.get(actual_model_key, VIDEO_MODELS_CONFIG.get("sora_2_std"))
     if isinstance(model_data["model"], dict):
         model_name_str = model_data["model"].get(effect_mode, list(model_data["model"].values())[0])
     else:
@@ -1652,7 +3021,9 @@ def generate_ai_video_service(
             h_val = 720
             if resolution == "480p": h_val = 480
             elif resolution == "540p": h_val = 540
+            elif resolution == "768p": h_val = 768
             elif resolution == "1080p": h_val = 1080
+            elif resolution == "2k": h_val = 1440
             elif resolution == "4k": h_val = 2160
             
             if ar_w == 16 and ar_h == 9:
@@ -1701,40 +3072,16 @@ def generate_ai_video_service(
                 except Exception:
                     pass
 
-    action_id_sound = {"vendor": "enable", "none": "none", "auto": "enable"}.get(sound, sound)
-    if effect_mode == "ImageToVideo":
-        overrides = model_data.get("action_id_i2v_overrides", {})
-        if resolution in overrides:
-            action_id_str = overrides[resolution].format(sound=action_id_sound, resolution=resolution, frame_mode=frame_mode)
-        elif "action_id_i2v" in model_data:
-            action_id_str = model_data["action_id_i2v"].format(sound=action_id_sound, resolution=resolution, frame_mode=frame_mode)
-        else:
-            overrides_t2v = model_data.get("action_id_overrides", {})
-            if resolution in overrides_t2v:
-                action_id_str = overrides_t2v[resolution].format(sound=action_id_sound, resolution=resolution)
-            else:
-                action_id_str = model_data["action_id"].format(sound=action_id_sound, resolution=resolution)
-    else:
-        overrides = model_data.get("action_id_overrides", {})
-        if resolution in overrides:
-            action_id_str = overrides[resolution].format(sound=action_id_sound, resolution=resolution)
-        else:
-            action_id_str = model_data["action_id"].format(sound=action_id_sound, resolution=resolution)
-            
-    credit_map = model_data.get("credit_map")
-    if credit_map:
-        credit_cost = credit_map.get((effect_mode, sound, frame_mode, resolution))
-        if credit_cost is None:
-            credit_cost = credit_map.get((effect_mode, sound, resolution))
-        if credit_cost is None:
-            credit_cost = credit_map.get((sound, resolution))
-        if credit_cost is None:
-            credit_cost = model_data.get("credit", 3)
-    else:
-        credit_cost = model_data.get("credit", 3)
+    action_id_str, credit_cost = resolve_video_action_and_credit(
+        model_key=actual_model_key,
+        effect_mode=effect_mode,
+        resolution=resolution,
+        sound=sound,
+        frame_mode=frame_mode
+    )
 
     get_member_remaining_credits(member_token)
-    sync_feature_credit(feature_id=effect_mode, action_id=action_id_str, credit=credit_cost)
+    sync_feature_credit(feature_id=effect_mode, action_id=action_id_str, credit=credit_cost * processing_duration)
 
     rsa_pub_key = get_myedit_rsa_public_key()
     sub_token = get_subscription_token(member_token)
@@ -1855,12 +3202,17 @@ def generate_ai_video_service(
             img_w, img_h = get_image_dimensions(prepared_media[0]["path"])
             image_file_size = os.path.getsize(prepared_media[0]["path"])
 
-            if vendor_str in ["Alibaba", "Pixverse", "BytePlus"]:
+            if vendor_str in ["Alibaba", "Pixverse", "BytePlus", "Flux", "Hailuo"]:
                 form_data_apply["width"] = str(img_w)
                 form_data_apply["height"] = str(img_h)
-                if vendor_str == "Alibaba":
+                if vendor_str in ["Alibaba", "Hailuo"]:
                     form_data_apply["aspect_ratio"] = aspect_ratio
                     form_data_apply["resolution"] = resolution.upper()
+                    if model_mode:
+                        form_data_apply["mode"] = model_mode
+                elif vendor_str == "BytePlus" and "2.5" in str(model_name_str):
+                    form_data_apply["aspect_ratio"] = "adaptive"
+                    form_data_apply["resolution"] = resolution
                     if model_mode:
                         form_data_apply["mode"] = model_mode
                 else:
@@ -1940,7 +3292,7 @@ def generate_ai_video_service(
     polling = apply_json.get("polling", {})
     delay = polling.get("delay", 5)
 
-    max_attempts = 120
+    max_attempts = 360
     decrypted_files = []
     for i in range(max_attempts):
         time.sleep(delay)
@@ -2035,6 +3387,7 @@ def generate_ai_video_service(
 # ==============================================================================
 # service.py ACCOUNT CACHE & REUSE SYSTEM
 # ==============================================================================
+
 
 ACTIVE_ACCOUNTS = {} # {api_key_id: {"email": email, "password": password, "member_token": token, "timestamp": time.time()}}
 ACCOUNT_LOCK = threading.Lock()
@@ -2197,86 +3550,98 @@ def get_or_create_active_account(api_key_id, task_id=None, force_new=False):
 
     return None, None
 
-def deduct_api_key_quota(api_key_id, task_id=None):
-    """Deducts 1 account/quota from the API key's available accounts upon successful task completion.
+def deduct_api_key_quota(api_key_id, task_id=None, amount=1):
+    """Deducts `amount` (default 1) accounts/quotas from the API key's available accounts upon successful task completion.
     Prioritizes accounts other than the currently active working account so the active account remains intact in DB.
     Even if the active account's DB row is consumed, its in-memory session (ACTIVE_ACCOUNTS) stays fully operational.
     """
     try:
+        if amount is None or amount <= 0:
+            amount = 1
+
         active_acc = ACTIVE_ACCOUNTS.get(api_key_id)
         active_email = active_acc.get("email") if active_acc else None
 
         conn = db.get_connection()
         cursor = conn.cursor()
-        consumed_email = None
+        consumed_emails = []
 
         if db.DB_TYPE == 'postgresql':
-            # 1. Önce aktif çalışan hesap DIŞINDAKİ boş bir hesabı düş
+            # 1. Önce aktif çalışan hesap DIŞINDAKİ boş hesapları seç
             if active_email:
                 cursor.execute(
-                    'SELECT email FROM accounts WHERE api_key_id = %s AND used = 0 AND email != %s LIMIT 1',
-                    (api_key_id, active_email)
+                    'SELECT email FROM accounts WHERE api_key_id = %s AND used = 0 AND email != %s LIMIT %s',
+                    (api_key_id, active_email, amount)
                 )
-                row = cursor.fetchone()
-                if row:
-                    consumed_email = row['email'] if isinstance(row, dict) else row[0]
+                rows = cursor.fetchall()
+                for row in rows:
+                    email_val = row['email'] if isinstance(row, dict) else row[0]
+                    consumed_emails.append(email_val)
             
-            # 2. Eğer başka hesap yoksa (sadece aktif hesap kalmışsa) onu düş
-            if not consumed_email:
+            # 2. Eğer daha fazla kota gerekiyorsa (aktif hesap dahil)
+            remaining_needed = amount - len(consumed_emails)
+            if remaining_needed > 0:
                 cursor.execute(
-                    'SELECT email FROM accounts WHERE api_key_id = %s AND used = 0 LIMIT 1',
-                    (api_key_id,)
+                    'SELECT email FROM accounts WHERE api_key_id = %s AND used = 0 LIMIT %s',
+                    (api_key_id, remaining_needed)
                 )
-                row = cursor.fetchone()
-                if row:
-                    consumed_email = row['email'] if isinstance(row, dict) else row[0]
+                rows = cursor.fetchall()
+                for row in rows:
+                    email_val = row['email'] if isinstance(row, dict) else row[0]
+                    if email_val not in consumed_emails:
+                        consumed_emails.append(email_val)
 
-            if consumed_email:
+            if consumed_emails:
                 cursor.execute(
-                    'UPDATE accounts SET used = 1 WHERE api_key_id = %s AND email = %s',
-                    (api_key_id, consumed_email)
+                    'UPDATE accounts SET used = 1 WHERE api_key_id = %s AND email = ANY(%s)',
+                    (api_key_id, consumed_emails)
                 )
                 if task_id:
                     cursor.execute(
                         'UPDATE tasks SET account_email = %s WHERE task_id = %s',
-                        (consumed_email, task_id)
+                        (consumed_emails[0], task_id)
                     )
                 conn.commit()
-                print(f"[QUOTA] Successfully deducted 1 quota ({consumed_email}) for task {task_id}.")
+                print(f"[QUOTA] Successfully deducted {len(consumed_emails)} quota units (requested {amount}) for task {task_id}.")
         else:
             # SQLite versiyonu
             if active_email:
                 cursor.execute(
-                    'SELECT email FROM accounts WHERE api_key_id = ? AND used = 0 AND email != ? LIMIT 1',
-                    (api_key_id, active_email)
+                    'SELECT email FROM accounts WHERE api_key_id = ? AND used = 0 AND email != ? LIMIT ?',
+                    (api_key_id, active_email, amount)
                 )
-                row = cursor.fetchone()
-                if row:
-                    consumed_email = row['email'] if isinstance(row, dict) else row[0]
+                rows = cursor.fetchall()
+                for row in rows:
+                    email_val = row['email'] if isinstance(row, dict) else row[0]
+                    consumed_emails.append(email_val)
 
-            if not consumed_email:
+            remaining_needed = amount - len(consumed_emails)
+            if remaining_needed > 0:
                 cursor.execute(
-                    'SELECT email FROM accounts WHERE api_key_id = ? AND used = 0 LIMIT 1',
-                    (api_key_id,)
+                    'SELECT email FROM accounts WHERE api_key_id = ? AND used = 0 LIMIT ?',
+                    (api_key_id, remaining_needed)
                 )
-                row = cursor.fetchone()
-                if row:
-                    consumed_email = row['email'] if isinstance(row, dict) else row[0]
+                rows = cursor.fetchall()
+                for row in rows:
+                    email_val = row['email'] if isinstance(row, dict) else row[0]
+                    if email_val not in consumed_emails:
+                        consumed_emails.append(email_val)
 
-            if consumed_email:
+            if consumed_emails:
+                placeholders = ','.join(['?'] * len(consumed_emails))
                 cursor.execute(
-                    'UPDATE accounts SET used = 1 WHERE api_key_id = ? AND email = ?',
-                    (api_key_id, consumed_email)
+                    f'UPDATE accounts SET used = 1 WHERE api_key_id = ? AND email IN ({placeholders})',
+                    [api_key_id] + consumed_emails
                 )
                 if task_id:
                     cursor.execute(
                         'UPDATE tasks SET account_email = ? WHERE task_id = ?',
-                        (consumed_email, task_id)
+                        (consumed_emails[0], task_id)
                     )
                 conn.commit()
-                print(f"[QUOTA] Successfully deducted 1 quota ({consumed_email}) for task {task_id}.")
+                print(f"[QUOTA] Successfully deducted {len(consumed_emails)} quota units (requested {amount}) for task {task_id}.")
         conn.close()
-        return consumed_email
+        return consumed_emails
     except Exception as e:
         print(f"[QUOTA] Error deducting quota: {e}")
         return None
@@ -2307,6 +3672,14 @@ def process_image_task(task_id, params, api_key_id):
         aspect_ratio = params.get('size', '1:1')
         resolution = params.get('resolution', '1K')
         batch_size = int(params.get('batch_size', 1))
+
+        # Determine API quota to deduct for image model
+        model_api_credit = 1
+        for m in AVAILABLE_MODELS.get('image', []):
+            if m.get('id') == raw_model or m.get('id') == model:
+                model_api_credit = m.get('credit', 1)
+                break
+        total_quota_to_deduct = model_api_credit * batch_size
 
         # Handle reference images (Image-to-Image)
         reference_images = []
@@ -2429,7 +3802,7 @@ def process_image_task(task_id, params, api_key_id):
 
             if completed_files:
                 db.update_task_status(task_id, 'completed', make_proxy_url(completed_files[0]))
-                deduct_api_key_quota(api_key_id, task_id)
+                deduct_api_key_quota(api_key_id, task_id, amount=total_quota_to_deduct)
                 post_credits_info = get_member_remaining_credits(current_token)
                 post_credits = post_credits_info.get("total_remain", "?") if post_credits_info else "?"
                 print(f"[RENDER LOG] [IMAGE TASK: {task_id}] [TAMAMLANDI] -> Hesap: {account['email']} | Kalan Kredi: {post_credits}\n")
@@ -2461,12 +3834,21 @@ def process_video_task(task_id, params, api_key_id):
         db.update_task_status(task_id, 'running')
 
         prompt = params.get('prompt', '')
-        raw_model = params.get('model', 'VEO_3_1')
+        has_start_frame = bool(params.get('start_frame'))
+        default_model = 'sora_2_std' if has_start_frame else 'seedance_2_0_mini'
+        raw_model = params.get('model') or default_model
         model = VIDEO_MODEL_MAPPING.get(raw_model, raw_model)
         aspect_ratio = params.get('size', '16:9')
-        resolution = params.get('resolution', '1080p')
-        duration = int(params.get('duration', 4))
+        resolution = params.get('resolution', '720p')
+        duration = int(params.get('duration', 8 if model == 'sora_2_std' else 10))
         sound = params.get('sound', 'vendor')
+
+        # Determine API quota to deduct for video model
+        model_api_credit = 1
+        for m in AVAILABLE_MODELS.get('video', []):
+            if m.get('id') == raw_model or m.get('id') == model:
+                model_api_credit = m.get('credit', 1)
+                break
 
         input_mode = "TextToVideo"
         source_image_path = None
@@ -2542,6 +3924,34 @@ def process_video_task(task_id, params, api_key_id):
                 })
                 db.update_task_token(task_id, token_data)
 
+                # If Sora 2 is invoked without a start frame, auto-generate initial frame from prompt
+                current_source_image_path = source_image_path
+                current_input_mode = input_mode
+                if model == "sora_2_std" and current_input_mode == "TextToVideo" and not current_source_image_path:
+                    try:
+                        print(f"[SORA-2] Auto-generating initial frame for Text-to-Video task {task_id}...")
+                        t2i_res = generate_ai_image_service(
+                            member_token=member_token,
+                            user_prompt=prompt,
+                            model_key="NANO_BANANA_2",
+                            aspect_ratio=aspect_ratio,
+                            resolution="1K",
+                            batch_size="1",
+                            task_id=task_id
+                        )
+                        if t2i_res and t2i_res.get("status") == "Done" and t2i_res.get("files"):
+                            img_url = t2i_res["files"][0]
+                            img_resp = requests.get(img_url, timeout=30)
+                            if img_resp.status_code == 200:
+                                temp_auto_img = os.path.join(tempfile.gettempdir(), f"sora_auto_{task_id}.jpg")
+                                with open(temp_auto_img, "wb") as f:
+                                    f.write(img_resp.content)
+                                temp_files.append(temp_auto_img)
+                                current_source_image_path = temp_auto_img
+                                current_input_mode = "ImageToVideo"
+                    except Exception as ex:
+                        print(f"[SORA-2] Auto-frame generation error: {ex}")
+
                 result = generate_ai_video_service(
                     member_token=member_token,
                     user_prompt=prompt,
@@ -2550,8 +3960,8 @@ def process_video_task(task_id, params, api_key_id):
                     resolution=resolution,
                     processing_duration=duration,
                     sound=sound,
-                    effect_mode=input_mode,
-                    source_image_path=source_image_path,
+                    effect_mode=current_input_mode,
+                    source_image_path=current_source_image_path,
                     last_image_path=last_image_path,
                     ref_images=ref_images if ref_images else None,
                     ref_videos=ref_videos if ref_videos else None,
@@ -2621,10 +4031,10 @@ def process_video_task(task_id, params, api_key_id):
 
             if video_file:
                 db.update_task_status(task_id, 'completed', make_proxy_url(video_file))
-                deduct_api_key_quota(api_key_id, task_id)
+                deduct_api_key_quota(api_key_id, task_id, amount=model_api_credit)
             else:
                 db.update_task_status(task_id, 'completed', make_proxy_url(completed_files[0]) if completed_files else "")
-                deduct_api_key_quota(api_key_id, task_id)
+                deduct_api_key_quota(api_key_id, task_id, amount=model_api_credit)
             post_credits_info = get_member_remaining_credits(current_token)
             post_credits = post_credits_info.get("total_remain", "?") if post_credits_info else "?"
             print(f"[RENDER LOG] [VIDEO TASK: {task_id}] [TAMAMLANDI] -> Hesap: {account['email']} | Kalan Kredi: {post_credits}\n")
